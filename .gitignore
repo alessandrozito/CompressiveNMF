@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+output/
+temp_files/
+R/old_scripts/
+data/old_data/
+cluster_jobs/

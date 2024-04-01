@@ -1,10 +1,45 @@
 # This function implements the Poisson factorization using the CUSP algorithm
 # In Legramanti et al. (2020). 
 
-
 # We share similar functions with the file CompressiveNMF. Thus, we call it. 
 # Notice that the model is slighlty different. 
-source("R/CompressiveNMF.R")
+#source("~/CompressiveNMF/R/CompressiveNMF.R")
+
+# Sample the mutational signature matrix
+sample_signatures <- function(Alpha) {
+  # Alpha is a matrix of I x K
+  I <- nrow(Alpha)
+  Ktot <- ncol(Alpha)
+  R <- matrix(rgamma(I * Ktot, Alpha), nrow = I) + 1e-10 # Small nugget to avoid degeneracies of the gamma prior
+  R <- apply(R, 2, function(x) x/sum(x))
+  colnames(R) <- colnames(Alpha)
+  return(R)
+}
+
+# Sample the weight matrix
+sample_weights <- function(shape_mat, rate_mat) {
+  # Alpha is a matrix of I x K
+  K <- nrow(shape_mat)
+  J <- ncol(shape_mat)
+  Theta <- matrix(rgamma(K * J, shape_mat, rate_mat), nrow = K)
+  rownames(Theta) <- rownames(shape_mat)
+  return(Theta)
+}
+
+# Sample the augmented variables
+sample_Y <- function(X, R, Theta, nonzero_ids) {
+  I <- nrow(R)
+  K <- ncol(R)
+  J <- ncol(Theta)
+  Y <- array(0, dim = c(I, J, K))
+  for(id in 1:nrow(nonzero_ids)){
+    i <- nonzero_ids[id, 1]
+    j <- nonzero_ids[id, 2]
+    q_vec <- R[i, ] * Theta[, j]
+    Y[i, j, ] <- rmultinom(n = 1, size = X[i, j], prob = q_vec)
+  }
+  return(Y)
+}
 
 
 sample_nu <- function(Z, alpha_sp) {
@@ -54,7 +89,7 @@ PoissonCUSP <- function(X, K, nsamples = 2000, burnin = 1000,
                         mu_inf = 0.01,
                         alpha_sp = 5, alpha0 = -1, alpha1 = -5e-04,
                         adapt_cutoff = 500) {
-  
+  t_start <- Sys.time()
   I <- nrow(X)
   J <- ncol(X)
   
@@ -62,7 +97,7 @@ PoissonCUSP <- function(X, K, nsamples = 2000, burnin = 1000,
   SIGN <- vector(mode = "list", length = nsamples) 
   THETA <- vector(mode = "list", length = nsamples)
   MU <- vector(mode = "list", length = nsamples)
-  ADAPT <- vector(mode = "list", length = nsamples)
+  ID_Dropped <- vector(mode = "list", length = nsamples)
   # Threshold for sparsity
   nu <- c(rbeta(K-1, 1, alpha_sp), 1)
   
@@ -144,9 +179,12 @@ PoissonCUSP <- function(X, K, nsamples = 2000, burnin = 1000,
       MU[[iter - burnin]] <- mu
     }
   }
+  time <- difftime(Sys.time(), t_start, units = "secs")[[1]]
   return(list(Signatures = SIGN, 
               Weights = THETA,
-              Mu = MU))
+              Mu = MU, 
+              spike = mu_inf,
+              time = time))
 }
 
 
@@ -155,6 +193,13 @@ PoissonCUSP <- function(X, K, nsamples = 2000, burnin = 1000,
 # 
 # plot(table(unlist(lapply(outCUSP$Mu, function(x) sum(x!= 0.01)))))
 # 
+
+
+
+
+
+
+
 
 
 
