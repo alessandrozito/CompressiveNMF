@@ -16,11 +16,9 @@ mutational signatures analysis, arxiv:
 
 ## Codes for reproducing simulation and applications
 
-* Simulation: `R/main_Simulation.R` 
-  - This file produces the files `output/main_simulation/df_F1.csv` and `output/main_simulation/simulation_output.csv`, which are needed to reproduce the figures. The original simulation was run on 20 cores in parallel on a cluster. To reproduce the plots, run  `R/main_Simulation_analysis.R`
+* Simulation: `R/main_Simulation.R`. This file produces the files `output/main_simulation/df_F1.csv` and `output/main_simulation/simulation_output.csv`, which are needed to reproduce the figures. The original simulation was run on 20 cores in parallel on a cluster. To reproduce the plots, run  `R/main_Simulation_analysis.R`
 
-* Application on 21 breast cancer data: `R/Application_21Breast.R` 
-  - This file produces the files is `output/Application_21brca` and the figures. To reproduce the figure only, simply set `rerun = FALSE`.
+* Application on 21 breast cancer data: `R/Application_21Breast.R`. This file produces the files is `output/Application_21brca` and the figures. To reproduce the figure only, simply set `rerun = FALSE`.
 
 ## R code description, file by file
 
@@ -44,13 +42,15 @@ mutational signatures analysis, arxiv:
 - `R/rInvKummer.R` - Function to evaluate the density and generate random samples from the inverse Kummer distribution
 
 - `R/plot_signatures.R` - Functions to plot the cosmic signature. For example,`plot_cosmic_signature("SBS5")` plots signature SBS5.  
+>>>>>>> ba71d6f7223a3631b3d8dc543b84156da501bdfa
 
 
 ### Miscellanea
 
 - `R/get_COSMIC_data.R` - Function to scrape the COSMIC v3.4 signature data and the proposed aetiologies from https://cancer.sanger.ac.uk/signatures/sbs/ 
 
-- `src/tune_betah.cpp` - Function to tune the hyperparameter `betah` in the `CompressiveNMF` method when specifying informative priors. See the file `data/optimal_betah.rdata`, and refer to the Supplementary material.
+- `src/tune_betah.cpp`  - Function to tune the hyperparameter `betah` in the `CompressiveNMF` method when specifying informative priors. See the file `data/optimal_betah.rdata`, and refer to the Supplementary material.
+>>>>>>> ba71d6f7223a3631b3d8dc543b84156da501bdfa
 
 #### References
 > Wang S., Li H., Song M., Tao Z., Wu T., He Z., et al. (2021) Copy number signature analysis tool and its application in prostate cancer reveals distinct mutational processes and clinical outcomes. PLoS Genetics 17(5): e1009557.
