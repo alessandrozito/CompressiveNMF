@@ -12,7 +12,7 @@ mutational signatures analysis, arxiv:
 * Figure 2, 3 and Figure S1 - S4 in the Supplementary material
   - `R/main_Simulation_analysis.R`
 * Figure 4, 5 and Figure S5 - S11 in the Supplementary material
- - `R/Application_21Breast.R`
+  - `R/Application_21Breast.R`
 
 ## Codes for reproducing results
 
