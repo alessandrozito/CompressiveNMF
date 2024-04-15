@@ -7,6 +7,8 @@ R/old_scripts/
 data/old_data/
 cluster_jobs/
 
+**/.DS_Store
+
 
 output/old_simulations
 output/Application_21brca

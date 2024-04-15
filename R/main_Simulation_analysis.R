@@ -133,7 +133,7 @@ p_overd0 <- df_all %>%
   dplyr::select(Method, J, K_new, overd, rmse_Signatures, rmse_Weights) %>%
   mutate(J = factor(paste0("J = ", J), levels=c("J = 50", "J = 100", "J = 200")),
          Signatures = rmse_Signatures,
-         Weights = rmse_Weights,
+         Loadings = rmse_Weights,
          overd = paste0("Overdispersion = ", as.factor(overd)), 
          K_new2 = paste0("K = ", K_new + 4),
          K_new2 = fct_reorder(K_new2, as.integer(K_new))) %>%
@@ -146,7 +146,7 @@ p_overd0 <- df_all %>%
   scale_fill_manual(values = color_values, labels = labels)+
   facet_grid(Metric ~ K_new2, scales = "free_y") +
   xlab("Number of samples J")+
-  ylab("Average RMSE")+
+  ylab("RMSE")+
   theme(
     legend.position ="right",
     legend.margin=margin(0,0,0,0),
@@ -162,7 +162,7 @@ p_overd15 <- df_all %>%
   dplyr::select(Method, J, K_new, overd, rmse_Signatures, rmse_Weights) %>%
   mutate(J = factor(paste0("J = ", J), levels=c("J = 50", "J = 100", "J = 200")),
          Signatures = rmse_Signatures,
-         Weights = rmse_Weights,
+         Loadings = rmse_Weights,
          overd = paste0("tau = ", as.factor(overd)), 
          K_new2 = paste0("K = ", K_new + 4),
          K_new2 = fct_reorder(K_new2, as.integer(K_new))) %>%
@@ -176,7 +176,7 @@ p_overd15 <- df_all %>%
   facet_grid(Metric ~ K_new2 , scales = "free_y") +
   #theme(axis.title.y = element_blank())+
   xlab("Number of samples J")+
-  ylab("Average RMSE")+
+  ylab("RMSE")+
   theme(#aspect.ratio = 1,
     legend.position ="right",
     legend.margin=margin(0,0,0,0),

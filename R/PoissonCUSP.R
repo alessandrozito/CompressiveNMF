@@ -1,9 +1,5 @@
 # This function implements the Poisson factorization using the CUSP algorithm
-# In Legramanti et al. (2020). 
-
-# We share similar functions with the file CompressiveNMF. Thus, we call it. 
-# Notice that the model is slighlty different. 
-#source("~/CompressiveNMF/R/CompressiveNMF.R")
+# in Legramanti et al. (2020). 
 
 # Sample the mutational signature matrix
 sample_signatures <- function(Alpha) {
@@ -186,13 +182,6 @@ PoissonCUSP <- function(X, K, nsamples = 2000, burnin = 1000,
               spike = mu_inf,
               time = time))
 }
-
-
-# # Try the function
-# outCUSP <- PoissonCUSP(X = data$X, K = 15, a0 = 0.5, b0 = 0.5, nsamples = 1000, burnin = 1000)
-# 
-# plot(table(unlist(lapply(outCUSP$Mu, function(x) sum(x!= 0.01)))))
-# 
 
 
 

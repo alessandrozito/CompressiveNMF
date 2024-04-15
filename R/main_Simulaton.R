@@ -265,7 +265,7 @@ for(theta in theta_list){
 }
 
 # Save the output
-write_csv(x = df_all, file = "output/main_simulation2/simulation_output.csv")
+write_csv(x = df_all, file =  paste0(simulation_dir, "/simulation_output.csv")
 
 #-----------------------------------------------------------  Extract the F1 range
 df_F1 <- data.frame()
@@ -311,7 +311,7 @@ for(theta in theta_list){
   }
 }
 
-write_csv(x = df_F1, file = "output/main_simulation2/df_F1.csv")
+write_csv(x = df_F1, file = paste0(simulation_dir, "/df_F1.csv"))
 
 
 

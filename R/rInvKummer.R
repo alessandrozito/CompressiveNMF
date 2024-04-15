@@ -255,7 +255,7 @@ abline(h = sol(a, y_true, epsilon), col = "red")
 
 
 
-# Panel (A)
+# Panel (A) - top 
 x <- seq(0.001, 8, 0.01)
 y_list <- c(3, 5, 7, 10)
 J_list <- c(10, 20)
@@ -273,19 +273,6 @@ for(J in J_list){
     df_plot <- rbind(df_plot, df_temp)
   }
 }
-
-color_values <- c("darkblue", "lightblue", "#FCB92B", "#DB5902", "#C30027") 
-# df_plot$y <- as.factor(df_plot$y)
-# df_plot$J <- as.factor(df_plot$J)
-# p1 <- ggplot(df_plot) +
-#   #geom_segment(x = epsilon, xend = epsilon, y = 0, yend = Inf, linetype = "dashed", color = "gray")+
-#   geom_line(aes(x = x, y = dens, color = y, linetype = J), linewidth = 0.75)+
-#   theme_bw()+
-#   theme(, axis.title = element_blank(), legend.position = "right")+
-#   ylab("Density")+
-#   facet_grid(~"Density when y > a")+
-#   scale_color_manual(expression(bar(Y)[k]), values = color_values)+
-#   xlab(expression(mu[k]))
 
 
 
@@ -308,17 +295,6 @@ for(J in J_list){
 }
 
 color_values <- c("darkblue", "lightblue", "#FCB92B", "#DB5902", "#C30027") 
-# df_plot2$y <- as.factor(df_plot2$y)
-# df_plot2$J <- as.factor(df_plot2$J)
-# p2 <- ggplot(df_plot2) +
-#   geom_segment(x = epsilon, xend = epsilon, y = 0, yend = Inf, color = "gray")+
-#   geom_line(aes(x = x, y = dens, linetype = J), linewidth = 0.75)+
-#   theme_bw()+
-#   theme(legend.position = "right", axis.title = element_blank())+
-#   ylab("Density")+
-#   facet_grid(~"Density when y = 0")+
-#   scale_color_manual(expression(bar(Y)[k]), values = color_values)
-# p2
 
 df_plot2$values <- "Density when y = 0"
 df_plot$values <- "Density when y > a"

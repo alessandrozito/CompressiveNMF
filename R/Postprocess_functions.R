@@ -309,36 +309,7 @@ Postprocess_SigProfiler <- function(resSigPro, data) {
   ))
 }
 
-#---------------------------------------------------------------------- PoissonCUSP
-# get_posterior_CUSP <- function(resCUSP) {
-#   Kmax <- max(unlist(lapply(resCUSP$Mu, length)))
-#   nspike <- rep(0, Kmax)
-#   nsims <- length(resCUSP$Signatures)
-#   R_hat <- 0
-#   Theta_hat <- 0
-#   Mu_hat <- 0
-#   for (i in 1:nsims) {
-#     # Check global mean
-#     mu_temp <- resCUSP$Mu[[i]]
-#     mu <- c(mu_temp, rep(resCUSP$spike, Kmax - length(mu_temp)))
-#     Mu_hat <- Mu_hat + mu
-#     nspike <- nspike + 1 * (mu == resCUSP$spike)
-#     # Check signatures
-#     mat_temp <- resCUSP$Signatures[[i]]
-#     R_hat <- R_hat + cbind(mat_temp, matrix(1 / 96, nrow = 96,
-#                                             ncol = Kmax - length(mu_temp)))
-#     # Check weights
-#     Theta_temp <- resCUSP$Weights[[i]]
-#     Theta_hat <- Theta_hat + rbind(Theta_temp, matrix(0, ncol = ncol(Theta_temp),
-#                                                       nrow =  Kmax - length(mu_temp)))
-#   }
-#   R_hat <- R_hat / nsims
-#   nspike <- nspike / nsims
-#   Theta_hat <- Theta_hat / nsims
-#   Mu_hat <- Mu_hat / nsims
-#   return(list("Theta_hat" = Theta_hat, "R_hat" = R_hat,
-#               "Mu_hat" = Mu_hat, "nspike" = nspike))
-# }
+
 
 get_posterior_CUSP <- function(resCUSP) {
   J <- ncol(resCUSP$Weights[[1]])
