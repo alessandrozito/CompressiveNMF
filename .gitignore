@@ -11,33 +11,23 @@ cluster_jobs/
 output/old_simulations
 output/Application_21brca
 
+# Simulation - remove large files
+output/main_simulation2/old_simulations
 
-output/main_simulation2/Scenario_100_overdisp_0_Knew_2_theta_100   
-output/main_simulation2/Scenario_100_overdisp_0_Knew_2_theta_200   
-output/main_simulation2/Scenario_100_overdisp_0_Knew_6_theta_100   
-output/main_simulation2/Scenario_100_overdisp_0_Knew_6_theta_200   
+output/main_simulation2/Scenario_100_overdisp_0_Knew_2_theta_100/
+
+
+output/main_simulation2/Scenario_100_overdisp_0_Knew_6_theta_100
 output/main_simulation2/Scenario_100_overdisp_0.15_Knew_2_theta_100
-output/main_simulation2/Scenario_100_overdisp_0.15_Knew_2_theta_200
 output/main_simulation2/Scenario_100_overdisp_0.15_Knew_6_theta_100
-output/main_simulation2/Scenario_100_overdisp_0.15_Knew_6_theta_200
-output/main_simulation2/Scenario_200_overdisp_0_Knew_2_theta_100   
-output/main_simulation2/Scenario_200_overdisp_0_Knew_2_theta_200   
-output/main_simulation2/Scenario_200_overdisp_0_Knew_6_theta_100   
-output/main_simulation2/Scenario_200_overdisp_0_Knew_6_theta_200   
+output/main_simulation2/Scenario_200_overdisp_0_Knew_2_theta_100
+output/main_simulation2/Scenario_200_overdisp_0_Knew_6_theta_100
 output/main_simulation2/Scenario_200_overdisp_0.15_Knew_2_theta_100
-output/main_simulation2/Scenario_200_overdisp_0.15_Knew_2_theta_200
 output/main_simulation2/Scenario_200_overdisp_0.15_Knew_6_theta_100
-output/main_simulation2/Scenario_200_overdisp_0.15_Knew_6_theta_200
-output/main_simulation2/Scenario_50_overdisp_0_Knew_2_theta_100    
-output/main_simulation2/Scenario_50_overdisp_0_Knew_2_theta_200    
-output/main_simulation2/Scenario_50_overdisp_0_Knew_6_theta_100    
-output/main_simulation2/Scenario_50_overdisp_0_Knew_6_theta_200    
-output/main_simulation2/Scenario_50_overdisp_0.15_Knew_2_theta_100 
-output/main_simulation2/Scenario_50_overdisp_0.15_Knew_2_theta_200 
-output/main_simulation2/Scenario_50_overdisp_0.15_Knew_6_theta_100 
-output/main_simulation2/Scenario_50_overdisp_0.15_Knew_6_theta_200 
-
-
+output/main_simulation2/Scenario_50_overdisp_0_Knew_2_theta_100
+output/main_simulation2/Scenario_50_overdisp_0_Knew_6_theta_100
+output/main_simulation2/Scenario_50_overdisp_0.15_Knew_2_theta_100
+output/main_simulation2/Scenario_50_overdisp_0.15_Knew_6_theta_100
 
 
 
