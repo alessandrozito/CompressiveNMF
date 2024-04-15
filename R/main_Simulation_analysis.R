@@ -1,4 +1,4 @@
- 
+# This file replicates Figure 2 in the main document and Figures S1-S4 in the supplement
 library(tidyverse)
 
 # Source the functions
@@ -58,7 +58,7 @@ p_sens_prec <- df_all %>%
   dplyr::select(Method, J, overd, K_new, Precision, Sensitivity) %>%
   mutate(J = as.factor(J),
          overd = paste0("Overdispersion = ", as.factor(overd)), 
-         K_new2 = paste0("H = 4, K = ", K_new),
+         K_new2 = paste0("K = ", K_new + 4),
          K_new2 = fct_reorder(K_new2, as.integer(K_new)),
          Method = case_when(Method == "4.SigPro" ~ "3.SigPro",
                             Method == "3.signeR" ~ "4.signeR",
@@ -98,12 +98,13 @@ pF1 <- df_F1 %>%
   facet_grid(overd ~ K_new2 + J)+
   theme_bw()+
   scale_color_manual(values = color_values, labels = labels) +
-  xlim(c(0.7, 1))+
   xlab("Cutoff")+
   ylab("Average F1 score")+
   theme(legend.position ="top",
         legend.margin=margin(0,0,0,0),
-        legend.box.margin=margin(-5,-5,-5,-5))+
+        legend.box.margin=margin(-5,-5,-5,-5), 
+        axis.text = element_text(size = 5.5))+
+  xlim(c(0.8, 1))+
   guides(color = guide_legend(title.position = "left", title.hjust = 0.5, nrow = 1))
 ggsave(plot = pF1, "figures/F1_score.pdf", width = 8.51, height = 2.50)
 
@@ -153,7 +154,7 @@ p_overd0 <- df_all %>%
     panel.grid.major.x = element_blank(), 
     panel.grid.minor.x = element_blank(), 
   )+
-  labs(title = "Overdisperion = 0")
+  labs(title = "Overdispersion = 0")
 ggsave(plot = p_overd0, filename = "figures/RMSE_plot_overd0.pdf", width = 8.51, height = 3.61)
 
 p_overd15 <- df_all %>%
@@ -183,7 +184,7 @@ p_overd15 <- df_all %>%
     panel.grid.major.x = element_blank(), 
     panel.grid.minor.x = element_blank(), 
   )+
-  labs(title = "Overdisperion = 0.15")
+  labs(title = "Overdispersion = 0.15")
 ggsave(plot = p_overd15, filename = "figures/RMSE_plot_overd15.pdf", width = 8.51, height = 3.61)
 
 #---- Counts and Lambda
@@ -213,7 +214,7 @@ p_counts0 <- df_all %>%
   )+
   xlab("Number of samples J")+
   ylab("RMSE")+
-  labs(title = "Overdisperion = 0")
+  labs(title = "Overdispersion = 0")
 ggsave(plot = p_counts0, filename = "figures/RMSE_plot_counts0.pdf", width = 8.51, height = 3.61)
 
 p_counts15 <- df_all %>%
@@ -242,7 +243,7 @@ p_counts15 <- df_all %>%
   )+
   xlab("Number of samples J")+
   ylab("RMSE")+
-  labs(title = "Overdisperion = 0.15")
+  labs(title = "Overdispersion = 0.15")
 ggsave(plot = p_counts15, filename = "figures/RMSE_plot_counts15.pdf", width = 8.51, height = 3.61)
 
 
