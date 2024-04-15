@@ -203,7 +203,7 @@ overdispersion_list <- c(0, 0.15)
 J_list <- c(50, 100, 200)
 K_new_list <- c(2, 6)
 
-simulation_dir <- "~/CompressiveNMF/output/main_simulation2/"
+simulation_dir <- "~/CompressiveNMF/output/main_simulation/"
 create_directory(simulation_dir)
 cat("start \n", file = "check.txt")
 # Run the simulation
