@@ -22,13 +22,16 @@ mutational signatures analysis, arxiv:
 
 ## R code description, file by file
 
-- `R/Application_21Breast.R`
+### Methods
 - `R/CompressiveNMF.R`
+
+- `R/Application_21Breast.R`
+
 - `R/get_COSMIC_data.R`
+
+### Files to run the simulation and 
 - `R/main_Simulation_analysis.R`
 - `R/main_Simulation.R`
-- `R/NMF_l1_ARD.R`
-- `R/old_scripts`
 - `R/plot_signatures.R`
 - `R/PoissonCUSP.R`
 - `R/Postprocess_functions.R`
