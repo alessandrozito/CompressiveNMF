@@ -15,8 +15,8 @@ color_values <- c("darkblue", "royalblue", "#02DB9E", "#FCB92B", "#DB5902", "#C3
 labels <- c("CompNMF + cosmic", "CompNMF", "signeR", "SigProfiler", "SignatureAnalyzer", "PoissonCUSP")
 
 # Load the output
-df_F1 <- read_csv(file = "output/main_simulation2/df_F1.csv")
-df_all <- read_csv(file = "output/main_simulation2/simulation_output.csv")
+df_F1 <- read_csv(file = "output/main_simulation/df_F1.csv")
+df_all <- read_csv(file = "output/main_simulation/simulation_output.csv")
 
 #-------- Figure 2 - Panel (A) - Plot for number of signatures K
 p_Ktot <- df_all %>%

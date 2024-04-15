@@ -72,8 +72,13 @@ if (rerun) {
                                            alpha = 0.5, a = 1, burnin = 10000, 
                                            nsamples = 2000, progressbar = FALSE, ncores = 4, nchains = 4, swap_prior = TRUE)
   print(out_CompNMF_cosmic_all)
-  saveRDS(out_CompNMF_cosmic_all, file = "output/Application_21brca/CompressiveNMF_cosmic_all.rds.gzip", compress = "gzip")
+  saveRDS(out_CompNMF_cosmic_all_nochains, file = "output/Application_21brca/CompressiveNMF_cosmic_all_best.rds.gzip")
   
+  # To save space, we remove the chains that are not used
+  out_CompNMF_cosmic_all_bestchain <- out_CompNMF_cosmic_all
+  out_CompNMF_cosmic_all_bestchain$mcmc_out[-out_CompNMF_cosmic_all_bestchain$selected_chain] <- NULL
+  out_CompNMF_cosmic_all_bestchain$selected_chain <- 1
+  saveRDS(out_CompNMF_cosmic_all_bestchain, file = "output/Application_21brca/CompressiveNMF_cosmic_all_bestchain.rds.gzip", compress = "gzip")
   
   #-------------------------------------------------------------------------------
   # SigneR
@@ -104,7 +109,7 @@ if (rerun) {
 # Reload all the models
 out_ARD_pcawg <- readRDS("output/Application_21brca/ARD_pcawg.rds.gzip")
 out_CompNMF <- readRDS("output/Application_21brca/CompressiveNMF.rds.gzip")
-out_CompNMF_cosmic_all <- readRDS("output/Application_21brca/CompressiveNMF_cosmic_all.rds.gzip")
+out_CompNMF_cosmic_all <- readRDS("output/Application_21brca/CompressiveNMF_cosmic_all_bestchain.rds.gzip")
 out_signeR <- readRDS("output/Application_21brca/signeR.rds.gzip")
 out_sigPro <- readRDS("output/Application_21brca/sigPro.rds.gzip")
 out_CUSP <- readRDS("output/Application_21brca/PoissonCUSP.rds.gzip")
