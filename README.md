@@ -23,21 +23,43 @@ mutational signatures analysis, arxiv:
 ## R code description, file by file
 
 ### Methods
+
 - `R/CompressiveNMF.R`
+  - The file contains our
+
+- `R/SignatureAnalyzer.R`
+
+- `R/signeR.R`
+
+- `R/SigProfilerExtractor.R`
+
+- `R/PoissonCUSP.R`
+
+### Files to run the Simulation
+
+- `R/main_Simulation.R`:
+
+- `R/main_Simulation_analysis.R`:
+
+
+### Files to run the Application
 
 - `R/Application_21Breast.R`
 
+### Additional functions to postprocess the output and to plot the signatures
+
+- `R/Postprocess_functions.R`
+
+- `R/rInvKummer.R`
+
+- `R/plot_signatures.R`
+
+
+### Miscellanea
+
 - `R/get_COSMIC_data.R`
 
-### Files to run the simulation and 
-- `R/main_Simulation_analysis.R`
-- `R/main_Simulation.R`
-- `R/plot_signatures.R`
-- `R/PoissonCUSP.R`
-- `R/Postprocess_functions.R`
-- `R/rInvKummer.R`
-- `R/SignatureAnalyzer.R`
-- `R/signeR.R`
-- `R/SigProfilerExtractor.R`
+- `src/tune_betah.cpp`
+
 
 
