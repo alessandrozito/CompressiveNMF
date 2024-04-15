@@ -65,6 +65,11 @@ if (rerun) {
   print(out_CompNMF)
   saveRDS(out_CompNMF, file = "output/Application_21brca/CompressiveNMF.rds.gzip", compress = "gzip")
   
+  # To save space, we remove the chains that are not used
+  out_CompNMF_bestchain <- out_CompNMF
+  out_CompNMF_bestchain$mcmc_out[-out_CompNMF_bestchain$selected_chain] <- NULL
+  out_CompNMF_bestchain$selected_chain <- 1
+  saveRDS(out_CompNMF_bestchain, file = "output/Application_21brca/CompressiveNMF_bestchain.rds.gzip", compress = "gzip")
   
   #-------------- CompressiveNMF + cosmic
   out_CompNMF_cosmic_all <- CompressiveNMF(X = X, use_cosmic = TRUE,
@@ -74,10 +79,20 @@ if (rerun) {
   print(out_CompNMF_cosmic_all)
   saveRDS(out_CompNMF_cosmic_all_nochains, file = "output/Application_21brca/CompressiveNMF_cosmic_all_best.rds.gzip")
   
-  # To save space, we remove the chains that are not used
+  out_CompNMF_cosmic_all <- readRDS("output/Application_21brca/CompressiveNMF_cosmic_all.rds.gzip")
+  out_CompNMF_cosmic_all
+  
+  # To save space, we remove the chains that are not used and we remove the redundant signatures
   out_CompNMF_cosmic_all_bestchain <- out_CompNMF_cosmic_all
   out_CompNMF_cosmic_all_bestchain$mcmc_out[-out_CompNMF_cosmic_all_bestchain$selected_chain] <- NULL
   out_CompNMF_cosmic_all_bestchain$selected_chain <- 1
+  
+  chain <- out_CompNMF_cosmic_all_bestchain$mcmc_out[[1]]
+  nonzero_sign <- which(colMeans(chain$Mu) > 0.05)
+  out_CompNMF_cosmic_all_bestchain$mcmc_out[[1]]$Signatures <- chain$Signatures[, , nonzero_sign] 
+  out_CompNMF_cosmic_all_bestchain$mcmc_out[[1]]$Weights <- chain$Weights[, nonzero_sign , ] 
+  out_CompNMF_cosmic_all_bestchain$mcmc_out[[1]]$Mu <- chain$Mu[, nonzero_sign] 
+  
   saveRDS(out_CompNMF_cosmic_all_bestchain, file = "output/Application_21brca/CompressiveNMF_cosmic_all_bestchain.rds.gzip", compress = "gzip")
   
   #-------------------------------------------------------------------------------
@@ -108,12 +123,11 @@ if (rerun) {
 
 # Reload all the models
 out_ARD_pcawg <- readRDS("output/Application_21brca/ARD_pcawg.rds.gzip")
-out_CompNMF <- readRDS("output/Application_21brca/CompressiveNMF.rds.gzip")
+out_CompNMF <- readRDS("output/Application_21brca/CompressiveNMF_bestchain.rds.gzip")
 out_CompNMF_cosmic_all <- readRDS("output/Application_21brca/CompressiveNMF_cosmic_all_bestchain.rds.gzip")
 out_signeR <- readRDS("output/Application_21brca/signeR.rds.gzip")
 out_sigPro <- readRDS("output/Application_21brca/sigPro.rds.gzip")
 out_CUSP <- readRDS("output/Application_21brca/PoissonCUSP.rds.gzip")
-
 
 
 #-------------------------------------------------- Figure 3 - Panel A

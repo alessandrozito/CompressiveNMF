@@ -481,11 +481,11 @@ match_to_cosmic_uncertainty_CompNMF <- function(out_CompNMF) {
   sigMat <- out_CompNMF$Signatures
   # Get the best chain
   nchains <- length(out_CompNMF$mcmc_out)
-  post <-lapply(out_CompNMF$mcmc_out, function(x) postprocess_mcmc_out(x, 0.05))
-  logposterior <- sapply(1:nchains, function(i) post[[i]]$logpost)
-  id_best <- which.max(logposterior)
-  # Get the posterior samples for all signatures
-  chain <- out_CompNMF$mcmc_out[[id_best]]
+  # post <-lapply(out_CompNMF$mcmc_out, function(x) postprocess_mcmc_out(x, 0.05))
+  # logposterior <- sapply(1:nchains, function(i) post[[i]]$logpost)
+  # id_best <- which.max(logposterior)
+  # # Get the posterior samples for all signatures
+  chain <- out_CompNMF$mcmc_out[[out_CompNMF$selected_chain]]
   nonzero_sign <- which(colMeans(chain$Mu) > 0.05)
   R_chain <- chain$Signatures[, , nonzero_sign]
   # Match signatures

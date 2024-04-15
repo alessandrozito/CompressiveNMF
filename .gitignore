@@ -13,7 +13,7 @@ cluster_jobs/
 output/Application_21brca/old_models
 output/Application_21brca/CompressiveNMF.rds.gzip
 output/Application_21brca/CompressiveNMF_cosmic_all.rds.gzip
-output/Application_21brca/CompressiveNMF_cosmic_all_bestchain.rds.gzip
+
 
 # Simulation - remove large files
 output/old_simulations
