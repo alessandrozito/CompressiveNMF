@@ -7,6 +7,162 @@ library(doParallel)
 source("~/CompressiveNMF/R/rInvKummer.R")
 source("~/CompressiveNMF/R/Postprocess_functions.R")
 
+#' Function for our compressive NMF methods
+#' @param X The input data matrix.
+#' @param K Number of signatures.
+#' @param nsamples Number of samples in each MCMC chain.
+#' @param burnin Number of burn-in iterations in each MCMC chain.
+#' @param alpha Parameter for the Dirichlet prior in the signature
+#' @param a Parameter for the local gamma prior over the loadings 
+#' @param epsilon Parameter controlling the sparsity of the loadings.
+#' @param nchains Number of chains to run in parallel.
+#' @param ncores Number of CPU cores to use.
+#' @param a0 Shape parameter for the compressive hyperprior
+#' @param b0 Shape parameter for the compressive hyperprior
+#' @param S Matrix of informative prior for the signtures
+#' @param cutoff_excluded Cutoff for excluded signatures
+#' @param use_cosmic Logical, indicating whether to use Cosmic data.
+#' @param swap_prior Logical, indicating whether to swap the informative prior at 2/3 of the burnin phase.
+#' @param betah Parameter controlling the strenght of the prior for the informative priors in S.
+#' @param betah_optimal Logical, indicating whether to use an optimal betah. See \code{src/tune_betah.cpp}
+#' @param useInvKummer Logical, indicating whether to use inverse Kummer distribution to sample from the full conditional for mu
+#' @param progressbar Logical, indicating whether to show a progress bar.
+#' @param verbose Logical, indicating whether to display verbose output.
+#' @param seed Seed for reproducibility.
+#'
+#' @return Returns a list of results from CompressiveNMF.
+CompressiveNMF <- function(X,
+                           K,
+                           nsamples = 1000,
+                           burnin = 1000,
+                           alpha = 0.5,
+                           a = 1,
+                           epsilon = 0.01,
+                           nchains = 4,
+                           ncores = 4,
+                           a0 = NULL,
+                           b0 = NULL,
+                           S = NULL,
+                           cutoff_excluded = 0.05,
+                           use_cosmic = FALSE,
+                           swap_prior = TRUE,
+                           betah = 100, 
+                           betah_optimal = TRUE,
+                           useInvKummer = FALSE,
+                           progressbar = TRUE, 
+                           verbose = TRUE,
+                           seed = 10) {
+  t_start <- Sys.time()
+  # Check if the matrix S is correctly specified
+  if(!is.null(S)){
+    if(!is.matrix(S)){
+      stop("The hyperparameter S must be a matrix")
+    }
+  }
+  
+  # If we use the Cosmic database, the overwrite the matrix S
+  if(use_cosmic){
+    load("data/Cosmic_data_no_artifacts.rdata")
+    S <- as.matrix(cosmic_data[, -c(1,2,3)])
+  }
+  
+  # Extract information from the data
+  I <- nrow(X)
+  J <- ncol(X)
+  if(!is.null(S)){
+    H <- ncol(S)
+    Ktot <- K + H
+    prior_names <- colnames(S)
+    if(K > 0){
+      prior_names <- c(prior_names, paste0("SBSnew", c(1:K)))
+    }
+  } else {
+    Ktot <- K
+    prior_names <- paste0("SBSnew", c(1:K))
+  }
+  
+  # Set the hyperparameters for the Compressive hyperprior
+  if(is.null(a0)){
+    a0 <- a * J + 1
+    b0 <- a * epsilon * J # implies that the mean for mu epsilon
+  }
+  
+  # Prepare the hyperparameters in the signatures
+  SignaturePrior <- matrix(alpha, nrow = I, ncol = Ktot)
+  
+  if(!is.null(S)){
+    if(betah_optimal & use_cosmic){
+      load("data/optimal_betah.rdata")
+      betah <- betah[colnames(S)]
+      # Check that betah and S have the same dimension
+      if(length(betah) != ncol(S)){
+        stop("length of betah must be the same as number of columns of S")
+      }
+    }
+    SignaturePrior[, 1:H] <- t(betah)[rep(1, I), ] * S
+  }
+  colnames(SignaturePrior) <- prior_names
+  
+  # Find the number of non-zero entries to speed-up the sampler
+  nonzero_ids <- which(X != 0, arr.ind = TRUE)
+  
+  # Pack the model parameters
+  model_pars <- list()
+  model_pars$a <- a
+  model_pars$alpha <- alpha
+  model_pars$a0 <- a0
+  model_pars$b0 <- b0
+  model_pars$cutoff_excluded <- cutoff_excluded
+  model_pars$SignaturePrior <- SignaturePrior
+  model_pars$nonzero_ids <- nonzero_ids 
+  model_pars$progressbar <- progressbar
+  model_pars$verbose <- verbose
+  model_pars$swap_prior <- swap_prior
+  model_pars$betah <- betah
+  model_pars$useInvKummer <- useInvKummer
+  model_pars$S <- S
+  
+  # Run the sampler across different chains
+  registerDoParallel(ncores)
+  set.seed(seed, kind = "L'Ecuyer-CMRG")
+  mcmc_out <- foreach(i = 1:nchains) %dopar% {
+    if(!progressbar){
+      verbose.out <- paste0("chain_status_", i,".txt")
+    } else {
+      verbose.out <- NULL 
+    }
+    # Step 1 - initialize the sampler
+    init_pars <- Initialize_CompressiveNMF(X, model_pars)
+    # Step 2 - run the sampler
+    Run_mcmc_CompressiveNMF(X, model_pars, init_pars, nsamples, burnin,
+                            verbose.out = verbose.out)
+  }
+  
+  
+  # Select the chain with the highest log posterior as solution
+  post <-lapply(mcmc_out, function(x) postprocess_mcmc_out(x, cutoff_excluded))
+  
+  # Calculate Posterior means 
+  logposterior <- sapply(1:nchains, function(i) post[[i]]$logpost)
+  id_best <- which.max(logposterior)
+  
+  # Record wall time of execution
+  time <- difftime(Sys.time(), t_start, units = "secs")[[1]]
+  
+  # Final output
+  out <- list(
+    Signatures = post[[id_best]]$Signatures,
+    Weights = post[[id_best]]$Weights, 
+    RelWeights = post[[id_best]]$RelWeights,
+    selected_chain = id_best, 
+    time = time,
+    mcmc_out = mcmc_out)
+  class(out) <- "CompressiveNMF"
+  return(out)
+}
+
+# Additional functions
+
 # Calculate the value of the log-posterior
 calculate_logPosterior <- function(X, R, Theta, mu, a, a0, b0, SignaturePrior){
   Lambda <- R %*% Theta
@@ -324,136 +480,5 @@ print.CompressiveNMF <- function(object, ...){
   # Plot logposteriors
   plot_logpost_chain(object$mcmc_out)
   par(mfrow = c(1,1))
-}
-
-# Function to run our method
-CompressiveNMF <- function(X,
-                           K,
-                           nsamples = 1000,
-                           burnin = 1000,
-                           alpha = 0.5,
-                           a = 1,
-                           epsilon = 0.01,
-                           nchains = 4,
-                           ncores = 4,
-                           a0 = NULL,
-                           b0 = NULL,
-                           S = NULL,
-                           cutoff_excluded = 0.05,
-                           use_cosmic = FALSE,
-                           swap_prior = TRUE,
-                           betah = 100, 
-                           betah_optimal = TRUE,
-                           useInvKummer = FALSE,
-                           progressbar = TRUE, 
-                           verbose = TRUE,
-                           seed = 10) {
-  t_start <- Sys.time()
-  # Check if the matrix S is correctly specified
-  if(!is.null(S)){
-    if(!is.matrix(S)){
-      stop("The hyperparameter S must be a matrix")
-    }
-  }
-  
-  # If we use the Cosmic database, the overwrite the matrix S
-  if(use_cosmic){
-    load("data/Cosmic_data_no_artifacts.rdata")
-    S <- as.matrix(cosmic_data[, -c(1,2,3)])
-  }
-  
-  # Extract information from the data
-  I <- nrow(X)
-  J <- ncol(X)
-  if(!is.null(S)){
-    H <- ncol(S)
-    Ktot <- K + H
-    prior_names <- colnames(S)
-    if(K > 0){
-      prior_names <- c(prior_names, paste0("SBSnew", c(1:K)))
-    }
-  } else {
-    Ktot <- K
-    prior_names <- paste0("SBSnew", c(1:K))
-  }
-  
-  # Set the hyperparameters for the Compressive hyperprior
-  if(is.null(a0)){
-    a0 <- a * J + 1
-    b0 <- a * epsilon * J # implies that the mean for mu epsilon
-  }
-  
-  # Prepare the hyperparameters in the signatures
-  SignaturePrior <- matrix(alpha, nrow = I, ncol = Ktot)
-  
-  if(!is.null(S)){
-    if(betah_optimal & use_cosmic){
-      load("data/optimal_betah.rdata")
-      betah <- betah[colnames(S)]
-      # Check that betah and S have the same dimension
-      if(length(betah) != ncol(S)){
-        stop("length of betah must be the same as number of columns of S")
-      }
-    }
-    SignaturePrior[, 1:H] <- t(betah)[rep(1, I), ] * S
-  }
-  colnames(SignaturePrior) <- prior_names
-  
-  # Find the number of non-zero entries to speed-up the sampler
-  nonzero_ids <- which(X != 0, arr.ind = TRUE)
-  
-  # Pack the model parameters
-  model_pars <- list()
-  model_pars$a <- a
-  model_pars$alpha <- alpha
-  model_pars$a0 <- a0
-  model_pars$b0 <- b0
-  model_pars$cutoff_excluded <- cutoff_excluded
-  model_pars$SignaturePrior <- SignaturePrior
-  model_pars$nonzero_ids <- nonzero_ids 
-  model_pars$progressbar <- progressbar
-  model_pars$verbose <- verbose
-  model_pars$swap_prior <- swap_prior
-  model_pars$betah <- betah
-  model_pars$useInvKummer <- useInvKummer
-  model_pars$S <- S
-  
-  # Run the sampler across different chains
-  registerDoParallel(ncores)
-  set.seed(seed, kind = "L'Ecuyer-CMRG")
-  mcmc_out <- foreach(i = 1:nchains) %dopar% {
-    if(!progressbar){
-      verbose.out <- paste0("chain_status_", i,".txt")
-    } else {
-      verbose.out <- NULL 
-    }
-    # Step 1 - initialize the sampler
-    init_pars <- Initialize_CompressiveNMF(X, model_pars)
-    # Step 2 - run the sampler
-    Run_mcmc_CompressiveNMF(X, model_pars, init_pars, nsamples, burnin,
-                                   verbose.out = verbose.out)
-  }
-  
-  
-  # Select the chain with the highest log posterior as solution
-  post <-lapply(mcmc_out, function(x) postprocess_mcmc_out(x, cutoff_excluded))
-  
-  # Calculate Posterior means 
-  logposterior <- sapply(1:nchains, function(i) post[[i]]$logpost)
-  id_best <- which.max(logposterior)
-  
-  # Record wall time of execution
-  time <- difftime(Sys.time(), t_start, units = "secs")[[1]]
-
-  # Final output
-  out <- list(
-    Signatures = post[[id_best]]$Signatures,
-    Weights = post[[id_best]]$Weights, 
-    RelWeights = post[[id_best]]$RelWeights,
-    selected_chain = id_best, 
-    time = time,
-    mcmc_out = mcmc_out)
-  class(out) <- "CompressiveNMF"
-  return(out)
 }
 
