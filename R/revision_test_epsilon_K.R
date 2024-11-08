@@ -58,7 +58,13 @@ test_epsilon_k <- function(K_range,
                            ndatasets = 20, 
                            overdispersion = 0, nsamples = 50, burnin = 100){
   values <- expand.grid("K" = K_range, "epsilon" = epsilon_range)
-  registerDoParallel(min(nrow(values), parallel::detectCores() - 1))
+  
+  # Create the cluster
+  num_cores <- min(nrow(values), parallel::detectCores() - 1)
+  cl <- makeCluster(num_cores)
+  registerDoParallel(cl)
+  
+  # Parallelize
   results <- foreach(s = c(1:nrow(values)), .combine = "rbind") %dopar% {
     # Simulate a dataset
     data_all <- lapply(1:ndatasets, function(x) simulate_data(K_new = 2, 
@@ -107,6 +113,7 @@ test_epsilon_k <- function(K_range,
     output$Kused = values$K[s]
     output
   }
+  stopCluster(cl)
   return(results)
 }
 
