@@ -211,13 +211,13 @@ plot_matrix_signature <- function(sigMat = NULL,
 
 
 plot_matrix_signature_v2 <- function(sigMat,
-                                  sigChain = NULL,
-                                  add_cosine_cosmic = TRUE,
-                                  aspect.ratio = NULL,
-                                  dims = c(2, 3),
-                                  n_signs_to_add = 0,
-                                  palette =c("#084B9D", "#2473D0", "#A4C1ED", "#F2DAAC", "#F29D52", "#E82C36"), 
-                                  palette_errors =c("#A4C1ED", "darkblue", "#2473D0", "#F29D52", "#E82C36", "darkred")) {
+                                     sigChain = NULL,
+                                     add_cosine_cosmic = TRUE,
+                                     aspect.ratio = NULL,
+                                     dims = c(2, 3),
+                                     n_signs_to_add = 0,
+                                     palette =c("#084B9D", "#2473D0", "#A4C1ED", "#F2DAAC", "#F29D52", "#E82C36"), 
+                                     palette_errors =c("#A4C1ED", "darkblue", "#2473D0", "#F29D52", "#E82C36", "darkred")) {
   load("~/CompressiveNMF/data/Cosmic_data.rdata")
 if(is.null(sigChain)){
   if(n_signs_to_add > 0){
@@ -316,13 +316,21 @@ plot_weights <- function(Wmat, col_palette = c("darkblue", "#2473D0", "#A4C1ED",
     scale_x_discrete(position = "top") +
     theme(axis.text.x = element_text(angle = -40, color = "gray35",
                                      vjust = .5, size = 8.5, hjust = 0.95), axis.title.x = element_blank(), 
-          legend.position = "bottom")+
+          legend.position = "bottom", 
+          )+
     scale_fill_manual("", values = col_palette)+
     ylab("Activity %") +
     guides(fill = guide_legend(ncol = 4))
   
   return(pW)
 } 
+
+
+# load("~/CompressiveNMF/data/Cosmic_data.rdata")
+# cosmic_data$SBS7a
+# library(LaplacesDemon)
+# c(rdirichlet(1, 10 * cosmic_data$SBS5))
+# plot_cosmic_signature("SBS5", sign_inferred = c(rdirichlet(1, 10 * cosmic_data$SBS5)))
 
 
 
@@ -365,4 +373,57 @@ plot_weights <- function(Wmat, col_palette = c("darkblue", "#2473D0", "#A4C1ED",
 #   scale_color_gradient("Weight",low = "white", high = "blue",
 #                         space = "Lab",na.value = "grey50",guide = "colourbar")
 
-# #-------------------------------------------------------------------------------
+# sigAD <- c(read_csv("ADsig-approx.csv")$sig)
+# plot_signature(sigAD) + xlab("Mutation type (single trinucleotide variant with trinucleotide context)")
+# plot_signature
+# 
+# 
+# load("~/CompressiveNMF/data/Cosmic_data_known_aetiology.rdata")
+# cbind(cosmic_data$Channel, sigAD)
+# 
+# 
+# palette <- c("#084B9D", "#2473D0", "#A4C1ED", "#F2DAAC", "#F29D52", "#E82C36")
+# cosmic_data %>% 
+#   dplyr::select(Triplet, Mutation) %>%
+#   arrange(Mutation, Triplet)%>%
+#   dplyr::mutate(prob = sigAD) %>%
+#   ggplot(aes(x = Triplet, y = prob, fill = Mutation))+
+#   geom_bar(stat = "identity", width = 0.7) +
+#   facet_wrap(~ Mutation, scales = "free_x", nrow = 1)+
+#   ylab("Mutation probability")+
+#   xlab("Mutation type (single nucleotide variant with trinucleotide context)")+
+#   theme_minimal()+
+#   labs(title = "Mutational signature associated with Alzheimer's disease")+
+#   scale_fill_manual(values = palette)+
+#   theme(
+#         legend.position = "none",
+#         axis.text.x = element_text(angle = 90, color = "gray35",
+#                                    vjust = .5, size = 5.5, margin = margin(t = -5)), 
+#         panel.grid.major.x = element_blank(), 
+#         plot.title = element_text(hjust = 0.5), 
+#         strip.text = element_text(colour = "gray30", face = "bold"))
+# ggsave("ADsig.pdf", height = 2.39, width = 7.25)
+#   
+# 
+#   
+# dfAD <- read_csv("41586_2022_4640_MOESM6_ESM.csv")
+# ggplot(dfAD %>%
+#           filter(`Neuron included after signature-based filtering (as shown in Ext. Data Fig. 1g)` == "Included"), 
+#        aes(x = Age, 
+#            y = `Estimated SNVs (per autosomal genome, post-filtering)`, 
+#            color = Diagnosis, 
+#            shape = Diagnosis))+
+#   #geom_point(size = 2.5)+
+#   geom_point(size = 1.5, stroke = .55)+
+#   geom_smooth(method=lm, se=FALSE, show.legend = FALSE)+
+#   theme_minimal()+
+#   theme(
+#         legend.position = "top")+
+#   ylab("Somatic SNVs / neuron")+
+#   scale_shape_manual(labels = c("AD", "Controls"), values = c(2, 1))+
+#   scale_color_manual(labels = c("AD", "Controls"), values = c("#E82C36", "#084B9D"))
+# ggsave("AD_vs_control.pdf", height = 2.39, width = 3.1)
+# 
+# 
+# 
+# # #-------------------------------------------------------------------------------

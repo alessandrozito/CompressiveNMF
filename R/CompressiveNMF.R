@@ -62,7 +62,7 @@ CompressiveNMF <- function(X,
   
   # If we use the Cosmic database, the overwrite the matrix S
   if(use_cosmic){
-    load("data/Cosmic_data_no_artifacts.rdata")
+    load("~/CompressiveNMF/data/Cosmic_data_no_artifacts.rdata")
     S <- as.matrix(cosmic_data[, -c(1,2,3)])
   }
   
@@ -92,7 +92,7 @@ CompressiveNMF <- function(X,
   
   if(!is.null(S)){
     if(betah_optimal & use_cosmic){
-      load("data/optimal_betah.rdata")
+      load("~/CompressiveNMF/data/optimal_betah.rdata")
       betah <- betah[colnames(S)]
       # Check that betah and S have the same dimension
       if(length(betah) != ncol(S)){

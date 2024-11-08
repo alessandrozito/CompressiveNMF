@@ -11,8 +11,8 @@ source("R/plot_signatures.R")
 source("R/Postprocess_functions.R")
 source("R/plot_signatures.R")
 
-color_values <- c("darkblue", "royalblue", "#02DB9E", "#FCB92B", "#DB5902", "#C30027")
-labels <- c("CompNMF + cosmic", "CompNMF", "signeR", "SigProfiler", "SignatureAnalyzer", "PoissonCUSP")
+color_values <- c("darkblue", "royalblue", "#02DB9E", "#FCB92B", "#DB5902", "#C30027", "darkred")
+labels <- c("CompNMF + cosmic", "CompNMF", "signeR", "SigProfiler", "SignatureAnalyzer", "PoissonCUSP", "BNMF")
 
 # Load the output
 df_F1 <- read_csv(file = "output/main_simulation/df_F1.csv")
@@ -65,8 +65,9 @@ p_sens_prec <- df_all %>%
                             Method == "6.CUSP" ~ "1.CUSP",
                             Method == "5.ARD" ~ "2.ARD",
                             Method == "1.CompNMFcos" ~ "6.CompNMFcos",
-                            Method == "2.CompNMF" ~ "5.CompNMF")) %>%
-  group_by(Method, K_new2, overd, J) %>%
+                            Method == "2.CompNMF" ~ "5.CompNMF", 
+                            Method == "7.BayesNMF" ~ "7.BayesNMF")) %>%
+  group_by(Method, K_new2, overd, J) %>% 
   summarise_all(mean) %>%
   ggplot() +
   scale_color_manual(values = rev(color_values), labels = rev(labels))+
@@ -85,6 +86,37 @@ p_sens_prec <- df_all %>%
   guides(color = guide_legend(reverse=TRUE))
 ggsave(p_sens_prec, filename = "figures/Prec_sensitivity_plot.pdf", width = 8.51, height = 3.15)
 
+
+df_all %>%
+  dplyr::select(Method, J, overd, K_new, Precision, Sensitivity) %>%
+  mutate(J = as.factor(J),
+         overd = paste0("Overdispersion = ", as.factor(overd)), 
+         K_new2 = paste0("K = ", K_new + 4),
+         K_new2 = fct_reorder(K_new2, as.integer(K_new)),
+         Method = case_when(Method == "4.SigPro" ~ "4.SigPro",
+                            Method == "3.signeR" ~ "5.signeR",
+                            Method == "6.CUSP" ~ "2.CUSP",
+                            Method == "5.ARD" ~ "3.ARD",
+                            Method == "1.CompNMFcos" ~ "7.CompNMFcos",
+                            Method == "2.CompNMF" ~ "6.CompNMF", 
+                            Method == "7.BayesNMF" ~ "1.BayesNMF")) %>%
+  group_by(Method, K_new2, overd, J) %>% 
+  summarise_all(mean) %>%
+  ggplot() +
+  scale_color_manual(values = rev(color_values), labels = rev(labels))+
+  geom_contour(data = grid, aes(x = x, y = y, z = f), linetype = "dashed", alpha = 0.5, color = "black") +
+  metR::geom_text_contour(data = grid, aes(x = x, y = y, z = f), stroke = 0.2, alpha = 1, color = "grey55")+
+  geom_point(aes(x = Precision, y = Sensitivity, color = Method, shape = J), 
+             size = 2, stroke = 1) +
+  theme_bw() +
+  facet_grid(~overd+K_new2)+
+  scale_shape_manual(values = c(1, 0, 2))+
+  xlim(c(0.2, 1))+ ylim(c(0.2, 1))+
+  xlab("Precision")+ylab("Sensitivity")+
+  theme(legend.position ="top",
+        legend.margin=margin(0,0,0,0),
+        legend.box.margin=margin(-5,-5,-5,-5))+
+  guides(color = guide_legend(reverse=TRUE))
 
 #-------- Figure 2 - Panel (C) - Plot for F1 score when overdispersion = 0.15
 pF1 <- df_F1 %>%

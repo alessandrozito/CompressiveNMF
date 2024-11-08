@@ -1,0 +1,18 @@
+Package: CompressiveNMF
+Type: Package
+Title: Compressive Bayesian non-negative matrix factorization for mutational signature analysis
+Version: 1.0.0
+Author: Alessandro Zito
+Maintainer: Alessandro Zito <azito@hsph.harvard.edu>
+Description: Implements a Bayesian non-negative matrix factorization for count data. Details of the model 
+             are available at in Zito and Miller (2024+), available at https://arxiv.org/abs/2404.10974
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
+Imports: Rcpp, RcppArmadillo, LaplacesDemon, RcppHungarian, ggplot2, dplyr, stringr, foreach, doParallel, lsa, magrittr
+LinkingTo: Rcpp, RcppArmadillo
+Suggests: rmarkdown
+VignetteBuilder: knitr
+Depends: 
+    R (>= 4.0)

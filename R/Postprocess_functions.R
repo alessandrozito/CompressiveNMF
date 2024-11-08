@@ -169,6 +169,41 @@ compute_RMSE_Signature <- function(R_hat, R_true){
 }
 
 
+get_ESS_Comp <- function(resComp){
+  
+  R_all <- resComp$mcmc_out[[resComp$selected_chain]]$Signatures
+  Theta_all <- resComp$mcmc_out[[resComp$selected_chain]]$Weights
+  Mu_all <- resComp$mcmc_out[[resComp$selected_chain]]$Mu
+  select <- colMeans(Mu_all) > 0.005
+  
+  EffectiveSigs <- apply(R_all[, , select], c(2,3), function(x) coda::effectiveSize(x))
+  EffectiveTheta <- apply(Theta_all[, select, ], c(2,3), function(x) coda::effectiveSize(x))
+  EffectiveRelW <- coda::effectiveSize(Mu_all[, select])
+  effsize <- c("ESS_Sig_mean" = mean(colMeans(EffectiveSigs)), 
+               "ESS_Sig_sd" = sd(colMeans(EffectiveSigs)),
+               "ESS_Theta_mean" = mean(rowMeans(EffectiveTheta)), 
+               "ESS_Theta_sd" = sd(rowMeans(EffectiveTheta)), 
+               "ESS_relweight_mean" = mean(EffectiveRelW), 
+               "ESS_relweight_sd" = sd(EffectiveRelW))
+  
+  return(effsize)
+}
+
+get_ESS_signeR <- function(resSigneR){
+  
+  R_all <- resSigneR$SignExposures@Sign[, , 1001:2000]
+  Theta_all <- resSigneR$SignExposures@Exp[, , 1001:2000]
+  EffectiveSigs <- apply(R_all, c(1,2), function(x) coda::effectiveSize(x))
+  EffectiveTheta <- apply(Theta_all, c(1, 2), function(x) coda::effectiveSize(x))
+  effsize <- c("ESS_Sig_mean" = mean(colMeans(EffectiveSigs)), 
+               "ESS_Sig_sd" = sd(colMeans(EffectiveSigs)),
+               "ESS_Theta_mean" = mean(rowMeans(EffectiveTheta)), 
+               "ESS_Theta_sd" = sd(rowMeans(EffectiveTheta)), 
+               "ESS_relweight_mean" = NA, 
+               "ESS_relweight_sd" = NA)
+  
+  return(effsize)
+}
 
 #---------------------------------------------------------------------- CompressiveNMF
 Postprocess_Compressive <- function(resComp, data) {
@@ -190,6 +225,8 @@ Postprocess_Compressive <- function(resComp, data) {
   rmse_Theta <- compute_RMSE_Theta(Theta_true = data$Theta, Theta_hat = Theta_hat, matchedSign$match)  
   # Step 5 - calculate the sensitivity and precision
   sens_prec  <- Compute_sensitivity_precision(R_hat = R_hat, R_true)
+  # Step 6 - add Effective sample sizes
+  effsize <- get_ESS_Comp(resComp)
   return(list(
     Lambda = Lambda,
     R_hat = R_hat,
@@ -203,7 +240,8 @@ Postprocess_Compressive <- function(resComp, data) {
                 rmse_Theta, 
                 sens_prec,
                 "cos_sim" = cos_sim, 
-                "time" = resComp$time)
+                "time" = resComp$time, 
+                effsize)
   ))
 }
 
@@ -260,6 +298,8 @@ Postprocess_signeR <- function(resSigneR, data) {
   rmse_Theta <- compute_RMSE_Theta(Theta_true = data$Theta, Theta_hat = resSigneR$Ehat, matchedSign$match)
   # Step 5 - calculate the sensitivity and precision
   sens_prec  <- Compute_sensitivity_precision(R_hat = resSigneR$Phat, data$Rmat)
+  # Step 6 - add Effective sample sizes
+  effsize <- get_ESS_signeR(resSigneR)
   return(list(
     "Lambda" = Lambda,
     "R_hat" = resSigneR$Phat,
@@ -272,7 +312,8 @@ Postprocess_signeR <- function(resSigneR, data) {
                   rmse_Theta, 
                   sens_prec,
                   "cos_sim" = cos_sim, 
-                  "time" = resSigneR$time)
+                  "time" = resSigneR$time, 
+                  effsize)
   ))
 }
 
@@ -407,9 +448,22 @@ Postprocess_PoissonCUSP <- function(resCUSP, data) {
 
 
 #---------------------------------------------------------------------- Extract results
+
+
+add_ess <- function(x) {
+  names_ess <- c("ESS_Sig_mean", "ESS_Sig_sd", "ESS_Theta_mean",
+                 "ESS_Theta_sd", "ESS_relweight_mean", "ESS_relweight_sd")
+  add_na <- rep(NA, length(names_ess))
+  names(add_na) <- names_ess
+  if(!any(names_ess %in% names(x))){
+    x <- c(x, add_na)
+  }
+  x
+}  
+  
 extract_results <- function(out, name){
   df <- data.frame("Method" = name, "Simulation" = 1:length(out))
-  df <- cbind(df, as.data.frame(t(sapply(1:length(out), function(i) out[[i]]$results, simplify = TRUE))))
+  df <- cbind(df, as.data.frame(t(sapply(1:length(out), function(i) add_ess(out[[i]]$results), simplify = TRUE))))
   if(name == "3.CUSP"){
     df$K = unlist(lapply(out, function(x) sum(x$nspike < 0.05)))
   }
@@ -422,7 +476,10 @@ extract_results <- function(out, name){
 aggregate_results <- function(out_CompressiveNMF = NULL,
                               out_CompressiveNMF_cosmic = NULL,
                               out_PoissonCUSP = NULL, 
-                              out_ARD = NULL, out_signeR = NULL, out_sigPro = NULL) {
+                              out_ARD = NULL, 
+                              out_signeR = NULL, 
+                              out_sigPro = NULL, 
+                              out_BayesNMF = NULL) {
   df_res <- NULL
   #---------- CompressiveNMF
   if(!is.null(out_CompressiveNMF)){
@@ -447,6 +504,10 @@ aggregate_results <- function(out_CompressiveNMF = NULL,
   #---------- sigProfiler
   if(!is.null(out_sigPro)){
     df_res <- rbind(df_res, extract_results(out_sigPro, name = "4.SigPro")) 
+  }
+  #---------- BayesianNMF
+  if(!is.null(out_BayesNMF)){
+    df_res <- rbind(df_res, extract_results(out_BayesNMF, name = "7.BayesNMF")) 
   }
   return(df_res)
 }

@@ -14,7 +14,7 @@ source("R/plot_signatures.R")
 
 # Load the dataset
 mut <- t(read.table(system.file("extdata","21_breast_cancers.mutations.txt", package="signeR"), header=TRUE, check.names=FALSE))
-transformed_names <- apply(str_split(rownames(mut), ":", simplify = TRUE), 1, function(x) {
+transformed_names <- apply(stringr::str_split(rownames(mut), ":", simplify = TRUE), 1, function(x) {
   y <- str_split(x[2], "", simplify = TRUE)
   y[2] <- paste0("[", x[1],"]")
   paste0(y, collapse = "")
@@ -192,7 +192,7 @@ df_matrix %>%
         axis.title.x = element_blank(),
         strip.text = element_text(colour = "black", size = 12),
         legend.position = "none") +
-  facet_wrap(~method, ncol = 1) +
+  facet_wrap(~method, ncol = 2) +
   ylab("Cosine Similarity with closest cosmic signature")
 ggsave("figures/uncertainty_all_methods.pdf", height = 6.97, width = 2.50)
 
@@ -344,6 +344,92 @@ ggsave("figures/Weight_SigProfiler.pdf", height = 3.13, width = 5.05)
 # Plot signatures
 plot_matrix_signature_v2(sigMat) + theme(aspect.ratio = .6) + labs(title = "SigProfiler")
 ggsave("figures/sig_suppl_SigProfiler.pdf", height = 9.08, width = 9.08)
+
+
+
+
+
+
+
+#-------------------------------------------------------- Add BayesNMF from brouwer
+dir_files <- "~/CompressiveNMF/output/Application_21brca/BayesNMF_brouwer/"
+ReshapeResults_BayesNMF_application <- function(dir_files, J = 21){
+  
+  # R matrix  
+  R <- as.matrix(read_table(paste0(dir_files, "Signatures.txt"), 
+                            col_names = FALSE, show_col_types = FALSE))
+  R_all <- reshape_python_array(R, dimension = 96)
+  Rmean <- apply(R_all, c(2, 3), mean)
+  lowCI <- apply(R_all, c(2, 3), function(x) quantile(x, 0.05))
+  highCI <- apply(R_all, c(2, 3), function(x) quantile(x, 0.95))
+  # Theta
+  Theta <- as.matrix(read_table(paste0(dir_files, "Loadings.txt"), 
+                                col_names = FALSE, show_col_types = FALSE))
+  Theta_all <- reshape_python_array(Theta, dimension = J)
+  Theta_mean <- apply(Theta_all, c(2, 3), mean)
+  
+  # Relevance weights
+  Lambda <- as.matrix(read_table(paste0(dir_files, "lambda.txt"), 
+                                 col_names = FALSE, show_col_types = FALSE))
+  
+  # time for execution
+  time_exec <- as.matrix(read_table(paste0(dir_files, "times.txt"), 
+                                    col_names = FALSE, show_col_types = FALSE))
+  time_exec <- time_exec[nrow(time_exec), 1]
+  
+  # Calculate the effective sample sizes
+  EffectiveSigs <- apply(R_all, c(2,3), function(x) coda::effectiveSize(x))
+  EffectiveTheta <- apply(Theta_all, c(2,3), function(x) coda::effectiveSize(x))
+  EffectiveLambda <- coda::effectiveSize(Lambda)
+  
+  # Select the number of signatures by excluding the ones that are plainly flat
+  norm_weight <- colSums(Rmean)
+  sigs_norm <- sapply(1:ncol(Rmean), function(i) Rmean[, i]/norm_weight[i])
+  Theta_norm <- t(sapply(1:ncol(Rmean), function(i) Theta_mean[, i]*norm_weight[i]))
+  select <- apply(sigs_norm, 2, function(x) cosine(x, rep(1, 96))) < 0.975
+  
+  lowCI <- apply(lowCI,2,  function(x) x/sum(x))
+  highCI <- apply(highCI,2,  function(x) x/sum(x))
+  return(list(
+    Signatures = sigs_norm,
+    CIsigs = list("lowCI" = lowCI, 
+                  "highCI" = highCI),
+    Theta = Theta_norm, 
+    RelWeights = colMeans(Lambda),
+    EffectiveSigs = EffectiveSigs,
+    EffectiveTheta = EffectiveTheta, 
+    EffectiveLambda = EffectiveLambda,
+    time = unname(time_exec)
+  ))
+}
+Xbrca <- as.matrix(read.table(file = "~/CompressiveNMF/R/run_BayesNMF_python/X_21breast.txt"))
+brca_appl <- ReshapeResults_BayesNMF_application(dir_files)
+
+rownames(brca_appl$Signatures) <- rownames(CompressiveNMF::COSMIC_v3.4_SBS96_GRCh37)
+rownames(brca_appl$CIsigs$lowCI) <- rownames(brca_appl$CIsigs$highCI) <- rownames(brca_appl$Signatures)
+CompressiveNMF:::plot.SBS.signature(brca_appl$Signatures, 
+                                    lowCI = brca_appl$CIsigs$lowCI,
+                                    highCI = brca_appl$CIsigs$highCI)
+
+
+
+plot(as.matrix(brca_appl$Signatures %*% brca_appl$Theta), Xbrca)
+
+
+rowMeans(brca_appl$Theta)
+
+Theta_norm <- apply(brca_appl$Theta, 2, function(x) x/sum(x))
+colnames(Theta_norm) <- paste0("pat", 1:ncol(Theta_norm))
+rownames(Theta_norm) <- paste0("sig",1:nrow(Theta_norm))
+CompressiveNMF:::plot_weights(t(Theta_norm))
+
+dist_unif <- apply(brca_appl$Signatures, 2, function(x) cosine(x, rep(1, 96)))
+brca_appl$RelWeights
+plot(dist_unif, brca_appl$RelWeights)
+
+plot(rowMeans(brca_appl$Theta), 1/brca_appl$RelWeights)
+
+
 
 
 

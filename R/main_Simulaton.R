@@ -9,9 +9,8 @@ source("R/SigProfilerExtractor.R")
 source("R/signeR.R")
 source("R/PoissonCUSP.R")
 source("R/CompressiveNMF.R")
-source("R/plot_signatures.R")
 source("R/Postprocess_functions.R")
-source("R/plot_signatures.R")
+#source("R/plot_signatures.R")
 
 create_directory <- function(dir) {
   if (!dir.exists(dir)) {
@@ -243,6 +242,7 @@ for(theta in theta_list){
         out_PoissonCUSP <- open_rds_file(paste0(out_dir, "/PoissonCUSP.rds.gzip"))
         out_signeR <- open_rds_file(paste0(out_dir, "/signeR.rds.gzip"))
         out_sigPro <- open_rds_file(paste0(out_dir, "/sigProfiler.rds.gzip"))
+        out_BayesNMF <- open_rds_file(paste0(out_dir, "/BayesNMF_brouwer.rds.gzip"))
         strange_sigpro <- unlist(lapply(out_sigPro, is.null))
         if(sum(strange_sigpro) > 0){
           out_sigPro <- out_sigPro[-which(strange_sigpro)] 
@@ -253,7 +253,8 @@ for(theta in theta_list){
                                 out_PoissonCUSP = out_PoissonCUSP, 
                                 out_ARD = out_ARD, 
                                 out_signeR = out_signeR, 
-                                out_sigPro = out_sigPro)
+                                out_sigPro = out_sigPro, 
+                                out_BayesNMF = out_BayesNMF)
         df$J = J
         df$theta = theta
         df$K_new = K_new
