@@ -142,49 +142,90 @@ CompressiveNMF <- function(X,
   model_pars$S <- S
 
   # Run the sampler across different chains
-  doParallel::registerDoParallel(ncores)
-  set.seed(seed, kind = "L'Ecuyer-CMRG")
-  mcmc_out <- foreach(i = 1:nchains) %dopar% {
-    if(verbose){
-      verbose.out <- paste0("chain_status_", i,".txt")
-    } else {
-      verbose.out <- NULL
+  if(ncores > 1){
+    cl <- parallel::makeCluster(ncores)
+    doParallel::registerDoParallel(cl)
+    set.seed(seed, kind = "L'Ecuyer-CMRG")
+    mcmc_out <- foreach(i = 1:nchains, .packages = c("CompressiveNMF")) %dopar% {
+      library(CompressiveNMF)
+      if(verbose){
+        verbose.out <- paste0("chain_status_", i,".txt")
+      } else {
+        verbose.out <- NULL
+      }
+      # Step 1 - initialize the sampler
+      init_pars <- Initialize_CompressiveNMF(X, model_pars)
+      # Step 2 - run the sampler
+      if(swap_prior & !is.null(S)){
+        # Run the sampler for 3/4, and the perform the swap
+        sample_preswap <- Run_mcmc_CompressiveNMF(X,
+                                                  model_pars,
+                                                  init_pars,
+                                                  nsamples = 1,
+                                                  burnin = round(burnin * 0.75),
+                                                  verbose.out = verbose.out,
+                                                  nchains = nchains)
+        # Swap the prior
+        model_pars$SignaturePrior <- swap_SignaturePrior(SignaturePrior = model_pars$SignaturePrior,
+                                                         R = sample_preswap$Signatures[1, , ],
+                                                         mu = sample_preswap$Mu[1, ],
+                                                         S = model_pars$S,
+                                                         cutoff = model_pars$cutoff_excluded)
+        # Re-initialize the sampler
+        init_pars$R <- sample_preswap$Signatures[1, ,]
+        init_pars$Theta <- sample_preswap$Weights[1, ,]
+        init_pars$mu <- sample_preswap$Mu[1, ]
+        Run_mcmc_CompressiveNMF(X, model_pars, init_pars, nsamples,
+                                burnin = round(burnin * 0.25),
+                                verbose.out = verbose.out, nchains = nchains)
+        #CompressiveNMF_cpp(X, nonzero_ids = model)
+      } else {
+        Run_mcmc_CompressiveNMF(X, model_pars, init_pars, nsamples, burnin,
+                                verbose.out = verbose.out, nchains = nchains)
+      }
     }
-    # Step 1 - initialize the sampler
-    init_pars <- Initialize_CompressiveNMF(X, model_pars)
-    # Step 2 - run the sampler
-    if(swap_prior & !is.null(S)){
-      # Run the sampler for 3/4, and the perform the swap
-      sample_preswap <- Run_mcmc_CompressiveNMF(X,
-                                                model_pars,
-                                                init_pars,
-                                                nsamples = 1,
-                                                burnin = round(burnin * 0.75),
-                                                verbose.out = verbose.out,
-                                                nchains = nchains)
-      # Swap the prior
-      model_pars$SignaturePrior <- swap_SignaturePrior(SignaturePrior = model_pars$SignaturePrior,
-                                                       R = sample_preswap$Signatures[1, , ],
-                                                       mu = sample_preswap$Mu[1, ],
-                                                       S = model_pars$S,
-                                                       cutoff = model_pars$cutoff_excluded)
-      # Re-initialize the sampler
-      init_pars$R <- sample_preswap$Signatures[1, ,]
-      init_pars$Theta <- sample_preswap$Weights[1, ,]
-      init_pars$mu <- sample_preswap$Mu[1, ]
-
-      #CompressiveNMF_cpp(X, nonzero_ids = model_pars$nonzero_ids,
-      #                   R = init_pars$R,
-      #                   Theta = init_pars$Theta)
-      Run_mcmc_CompressiveNMF(X, model_pars, init_pars, nsamples,
-                              burnin = round(burnin * 0.25),
-                              verbose.out = verbose.out, nchains = nchains)
-      #CompressiveNMF_cpp(X, nonzero_ids = model)
-    } else {
-      Run_mcmc_CompressiveNMF(X, model_pars, init_pars, nsamples, burnin,
-                              verbose.out = verbose.out, nchains = nchains)
-    }
+    parallel::stopCluster(cl)
+  } else {
+    mcmc_out <- lapply(1:nchains, function(i) {
+      if(verbose){
+        verbose.out <- paste0("chain_status_", i,".txt")
+      } else {
+        verbose.out <- NULL
+      }
+      # Step 1 - initialize the sampler
+      init_pars <- Initialize_CompressiveNMF(X, model_pars)
+      # Step 2 - run the sampler
+      if(swap_prior & !is.null(S)){
+        # Run the sampler for 3/4, and the perform the swap
+        sample_preswap <- Run_mcmc_CompressiveNMF(X,
+                                                  model_pars,
+                                                  init_pars,
+                                                  nsamples = 1,
+                                                  burnin = round(burnin * 0.75),
+                                                  verbose.out = verbose.out,
+                                                  nchains = nchains)
+        # Swap the prior
+        model_pars$SignaturePrior <- swap_SignaturePrior(SignaturePrior = model_pars$SignaturePrior,
+                                                         R = sample_preswap$Signatures[1, , ],
+                                                         mu = sample_preswap$Mu[1, ],
+                                                         S = model_pars$S,
+                                                         cutoff = model_pars$cutoff_excluded)
+        # Re-initialize the sampler
+        init_pars$R <- sample_preswap$Signatures[1, ,]
+        init_pars$Theta <- sample_preswap$Weights[1, ,]
+        init_pars$mu <- sample_preswap$Mu[1, ]
+        Run_mcmc_CompressiveNMF(X, model_pars, init_pars, nsamples,
+                                burnin = round(burnin * 0.25),
+                                verbose.out = verbose.out, nchains = nchains)
+        #CompressiveNMF_cpp(X, nonzero_ids = model)
+      } else {
+        Run_mcmc_CompressiveNMF(X, model_pars, init_pars, nsamples, burnin,
+                                verbose.out = verbose.out, nchains = nchains)
+      }
+    })
   }
+
+
 
   # Select the chain with the highest log posterior as solution
   post <-lapply(mcmc_out, function(x) postprocess_mcmc_out(x, cutoff_excluded))
@@ -211,6 +252,7 @@ CompressiveNMF <- function(X,
 # Additional functions
 
 # Calculate the value of the log-posterior
+#'@export
 calculate_logPosterior <- function(X, R, Theta, mu, a, a0, b0, SignaturePrior){
   Lambda <- R %*% Theta
   logpost <- 0
@@ -228,6 +270,7 @@ calculate_logPosterior <- function(X, R, Theta, mu, a, a0, b0, SignaturePrior){
 }
 
 # Sample the mutational signature matrix
+#'@export
 sample_signatures <- function(Alpha) {
   # Alpha is a matrix of I x K
   I <- nrow(Alpha)
@@ -239,6 +282,7 @@ sample_signatures <- function(Alpha) {
 }
 
 # Sample the weight matrix
+#'@export
 sample_weights <- function(shape_mat, rate_mat) {
   # Alpha is a matrix of I x K
   K <- nrow(shape_mat)
@@ -249,6 +293,7 @@ sample_weights <- function(shape_mat, rate_mat) {
 }
 
 # Sample the augmented variables
+#'@export
 sample_Y <- function(X, R, Theta, nonzero_ids) {
   I <- nrow(R)
   K <- ncol(R)
@@ -265,6 +310,7 @@ sample_Y <- function(X, R, Theta, nonzero_ids) {
 
 
 # Function to swap the prior in the active processess using hungarian algorithm
+#'@export
 swap_SignaturePrior <- function(SignaturePrior, R, mu, S, cutoff) {
   # Check active processes
   sel <- which(mu > cutoff)
@@ -343,6 +389,7 @@ swap_SignaturePrior <- function(SignaturePrior, R, mu, S, cutoff) {
 
 
 # Initialize CompressiveNMF
+#'@export
 Initialize_CompressiveNMF <- function(X, model_pars){
   # Matrix dimension
   I <- nrow(X); J <- ncol(X); Ktot <- ncol(model_pars$SignaturePrior)
@@ -359,6 +406,7 @@ Initialize_CompressiveNMF <- function(X, model_pars){
 
 
 # RunMCMC CompressiveNMF
+#'@export
 Run_mcmc_CompressiveNMF <- function(X, model_pars, init_pars, nsamples, burnin, verbose.out, nchains, ...){
 
   # Matrix dimension
@@ -455,6 +503,7 @@ Run_mcmc_CompressiveNMF <- function(X, model_pars, init_pars, nsamples, burnin, 
               logposterior = LOGPOST, init_pars = init_pars))
 }
 
+#'@export
 postprocess_mcmc_out <- function(output, cutoff_excluded){
   Rhat <- apply(output$Signatures, c(2,3), mean); colnames(Rhat) <- colnames(output$Mu)
   Thetahat <- apply(output$Weights, c(2,3), mean); rownames(Thetahat) <- colnames(output$Mu)
