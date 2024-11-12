@@ -9,6 +9,7 @@ library(lsa)
 library(doParallel)
 
 source("R/Postprocess_functions.R")
+source("R/simulate_data.R")
 
 create_directory <- function(dir) {
   if (!dir.exists(dir)) {
@@ -26,50 +27,27 @@ open_rds_file <- function(file){
 }
 
 
-# This function simulates the data from 
-simulate_data <- function(J = 100, cosmic_sig = c("SBS1", "SBS2", "SBS5", "SBS13"), 
-                          K_new = 0, alpha = 0.25, theta = 100, overdispersion = 0){
-  
-  # Generate the signatures
-  cosmic_data <- CompressiveNMF::COSMIC_SBS96_GRCh37_v3.4
-  Rmat_random <- t(LaplacesDemon::rdirichlet(n = K_new, alpha = rep(alpha, 96)))
-  if(K_new > 0) colnames(Rmat_random) <- paste0("SBSnew", 1:K_new)
-  Rmat_cos <- as.matrix(cosmic_data[, cosmic_sig])
-  Rmat <- as.matrix(cbind(Rmat_cos, Rmat_random))
-  rownames(Rmat) <- cosmic_data$Channel
-  
-  # Generate the weights
-  K <- ncol(Rmat)
-  exposures <- rgamma(K, theta, 1)
-  Theta <- matrix(rgamma(K * J, 0.5, 0.5), ncol = J, nrow = K)
-  Theta <- apply(Theta, 2, function(x) x * exposures)
-  rownames(Theta) <- colnames(Rmat)
-  
-  # Generate the counts
-  Lambda <- Rmat %*% Theta
-  X <- matrix(rnbinom(length(Lambda), size = 1/overdispersion, mu = c(Lambda)), nrow = 96, ncol = J)
-  rownames(X) <- rownames(Rmat) 
-  return(list(X = X, Rmat = Rmat, Theta = Theta))
-}
-
 test_epsilon_k <- function(K_range, 
                            epsilon_range, 
                            J = 50, 
                            ndatasets = 20, 
-                           overdispersion = 0, nsamples = 50, burnin = 100){
+                           overdispersion = 0, 
+                           nsamples = 50, 
+                           burnin = 100){
   values <- expand.grid("K" = K_range, "epsilon" = epsilon_range)
   
   # Create the cluster
   num_cores <- min(nrow(values), parallel::detectCores() - 1)
   #cl <- makeCluster(num_cores, )
   registerDoParallel(num_cores)
-  
+  # Simulate a dataset
+  data_all <- lapply(1:ndatasets, function(x) 
+    simulate_data(K_new = 2, 
+                  J = J, 
+                  overdispersion = overdispersion))
   # Parallelize
   results <- foreach(s = c(1:nrow(values)), .combine = "rbind") %dopar% {
-    # Simulate a dataset
-    data_all <- lapply(1:ndatasets, function(x) simulate_data(K_new = 2, 
-                                                              J = J, 
-                                                              overdispersion = overdispersion))
+    
     #res <- vector(mode = "list", length = ndatasets)
     output <- vector(mode = "list", length = ndatasets)
     
@@ -166,9 +144,9 @@ epsilon_range <- c(0.001, 0.01, 0.1, 0.25, 1, 2)
 K_range <- c(5, 10, 20, 30, 40, 50)
 
 
-ndatasets <- 5
-nsamples <- 50
-burnin <- 100
+ndatasets <- 40
+nsamples <- 500
+burnin <- 3000
 J <- 100
 
 set.seed(10, kind = "L'Ecuyer-CMRG")
