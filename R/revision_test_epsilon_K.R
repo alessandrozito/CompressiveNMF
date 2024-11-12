@@ -166,9 +166,9 @@ epsilon_range <- c(0.001, 0.01, 0.1, 0.25, 1, 2)
 K_range <- c(5, 10, 20, 30, 40, 50)
 
 
-ndatasets <- 20
-nsamples <- 1000
-burnin <- 3000
+ndatasets <- 5
+nsamples <- 50
+burnin <- 100
 J <- 100
 
 set.seed(10, kind = "L'Ecuyer-CMRG")
