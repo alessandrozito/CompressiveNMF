@@ -156,24 +156,82 @@ write_csv(results_misp,
 df_a_alpha <- rbind(read_csv("output/sensitivity_simulation/sensitivity_a_alpha_100_correct.csv"),
                  read_csv("output/sensitivity_simulation/sensitivity_a_alpha_100_misp.csv"))
 
-df_a_alpha %>%
+pK_a_sig <- df_a_alpha %>%
   mutate(a = as.factor(a),
-         alpha = as.factor(alpha)) %>%
+         alpha = alpha, 
+         overdispersion = paste0("Overd = ", overdispersion)) %>%
   group_by(a, alpha, overdispersion) %>%
-  summarise(Kest = mean(Kest)) %>%
+  summarise(Kest_mean = mean(Kest), 
+            Kest_low = quantile(Kest, 0.2), 
+            Kest_high = quantile(Kest, 0.8)) %>%
     ggplot() +
     geom_hline(yintercept =  6, linetype = "dashed", color = "gray50") +
-    geom_point(aes(x = alpha, y = Kest, color = a)) +
-    geom_line(aes(x = alpha, y = Kest, color = a)) +
+    geom_point(aes(x = alpha, y = Kest_mean, color = a)) +
+    geom_line(aes(x = alpha, y = Kest_mean, color = a)) +
+    #geom_line(aes(x = alpha, y = Kest_low, color = a), linetype = "dashed") +
+    #geom_line(aes(x = alpha, y = Kest_high, color = a), linetype = "dashed") +
     theme_bw() +
     facet_wrap(~overdispersion, scales = "free")+
-    ylab("Estimated number of signatures")+
+    ylab("Estimated n. of signatures")+
     xlab("Value of alpha")
 
 
+pK_a_rmse <- df_a_alpha %>%
+  mutate(a = as.factor(a),
+         alpha = alpha, 
+         overdispersion = paste0("Overd = ", overdispersion),) %>%
+  group_by(a, alpha, overdispersion) %>%
+  summarise(rmse = mean(rmse_Counts), 
+            rmse_low = quantile(rmse_Counts, 0.2), 
+            rmse_high = quantile(rmse_Counts, 0.8)) %>%
+  ggplot() +
+  #geom_hline(yintercept =  6, linetype = "dashed", color = "gray50") +
+  geom_point(aes(x = alpha, y = rmse, color = a)) +
+  geom_line(aes(x = alpha, y = rmse, color = a)) +
+  #geom_line(aes(x = alpha, y = rmse_low, color = a), linetype = "dashed") +
+  #geom_line(aes(x = alpha, y = rmse_high, color = a), linetype = "dashed") +
+  theme_bw() +
+  facet_wrap(~overdispersion, scales = "free")+
+  ylab("RMSE for the counts")+
+  xlab("Value of alpha")
+
+ggpubr::ggarrange(pK_a_sig, pK_a_rmse, common.legend = TRUE, legend = "right")
+
+df_a_alpha %>%
+  mutate(a = as.factor(a),
+         alpha = alpha) %>%
+  group_by(a, alpha, overdispersion) %>%
+  summarise(rmse = mean(rmse_Signatures)) %>%
+  ggplot() +
+  #geom_hline(yintercept =  6, linetype = "dashed", color = "gray50") +
+  geom_point(aes(x = alpha, y = rmse, color = a)) +
+  geom_line(aes(x = alpha, y = rmse, color = a)) +
+  #geom_line(aes(x = alpha, y = Kest_low, color = a), linetype = "dashed") +
+  #geom_line(aes(x = alpha, y = Kest_high, color = a), linetype = "dashed") +
+  theme_bw() +
+  facet_wrap(~overdispersion, scales = "free")+
+  ylab("RMSE for the count matrix")+
+  xlab("Value of alpha")
+
+df_a_alpha %>%
+  mutate(a = as.factor(a),
+         alpha = alpha) %>%
+  group_by(a, alpha, overdispersion) %>%
+  summarise(rmse = mean(rmse_Weights)) %>%
+  ggplot() +
+  #geom_hline(yintercept =  6, linetype = "dashed", color = "gray50") +
+  geom_point(aes(x = alpha, y = rmse, color = a)) +
+  geom_line(aes(x = alpha, y = rmse, color = a)) +
+  #geom_line(aes(x = alpha, y = Kest_low, color = a), linetype = "dashed") +
+  #geom_line(aes(x = alpha, y = Kest_high, color = a), linetype = "dashed") +
+  theme_bw() +
+  facet_wrap(~overdispersion, scales = "free")+
+  ylab("RMSE for the count matrix")+
+  xlab("Value of alpha")
 
 
 
+table(df_a_alpha$alpha, df_a_alpha$a)
 
 
 

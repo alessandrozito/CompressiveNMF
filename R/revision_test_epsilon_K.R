@@ -175,6 +175,9 @@ write_csv(results_misp,
 #write_csv(rbind(results_correct, results_misp), 
 #          file = "output/sensitivity_simulation/sensitivity_epsilon_K_100.csv")
 
+df_Keps <- rbind(read_csv("output/sensitivity_simulation/sensitivity_epsilon_K_100_correct.csv"),
+                    read_csv("output/sensitivity_simulation/sensitivity_epsilon_K_100_misp.csv"))
+
 
 #df_Keps <- read_csv("output/sensitivity_simulation/sensitivity_epsilon_K_100.csv")
 
@@ -192,69 +195,72 @@ write_csv(results_misp,
 # # 
 # # 
 # ## Plot of excluded columns
-# df_Keps %>%
-#   filter(Kused >5) %>%
-#   mutate(Kused = as.factor(Kused),
-#          tau = as.factor(overdispersion)) %>%
-#   group_by(epsilon, Kused, tau) %>%
-#   summarise(mean_eps_excluded = mean(mean)) %>%
-#   #left_join(dodge_eps, by = "Kused") %>%
-#   ggplot() +
-#   geom_abline(slope = 1, intercept = 0, col = "grey") +
-#   geom_segment(x = 1, xend = 1, y = 0, yend = Inf, col = "grey50", linetype = "dashed")+
-#   geom_point(aes(x = epsilon, y = mean_eps_excluded, color = tau))+
-#   theme_bw() +
-#   facet_grid(~ Kused)+
-#   theme(aspect.ratio = 1)
+df_Keps %>%
+  filter(Kused >5) %>%
+  mutate(Kused = as.factor(Kused),
+         tau = as.factor(overdispersion)) %>%
+  group_by(epsilon, Kused, tau) %>%
+  summarise(mean_eps_excluded = mean(mean)) %>%
+  #left_join(dodge_eps, by = "Kused") %>%
+  ggplot() +
+  geom_abline(slope = 1, intercept = 0, col = "grey") +
+  geom_segment(x = 1, xend = 1, y = 0, yend = Inf, col = "grey50", linetype = "dashed")+
+  geom_point(aes(x = epsilon, y = mean_eps_excluded, color = tau))+
+  theme_bw() +
+  facet_grid(~ Kused)+
+  theme(aspect.ratio = 1)
 # # 
 # # # 
 # # # 
 # # ## RMSE as a function of K and epsilon
-# df_Keps %>%
-#   mutate(epsilon = as.factor(epsilon),
-#          overdispersion = paste0("overd = ", overdispersion)) %>%
-#   group_by(epsilon, Kused, overdispersion) %>%
-#   summarise(rmse = mean(rmse_Counts)) %>%
-#   ggplot() +
-#   geom_point(aes(x = Kused, y = rmse, color = epsilon)) +
-#   geom_line(aes(x = Kused, y = rmse, color = epsilon)) +
-#   theme_bw() +
-#   facet_wrap(~overdispersion, scales = "free")+
-#   ylab("RMSE for the counts")
+pK_rmse <- df_Keps %>%
+  mutate(epsilon = as.factor(epsilon),
+         overdispersion = paste0("overd = ", overdispersion)) %>%
+  group_by(epsilon, Kused, overdispersion) %>%
+  summarise(rmse = mean(rmse_Counts)) %>%
+  ggplot() +
+  geom_point(aes(x = Kused, y = rmse, color = epsilon)) +
+  geom_line(aes(x = Kused, y = rmse, color = epsilon)) +
+  theme_bw() +
+  facet_wrap(~overdispersion, scales = "free")+
+  ylab("RMSE for the counts")
 # 
 # # ## Number of factors as a function of K and epsilon
-# df_Keps %>%
-#   mutate(epsilon = as.factor(epsilon),
-#          overdispersion = paste0("overd = ", overdispersion)) %>%
-#   group_by(epsilon, Kused, overdispersion) %>%
-#   summarise(Kest = mean(Kest)) %>%
-#   ggplot() +
-#   geom_point(aes(x = Kused, y = Kest, color = epsilon)) +
-#   geom_line(aes(x = Kused, y = Kest, color = epsilon)) +
-#   theme_bw() +
-#   facet_wrap(~overdispersion, scales = "free")+
-#   ylab("Estimated number of signatures")+
-#   xlab("Value of K in the model")
+pK_sig <- df_Keps %>%
+  mutate(epsilon = as.factor(epsilon),
+         overdispersion = paste0("overd = ", overdispersion)) %>%
+  group_by(epsilon, Kused, overdispersion) %>%
+  summarise(Kest = mean(Kest)) %>%
+  ggplot() +
+  geom_hline(yintercept =  6, linetype = "dashed", color = "gray50") +
+  geom_point(aes(x = Kused, y = Kest, color = epsilon)) +
+  geom_line(aes(x = Kused, y = Kest, color = epsilon)) +
+  theme_bw() +
+  facet_wrap(~overdispersion, scales = "free")+
+  ylab("Estimated n. of signatures")+
+  xlab("Value of K in the model")
+
+ggpubr::ggarrange(pK_rmse, pK_sig, common.legend = TRUE)
 # 
 # # # 
 # # # 
 # # # 
-# df_Keps %>%
-# mutate(epsilon = as.factor(epsilon)) %>%
-# group_by(epsilon, Kused, overdispersion) %>%
-# summarise(rmse_Weights = mean(rmse_Weights)) %>%
-# ggplot()+
-# geom_line(aes(x = Kused, y = rmse_Weights, color = epsilon))+
-#   facet_wrap(~overdispersion, scales = "free")
-# # 
-# df_Keps %>%
-#   mutate(epsilon = as.factor(epsilon)) %>%
-#   group_by(epsilon, Kused, overdispersion) %>%
-#   summarise(rmse = mean(rmse_Signatures)) %>%
-#   ggplot()+
-#   geom_line(aes(x = Kused, y = rmse, color = epsilon))+
-#   facet_wrap(~overdispersion, scales = "free")
-# 
+df_Keps %>%
+mutate(epsilon = as.factor(epsilon)) %>%
+group_by(epsilon, Kused, overdispersion) %>%
+summarise(rmse_Weights = mean(rmse_Weights)) %>%
+ggplot()+
+geom_line(aes(x = Kused, y = rmse_Weights, color = epsilon))+
+  facet_wrap(~overdispersion, scales = "free")
+
+df_Keps %>%
+  mutate(epsilon = as.factor(epsilon)) %>%
+  group_by(epsilon, Kused, overdispersion) %>%
+  summarise(rmse = mean(rmse_Signatures)) %>%
+  ggplot()+
+  geom_line(aes(x = Kused, y = rmse, color = epsilon))+
+  facet_wrap(~overdispersion, scales = "free")
+
 # # 
 # # 
 # # # 
