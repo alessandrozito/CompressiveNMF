@@ -33,7 +33,7 @@ KL.div <- function(X, R, Theta){
 }
 
 
-# Hyperparameters of the simulation *(fixed vs compressiv)
+# Hyperparameters of the simulation *(fixed vs compressive)
 epsilon <- 0.01
 strength_fixed <- 10
 K <- 20
@@ -46,7 +46,7 @@ J_range <- c(20, 50, 100, 200, 300, 400, 500)
 overd_list <-c(0, 0.15)
 
 # Simulate the array of data
-regenerate_data <- FALSE
+regenerate_data <- TRUE
 
 main_dir <- "~/CompressiveNMF/output/compressive_vs_fixed_simulation/"
 create_directory(main_dir)
@@ -60,7 +60,7 @@ if(regenerate_data){
       data_all <- lapply(1:ndatasets, function(i) 
         simulate_data(J = J, 
                       K_new = K_new, 
-                      overdispersion = 0))
+                      overdispersion = overd))
       directory <- paste0(main_dir, "Scenario_", J, "_overd_", overd, "/")
       create_directory(directory)
       # Save data
@@ -175,6 +175,7 @@ if(run_compressive){
     if(run_correct) {
       overd <- 0
       print(paste0("J - ", J, ", overd - ", overd))
+      set.seed(10, kind = "L'Ecuyer-CMRG")
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
                                           case = "compressive", 
@@ -187,6 +188,7 @@ if(run_compressive){
     if(run_overd) {
       overd <- 0.15
       print(paste0("J - ", J, ", overd - ", overd))
+      set.seed(10, kind = "L'Ecuyer-CMRG")
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
                                           case = "compressive", 
@@ -198,9 +200,9 @@ if(run_compressive){
 }
 
 #-------------------------------------------- Run fixed case
-run_fixed <- TRUE
+run_fixed <- FALSE
 run_correct <- FALSE
-run_overd <- TRUE
+run_overd <- FALSE
 
 if(run_fixed){
   for(J in J_range){
@@ -209,6 +211,7 @@ if(run_fixed){
     if(run_correct) {
       overd <- 0
       print(paste0("J - ", J, ", overd - ", overd))
+      set.seed(10, kind = "L'Ecuyer-CMRG")
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
                                           case = "fixed", 
@@ -221,6 +224,7 @@ if(run_fixed){
     if(run_overd) {
       overd <- 0.15
       print(paste0("J - ", J, ", overd - ", overd))
+      set.seed(10, kind = "L'Ecuyer-CMRG")
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
                                           case = "fixed", 
@@ -230,6 +234,48 @@ if(run_fixed){
     }
   }
 }
+
+
+
+#-------------------------------------------- 
+# Aggregate results and make plots
+
+df_results <- data.frame()
+main_dir <- "~/CompressiveNMF/output/compressive_vs_fixed_simulation/"
+for(J in J_range){
+  for(overd in overd_list){
+    subdir <- paste0(main_dir, "Scenario_", J, "_overd_", overd, "/")
+    # Read csv results
+    res_compressive <- as.data.frame(read_csv(paste0(subdir, "results_compressive.csv"), show_col_types = FALSE))
+    res_fixed <- as.data.frame(read_csv(paste0(subdir, "results_fixed.csv"), show_col_types = FALSE))
+    # Append
+    df_results <- rbind(df_results, res_compressive,  res_fixed)
+  }
+}
+
+df_results %>%
+  group_by(case, J, overd) %>%
+  summarize(K = mean(Kest)) %>%
+  ggplot()+
+  geom_point(aes(x = J, y = K, color = case)) +
+  facet_wrap(~overd)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
