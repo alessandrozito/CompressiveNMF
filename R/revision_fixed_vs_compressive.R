@@ -198,12 +198,12 @@ if(run_compressive){
 }
 
 #-------------------------------------------- Run fixed case
-run_fixed <- FALSE
+run_fixed <- TRUE
 run_correct <- FALSE
-run_overd <- FALSE
+run_overd <- TRUE
 
 if(run_fixed){
-  for(J in c(20, 50)){
+  for(J in J_range){
     
     # Correctly specified case
     if(run_correct) {
