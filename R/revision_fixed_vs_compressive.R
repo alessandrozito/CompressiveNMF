@@ -69,20 +69,19 @@ if(regenerate_data){
   }
 }
 
-
-
 # Function to run the simulation
 run_simulation_fixed_vs_compressive <- function(J, overd, case, 
                                                 epsilon = 0.01, 
                                                 strength_fixed = 10, 
                                                 nsamples = 500, 
-                                                nburn = 3000){
+                                                nburn = 3000, 
+                                                ncores = 1){
   
   subdir <- paste0(main_dir, "Scenario_", J, "_overd_", overd, "/")
   # Load the data
   data_all <- readRDS(paste0(subdir, "data.rds.gzip"))
   # Run all models in parallel
-  registerDoParallel(length(data_all))
+  registerDoParallel(ncores)
   output <- foreach(j = 1:length(data_all), .combine = "rbind") %dopar% {
     # Load data
     data <- data_all[[j]]
@@ -135,16 +134,13 @@ run_simulation_fixed_vs_compressive <- function(J, overd, case,
     
     # Results
     results <- c("Kest" = K_selected,
-                      "mean" = mean(res$RelWeights[!id_selected]), 
-                      "lowCI" = quantile(res$RelWeights[!id_selected], probs = c(0.05)), 
-                      "highCI" = quantile(res$RelWeights[!id_selected], probs = c(0.95)), 
-                      sens_prec, 
-                      rmse_R, 
-                      rmse_Theta, 
-                      "mean_cos_sim" = cos_sim, 
-                      "rmse_Lambda" = rmse_Lambda, 
-                      "rmse_Counts" = rmse_Counts,
-                      "kl_counts" = kl_counts)
+                 sens_prec, 
+                 rmse_R, 
+                 rmse_Theta, 
+                 "mean_cos_sim" = cos_sim, 
+                 "rmse_Lambda" = rmse_Lambda, 
+                 "rmse_Counts" = rmse_Counts,
+                 "kl_counts" = kl_counts)
     
     results
   }
@@ -163,40 +159,77 @@ run_simulation_fixed_vs_compressive <- function(J, overd, case,
 
 
 # Sampler parameters
-nsamples <- 10
-nburn <- 30
+nsamples <- 1000
+nburn <- 3000
+ncores <- ndatasets
 
 #-------------------------------------------- Run compressive case
 run_compressive <- FALSE
+run_correct <- FALSE
+run_overd <- FALSE
+
 if(run_compressive){
   for(J in J_range){
-    for(overd in overd_list) {
+    
+    # Correctly specified case
+    if(run_correct) {
+      overd <- 0
+      print(paste0("J - ", J, ", overd - ", overd))
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
                                           case = "compressive", 
                                           nsamples = nsamples, 
-                                          nburn = nburn)
+                                          nburn = nburn, 
+                                          ncores = ncores)
+    }
+    
+    # Incorrect case
+    if(run_overd) {
+      overd <- 0.15
+      print(paste0("J - ", J, ", overd - ", overd))
+      run_simulation_fixed_vs_compressive(J = J, 
+                                          overd = overd, 
+                                          case = "compressive", 
+                                          nsamples = nsamples, 
+                                          nburn = nburn, 
+                                          ncores = ncores)
     }
   }
 }
 
 #-------------------------------------------- Run fixed case
-run_fix <- FALSE
-if(run_fix){
-  for(J in J_range){
-    for(overd in overd_list) {
+run_fixed <- FALSE
+run_correct <- FALSE
+run_overd <- FALSE
+
+if(run_fixed){
+  for(J in c(20, 50)){
+    
+    # Correctly specified case
+    if(run_correct) {
+      overd <- 0
+      print(paste0("J - ", J, ", overd - ", overd))
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
                                           case = "fixed", 
                                           nsamples = nsamples, 
-                                          nburn = nburn)
+                                          nburn = nburn, 
+                                          ncores = ncores)
+    }
+    
+    # Incorrect case
+    if(run_overd) {
+      overd <- 0.15
+      print(paste0("J - ", J, ", overd - ", overd))
+      run_simulation_fixed_vs_compressive(J = J, 
+                                          overd = overd, 
+                                          case = "fixed", 
+                                          nsamples = nsamples, 
+                                          nburn = nburn, 
+                                          ncores = ncores)
     }
   }
 }
-
-
-
-
 
 
 
