@@ -164,9 +164,9 @@ nburn <- 3000
 ncores <- ndatasets
 
 #-------------------------------------------- Run compressive case
-run_compressive <- FALSE
+run_compressive <- TRUE
 run_correct <- FALSE
-run_overd <- FALSE
+run_overd <- TRUE
 
 if(run_compressive){
   for(J in J_range){
@@ -174,7 +174,7 @@ if(run_compressive){
     # Correctly specified case
     if(run_correct) {
       overd <- 0
-      print(paste0("J - ", J, ", overd - ", overd))
+      print(paste0("Compressive: J - ", J, ", overd - ", overd))
       set.seed(10, kind = "L'Ecuyer-CMRG")
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
@@ -187,7 +187,7 @@ if(run_compressive){
     # Incorrect case
     if(run_overd) {
       overd <- 0.15
-      print(paste0("J - ", J, ", overd - ", overd))
+      print(paste0("Compressive: J - ", J, ", overd - ", overd))
       set.seed(10, kind = "L'Ecuyer-CMRG")
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
@@ -202,7 +202,7 @@ if(run_compressive){
 #-------------------------------------------- Run fixed case
 run_fixed <- FALSE
 run_correct <- FALSE
-run_overd <- FALSE
+run_overd <- TRUE
 
 if(run_fixed){
   for(J in J_range){
@@ -210,7 +210,7 @@ if(run_fixed){
     # Correctly specified case
     if(run_correct) {
       overd <- 0
-      print(paste0("J - ", J, ", overd - ", overd))
+      print(paste0("Fixed: J - ", J, ", overd - ", overd))
       set.seed(10, kind = "L'Ecuyer-CMRG")
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
@@ -223,7 +223,7 @@ if(run_fixed){
     # Incorrect case
     if(run_overd) {
       overd <- 0.15
-      print(paste0("J - ", J, ", overd - ", overd))
+      print(paste0("Fixed: J - ", J, ", overd - ", overd))
       set.seed(10, kind = "L'Ecuyer-CMRG")
       run_simulation_fixed_vs_compressive(J = J, 
                                           overd = overd, 
