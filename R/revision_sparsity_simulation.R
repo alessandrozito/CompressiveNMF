@@ -57,12 +57,12 @@ if(regenerate_data){
 # Part 1 - Run the simulation
 #######################################################
 run_compNMF <- FALSE
-run_compNMF_cos <- FALSE
-run_ARD <- TRUE
+run_compNMF_cos <- TRUE
+run_ARD <- FALSE
 
 # Number of samples
-nsamples <- 100
-burnin <- 100
+nsamples <- 1000
+burnin <- 3000
 
 registerDoParallel(min(c(ndatasets, parallel::detectCores() - 1)))
 #---------------------------------- 1 - CompressiveNMF 
@@ -133,9 +133,6 @@ if (run_ARD) {
 
 #---------------------------------- 4 - ARD with BayesNMF (use Python script)
 # Consider the python code
-
-
-
 
 
 #######################################################
