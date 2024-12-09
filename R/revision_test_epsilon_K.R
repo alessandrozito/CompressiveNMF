@@ -195,9 +195,9 @@ df_Keps <- rbind(read_csv("output/sensitivity_simulation/sensitivity_epsilon_K_1
 # # 
 # # 
 # ## Plot of excluded columns
-df_Keps %>%
+p_eps <- df_Keps %>%
   filter(Kused >5) %>%
-  mutate(Kused = as.factor(Kused),
+  mutate(Kused = paste0("K = ", as.factor(Kused)),
          tau = as.factor(overdispersion)) %>%
   group_by(epsilon, Kused, tau) %>%
   summarise(mean_eps_excluded = mean(mean)) %>%
@@ -205,17 +205,22 @@ df_Keps %>%
   ggplot() +
   geom_abline(slope = 1, intercept = 0, col = "grey") +
   geom_segment(x = 1, xend = 1, y = 0, yend = Inf, col = "grey50", linetype = "dashed")+
-  geom_point(aes(x = epsilon, y = mean_eps_excluded, color = tau))+
+  geom_point(aes(x = epsilon, y = mean_eps_excluded, color = tau, shape = tau), size = 2.1)+
+  scale_shape_manual(values = c(16, 1))+
   theme_bw() +
   facet_grid(~ Kused)+
-  theme(aspect.ratio = 1)
+  theme(aspect.ratio = 1) +
+  ylab(expression(paste("Mean of ", mu[k], " when excluded")))+
+  xlab(expression(paste("Value of ", epsilon)))
+ggsave(plot = p_eps, filename = "figures/sensitivity_epsilon_K_excluded.pdf", 
+       width = 10.45, height = 2.65)
 # # 
 # # # 
 # # # 
 # # ## RMSE as a function of K and epsilon
 pK_rmse <- df_Keps %>%
   mutate(epsilon = as.factor(epsilon),
-         overdispersion = paste0("overd = ", overdispersion)) %>%
+         overdispersion = paste0("tau = ", overdispersion)) %>%
   group_by(epsilon, Kused, overdispersion) %>%
   summarise(rmse = mean(rmse_Counts)) %>%
   ggplot() +
@@ -223,12 +228,13 @@ pK_rmse <- df_Keps %>%
   geom_line(aes(x = Kused, y = rmse, color = epsilon)) +
   theme_bw() +
   facet_wrap(~overdispersion, scales = "free")+
-  ylab("RMSE for the counts")
-# 
+  ylab("RMSE for the counts")+
+  xlab("Value of K in the model")
+ 
 # # ## Number of factors as a function of K and epsilon
 pK_sig <- df_Keps %>%
   mutate(epsilon = as.factor(epsilon),
-         overdispersion = paste0("overd = ", overdispersion)) %>%
+         overdispersion = paste0("tau = ", overdispersion)) %>%
   group_by(epsilon, Kused, overdispersion) %>%
   summarise(Kest = mean(Kest)) %>%
   ggplot() +
@@ -240,8 +246,13 @@ pK_sig <- df_Keps %>%
   ylab("Estimated n. of signatures")+
   xlab("Value of K in the model")
 
-ggpubr::ggarrange(pK_rmse, pK_sig, common.legend = TRUE)
-# 
+p_K_sig_eps <- ggpubr::ggarrange(pK_rmse, pK_sig, 
+                                 common.legend = TRUE, 
+                                 legend = "right") 
+ggsave(plot = p_K_sig_eps, filename = "figures/sensitivity_epsilon_K_all.pdf", 
+       width = 10.45, height = 2.65)
+
+
 # # # 
 # # # 
 # # # 

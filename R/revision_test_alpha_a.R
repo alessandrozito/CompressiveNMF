@@ -5,7 +5,6 @@
 
 # This file runs the simulation to show the sensitivity of CompressiveNMF to 
 # the values of epsilon, K, a and alpha.  
-
 library(CompressiveNMF)
 library(tidyverse)
 library(mcmcse)
@@ -152,14 +151,13 @@ results_misp$overdispersion <- 0.15
 write_csv(results_misp, 
           file = "output/sensitivity_simulation/sensitivity_a_alpha_100_misp.csv")
 
-
 df_a_alpha <- rbind(read_csv("output/sensitivity_simulation/sensitivity_a_alpha_100_correct.csv"),
                  read_csv("output/sensitivity_simulation/sensitivity_a_alpha_100_misp.csv"))
 
 pK_a_sig <- df_a_alpha %>%
   mutate(a = as.factor(a),
          alpha = alpha, 
-         overdispersion = paste0("Overd = ", overdispersion)) %>%
+         overdispersion = paste0("tau = ", overdispersion)) %>%
   group_by(a, alpha, overdispersion) %>%
   summarise(Kest_mean = mean(Kest), 
             Kest_low = quantile(Kest, 0.2), 
@@ -173,13 +171,13 @@ pK_a_sig <- df_a_alpha %>%
     theme_bw() +
     facet_wrap(~overdispersion, scales = "free")+
     ylab("Estimated n. of signatures")+
-    xlab("Value of alpha")
+    xlab(expression(paste("Value of ", alpha)))
 
 
 pK_a_rmse <- df_a_alpha %>%
   mutate(a = as.factor(a),
          alpha = alpha, 
-         overdispersion = paste0("Overd = ", overdispersion),) %>%
+         overdispersion = paste0("tau = ", overdispersion),) %>%
   group_by(a, alpha, overdispersion) %>%
   summarise(rmse = mean(rmse_Counts), 
             rmse_low = quantile(rmse_Counts, 0.2), 
@@ -193,9 +191,11 @@ pK_a_rmse <- df_a_alpha %>%
   theme_bw() +
   facet_wrap(~overdispersion, scales = "free")+
   ylab("RMSE for the counts")+
-  xlab("Value of alpha")
+  xlab(expression(paste("Value of ", alpha)))
 
-ggpubr::ggarrange(pK_a_sig, pK_a_rmse, common.legend = TRUE, legend = "right")
+p_alpha_a <- ggpubr::ggarrange(pK_a_sig, pK_a_rmse, common.legend = TRUE, legend = "right")
+ggsave(plot = p_alpha_a, filename = "figures/sensitivty_a_alpha.pdf", height = 2.40, width = 8.59)
+
 
 df_a_alpha %>%
   mutate(a = as.factor(a),

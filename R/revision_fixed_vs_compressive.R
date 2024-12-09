@@ -7,6 +7,8 @@ library(mcmcse)
 library(foreach)
 library(lsa)
 library(doParallel)
+library(ggpubr)
+library(simplecolors)
 
 source("R/Postprocess_functions.R")
 source("R/simulate_data.R")
@@ -164,9 +166,9 @@ nburn <- 3000
 ncores <- ndatasets
 
 #-------------------------------------------- Run compressive case
-run_compressive <- TRUE
+run_compressive <- FALSE
 run_correct <- FALSE
-run_overd <- TRUE
+run_overd <- FALSE
 
 if(run_compressive){
   for(J in J_range){
@@ -202,7 +204,7 @@ if(run_compressive){
 #-------------------------------------------- Run fixed case
 run_fixed <- FALSE
 run_correct <- FALSE
-run_overd <- TRUE
+run_overd <- FALSE
 
 if(run_fixed){
   for(J in J_range){
@@ -236,47 +238,275 @@ if(run_fixed){
 }
 
 
+#-------------------------------------------- 
+# Plot the functions
+#-------------------------------------------- 
+
+df_results <- data.frame()
+main_dir <- "~/CompressiveNMF/output/compressive_vs_fixed_simulation/"
+for(J in J_range){
+  for(overd in overd_list){
+    subdir <- paste0(main_dir, "Scenario_", J, "_overd_", overd, "/")
+    # Read csv results
+    res_compressive <- as.data.frame(read_csv(paste0(subdir, "results_compressive.csv"), show_col_types = FALSE))
+    res_fixed <- as.data.frame(read_csv(paste0(subdir, "results_fixed.csv"), show_col_types = FALSE))
+    # Append
+    df_results <- rbind(df_results, res_compressive,  res_fixed)
+  }
+}
+
+# #------------------- Number of signatures, precision and sensitivity
+# p_K_prec_sens_0 <- df_results %>%
+#   filter(overd == 0) %>%
+#   mutate(Jlist = as.factor(J), 
+#          ovd = paste0(ovd = paste0("tau = ", overd)), 
+#          `Estimated K` = Kest) %>%
+#   dplyr::select(Jlist, ovd, case, `Estimated K`, Precision, Sensitivity) %>%
+#   gather(key = "quant", value = "value", -Jlist, -ovd, -case) %>%
+#   mutate(Ktrue = case_when(quant == "Estimated K" ~ 10,
+#                            TRUE ~ NA)) %>%
+#   ggplot()+
+#     theme_bw()+
+#     geom_hline(aes(yintercept = Ktrue), color = "turquoise", linetype = "solid")+
+#     geom_boxplot(aes(x = Jlist, y = value, fill = case, color = case)) +
+#     facet_grid(quant~ovd, scales = "free", shrink = FALSE)+
+#     scale_color_manual("Prior", values = c("firebrick", "blue"))+
+#      scale_fill_manual("Prior", values = c("#F8766D", "#619CFF")) +
+#     theme(axis.title.y = element_blank(), 
+#           panel.spacing = unit(0, "lines"))+
+#   xlab("Sample size J")
+# 
+# p_K_prec_sens_015 <- df_results %>%
+#   filter(overd == 0.15) %>%
+#   mutate(Jlist = as.factor(J), 
+#          ovd = paste0(ovd = paste0("tau = ", overd)), 
+#          `Estimated K` = Kest) %>%
+#   dplyr::select(Jlist, ovd, case, `Estimated K`, Precision, Sensitivity) %>%
+#   gather(key = "quant", value = "value", -Jlist, -ovd, -case) %>%
+#   mutate(Ktrue = case_when(quant == "Estimated K" ~ 10,
+#                            TRUE ~ NA)) %>%
+#   ggplot()+
+#   theme_bw()+
+#   geom_hline(aes(yintercept = Ktrue), color = "turquoise", linetype = "solid")+
+#   geom_boxplot(aes(x = Jlist, y = value, fill = case, color = case)) +
+#   facet_grid(quant~ovd, scales = "free", shrink = FALSE)+
+#   scale_color_manual("Prior", values = c("firebrick", "blue"))+
+#   scale_fill_manual("Prior", values = c("#F8766D", "#619CFF")) +
+#   theme(axis.title.y = element_blank(), 
+#         panel.spacing = unit(0, "lines"))+
+#   xlab("Sample size J")
+
+p_K_prec_sens <- df_results %>%
+  mutate(Jlist = as.factor(J), 
+         ovd = paste0(ovd = paste0("tau = ", overd)), 
+         `Estimated K` = Kest, 
+         case = case_when(case == "compressive"~"Compressive",
+                          TRUE~"Fixed-strength")) %>%
+  dplyr::select(Jlist, ovd, case, `Estimated K`, Precision, Sensitivity) %>%
+  gather(key = "quant", value = "value", -Jlist, -ovd, -case) %>%
+  mutate(Ktrue = case_when(quant == "Estimated K" ~ 10,
+                           TRUE ~ NA)) %>%
+  ggplot()+
+  theme_bw()+
+  geom_hline(aes(yintercept = Ktrue), color = "turquoise", linetype = "solid")+
+  geom_boxplot(aes(x = Jlist, y = value, fill = case, color = case)) +
+  facet_wrap(ovd~quant, scales = "free_y", shrink = FALSE)+
+  scale_color_manual("Prior", values = c("firebrick", "blue"))+
+  scale_fill_manual("Prior", values = c("#F8766D", "#619CFF")) +
+  theme(axis.title.y = element_blank(), 
+        panel.spacing.y = unit(0, "lines"), 
+        legend.position = "top")+
+  xlab("Sample size J")
+p_K_prec_sens
+
+ggsave(plot = p_K_prec_sens, 
+       filename = "figures/simulation_fixed_vs_compressive_K_prec_sens.pdf", 
+       width = 8.41, height = 5.27)
+
+#------------------- RMSE of all quantities
+# p_rmse_0 <- df_results %>%
+#   filter(overd == 0) %>%
+#   mutate(Jlist = as.factor(J), 
+#          ovd = paste0(ovd = paste0("tau = ", overd)), 
+#          `RMSE Counts` = rmse_Counts, 
+#          `RMSE Loadings` = rmse_Weights, 
+#          `RMSE Signatures` = rmse_Signatures) %>%
+#   dplyr::select(Jlist, ovd, case, `RMSE Counts`, `RMSE Loadings`, `RMSE Signatures`) %>%
+#   gather(key = "quant", value = "value", -Jlist, -ovd, -case) %>%
+#   ggplot()+
+#   theme_bw()+
+#   geom_boxplot(aes(x = Jlist, y = value, fill = case, color = case)) +
+#   facet_grid(quant~ovd, scales = "free", shrink = FALSE)+
+#   scale_color_manual("Prior", values = c("firebrick", "blue"))+
+#   scale_fill_manual("Prior", values = c("#F8766D", "#619CFF")) +
+#   theme(axis.title.y = element_blank(), 
+#         panel.spacing = unit(0, "lines"))+
+#   xlab("Sample size J")
+# 
+# p_rmse_015 <- df_results %>%
+#   filter(overd == 0.15) %>%
+#   mutate(Jlist = as.factor(J), 
+#          ovd = paste0(ovd = paste0("tau = ", overd)), 
+#          `RMSE Counts` = rmse_Counts, 
+#          `RMSE Loadings` = rmse_Weights, 
+#          `RMSE Signatures` = rmse_Signatures) %>%
+#   dplyr::select(Jlist, ovd, case, `RMSE Counts`, `RMSE Loadings`, `RMSE Signatures`) %>%
+#   gather(key = "quant", value = "value", -Jlist, -ovd, -case) %>%
+#   ggplot()+
+#   theme_bw()+
+#   geom_boxplot(aes(x = Jlist, y = value, fill = case, color = case)) +
+#   facet_grid(quant~ovd, scales = "free", shrink = FALSE)+
+#   scale_color_manual("Prior", values = c("firebrick", "blue"))+
+#   scale_fill_manual("Prior", values = c("#F8766D", "#619CFF")) +
+#   theme(axis.title.y = element_blank(), 
+#         panel.spacing = unit(0, "lines"))+
+#   xlab("Sample size J")
+
+p_rmse <- df_results %>%
+  mutate(Jlist = as.factor(J), 
+         ovd = paste0(ovd = paste0("tau = ", overd)), 
+         `RMSE Counts` = rmse_Counts, 
+         `RMSE Loadings` = rmse_Weights, 
+         `RMSE Signatures` = rmse_Signatures, 
+         case = case_when(case == "compressive"~"Compressive",
+                          TRUE~"Fixed-strength")) %>%
+  dplyr::select(Jlist, ovd, case, `RMSE Counts`, `RMSE Loadings`, `RMSE Signatures`) %>%
+  gather(key = "quant", value = "value", -Jlist, -ovd, -case) %>%
+  ggplot()+
+  theme_bw()+
+  geom_boxplot(aes(x = Jlist, y = value, fill = case, color = case)) +
+  facet_wrap(ovd~quant, scales = "free_y")+
+  scale_color_manual("Prior", values = c("firebrick", "blue"))+
+  scale_fill_manual("Prior", values = c("#F8766D", "#619CFF")) +
+  theme(axis.title.y = element_blank(), 
+        panel.spacing.y = unit(0, "lines"), legend.position = "top")+
+  xlab("Sample size J")
+
+#ggpubr::ggarrange(p_K_prec_sens_0, p_K_prec_sens_015, p_rmse_0, p_rmse_015, common.legend = TRUE, legend = "top", nrow = 1)
+
+#ggpubr::ggarrange(p_rmse, common.legend = TRUE, legend = "top", nrow = 1)
+ggsave(plot = p_rmse, 
+       filename = "figures/simulation_fixed_vs_compressive_rmse.pdf", 
+       width = 8.41, height = 5.27)
+
+
+
+#ggpubr::ggarrange(p_K_prec_sens, p_rmse, common.legend = TRUE, legend = "top", nrow = 1)
+#ggsave(filename = "figures/simulation_fixed_vs_compressive.pdf", 
+#       width = 9.30, height = 5.11)
+
 
 #-------------------------------------------- 
-# Aggregate results and make plots
-# 
-# df_results <- data.frame()
-# main_dir <- "~/CompressiveNMF/output/compressive_vs_fixed_simulation/"
-# for(J in J_range){
-#   for(overd in overd_list){
-#     subdir <- paste0(main_dir, "Scenario_", J, "_overd_", overd, "/")
-#     # Read csv results
-#     res_compressive <- as.data.frame(read_csv(paste0(subdir, "results_compressive.csv"), show_col_types = FALSE))
-#     res_fixed <- as.data.frame(read_csv(paste0(subdir, "results_fixed.csv"), show_col_types = FALSE))
-#     # Append
-#     df_results <- rbind(df_results, res_compressive,  res_fixed)
-#   }
-# }
-# 
-# df_results %>%
-#   group_by(case, J, overd) %>%
-#   summarize(K = mean(Kest)) %>%
-#   ggplot()+
-#   geom_point(aes(x = J, y = K, color = case)) +
-#   facet_wrap(~overd)
+# Show an individual case. How do the signatures and the loadings look like?
+data <- readRDS("output/compressive_vs_fixed_simulation/Scenario_300_overd_0.15/data.rds.gzip")[[3]]
+
+# Compressive case
+set.seed(10)
+out_comp <- CompressiveNMF(X = data$X,
+                      a0 = ncol(data$X) + 1, 
+                      b0 = epsilon * ncol(data$X), 
+                      cutoff_excluded = 0,
+                      K = K, 
+                      epsilon = epsilon,
+                      nsamples = nsamples, 
+                      burnin = nburn, 
+                      verbose = TRUE)
+
+# Fixed case
+set.seed(10)
+out_fixed <- CompressiveNMF(X = data$X,
+                        a0 = strength_fixed + 1, 
+                        b0 = epsilon * strength_fixed, 
+                        cutoff_excluded = 0,
+                        K = K, 
+                        epsilon = epsilon,
+                        nsamples = nsamples, 
+                        burnin = nburn, 
+                        verbose = TRUE)
 
 
+# Match them via Hungarian algorithm for better visualization
+match_mut <- match_MutSign(R_hat = out_comp$Signatures, 
+                           R_true = out_fixed$Signatures)
+sig_compressive <- match_mut$R_hat
+sig_fixed <- match_mut$R_true
 
+# Put the "compressed out signatures" at the bottom. 
+is_flat <- apply(sig_compressive, 2, function(x) cosine(x, rep(1, 96)) > 0.95)
+sig_compressive <- cbind(sig_compressive[, !is_flat], sig_compressive[, is_flat])
+sig_fixed <- cbind(sig_fixed[, !is_flat], sig_fixed[, is_flat])
+match <- c(match_mut$match[!is_flat], match_mut$match[is_flat])
 
+# Name the signatures
+colnames(sig_compressive) <- LETTERS[1:K]
+colnames(sig_fixed) <- LETTERS[1:K]
 
+# Plot signatures side by side
+p_sig <-ggarrange(CompressiveNMF:::plot.SBS.signature(sig_compressive) +
+            theme(axis.text.x = element_blank(), 
+                  plot.title = element_text(hjust = 0.5)) +
+            ggtitle("Compressive"), 
+          CompressiveNMF:::plot.SBS.signature(sig_fixed) +
+            theme(axis.text.x = element_blank(), 
+                  plot.title = element_text(hjust = 0.5))+
+            ggtitle("Fixed-strength"), 
+          nrow = 1)
 
+ggsave(plot = p_sig , 
+       filename = "figures/simulation_fixed_vs_compressive_signature_ex.pdf", 
+       width = 8.41, height = 5.19)
 
+# Plot the relevance weights
+mu_comp <- data.frame(out_comp$mcmc_out[[1]]$Mu[, match])
+colnames(mu_comp) <- LETTERS[1:K]
+mu_fixed <- data.frame(out_fixed$mcmc_out[[1]]$Mu)
+mu_fixed <- cbind(mu_fixed[, !is_flat], mu_fixed[, is_flat])
+colnames(mu_fixed) <- LETTERS[1:K]
 
+colors_palette_20 <- c("black",
+                       rev(RColorBrewer::brewer.pal(n = 9, name = "Blues")), 
+                       "gray",
+                       RColorBrewer::brewer.pal(n = 9, name = "Reds"))
+p_trace_comp <- mu_comp %>%
+  mutate(iter = 1:nrow(mu_comp), 
+         case = "Compressive") %>%
+  gather(key = "sig", value = "mu", -iter, -case) %>%
+  ggplot()+
+  #theme_bw()+
+  geom_line(aes(x = iter, y = mu, col = sig))+
+  scale_color_manual(values = colors_palette_20)+
+  xlab("Post burn-in MCMC iteration")+
+  facet_grid(.~case, scales = "free_y")
 
+p_trace_fixed <- mu_fixed %>%
+  mutate(iter = 1:nrow(mu_fixed), 
+         case = "Fixed-strength") %>%
+  gather(key = "sig", value = "mu", -iter, -case) %>%
+  ggplot()+
+  #theme_bw()+
+  geom_line(aes(x = iter, y = mu, col = sig))+
+  scale_color_manual(values = colors_palette_20)+
+  xlab("Post burn-in MCMC iteration")+
+  facet_grid(.~case, scales = "free_y")
 
+p_trace_all <- rbind(mu_comp %>%
+        mutate(iter = 1:nrow(mu_comp), 
+               case = "Compressive") %>%
+        gather(key = "sig", value = "mu", -iter, -case), 
+      mu_fixed %>%
+        mutate(iter = 1:nrow(mu_fixed), 
+               case = "Fixed-strength") %>%
+        gather(key = "sig", value = "mu", -iter, -case)) %>%
+  ggplot()+
+  #theme_bw()+
+  geom_line(aes(x = iter, y = mu, col = sig))+
+  scale_color_manual("Signature", values = colors_palette_20)+
+  xlab("Post burn-in MCMC iteration")+
+  facet_grid(.~case, scales = "free_y") +
+  theme(legend.position = "top")+
+  guides(colour = guide_legend(nrow = 2))+
+  ylab(expression(paste("Posterior samples of ", mu[k])))
 
-
-
-
-
-
-
-
-
-
-
+ggsave(plot = p_trace_all , 
+       filename = "figures/simulation_fixed_vs_compressive_traceplots.pdf", 
+       width = 8.41, height = 4.06)

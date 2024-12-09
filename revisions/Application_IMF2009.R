@@ -9,6 +9,7 @@ library(doParallel)
 source("R/SignatureAnalyzer.R")
 source("R/SigProfilerExtractor.R")
 source("R/signeR.R")
+source("R/SigProfilerExtractor.R")
 source("R/PoissonCUSP.R")
 source("R/Postprocess_functions.R")
 
@@ -130,5 +131,72 @@ plot(out_ARDl1_DBS$Signature.norm %*% out_ARDl1_DBS$Exposure, Xdbs)
 
 
 plot(out_CompNMF_SBS$Signatures %*% out_CompNMF_SBS$Weights, Xsbs)
+
+
+#------- meeting with Jeff soon
+
+
+# DBS data
+nchains <- 1
+ncores <- 1
+nsamples <- 10
+burnin <- 20
+# Compressive case
+set.seed(10)
+out_CompNMF_DBS <- CompressiveNMF(X = Xdbs, 
+                                  K = 20, 
+                                  nsamples = nsamples, 
+                                  burnin = burnin, 
+                                  nchains = 4, 
+                                  ncores = 4, 
+                                  alpha = 0.5, 
+                                  epsilon = 0.01,
+                                  a = 1, cutoff_excluded = 0)
+plot(out_CompNMF_DBS)
+CompressiveNMF:::plot.DBS.signature(out_CompNMF_DBS$Signatures[, out_CompNMF_DBS$RelWeights > 1.5 * 0.01])
+# Fixed strength
+set.seed(10)
+N_fixed <- 10
+out_CompNMF_DBS_fixed <- CompressiveNMF(X = Xdbs, 
+                                        K = 20, 
+                                        a0 = N_fixed + 1,
+                                        b0 = 0.01 * N_fixed,
+                                        nsamples = nsamples, 
+                                        burnin = burnin, 
+                                        nchains = nchains, 
+                                        ncores = ncores, 
+                                        alpha = 0.5, 
+                                        a = 1, cutoff_excluded = 0)
+plot(out_CompNMF_DBS_fixed)
+print(out_CompNMF_DBS_fixed)
+CompressiveNMF:::plot.DBS.signature(out_CompNMF_DBS_fixed$Signatures[, out_CompNMF_DBS_fixed$RelWeights > 1.5 * 0.01])
+
+# SignatureAnalyzer
+out_ARDl1_DBS <- sigminer::sig_auto_extract(t(Xdbs), method = "L1KL")
+
+# SigneR. # <--- does not work with DBS!!!!!!!!!
+set.seed(10)
+out_signeR <- signeR(Xdbs, samples = "cols", nlim = c(1, 10), estimate_hyper = FALSE)
+
+# Sigprofiler # also apparently not working well
+sigminer::sigprofiler_extract(nmf_matrix = t(Xdbs),
+                              output = "temp_files/sigProDBS", 
+                              range = 1:8, init_method = "random", 
+                              py_path = reticulate::conda_list()[2, 2], 
+                              refit_plot = FALSE, refit = FALSE, nrun = 5L,
+                              sigprofiler_version = "1.1.23",is_exome = FALSE,
+                              cores = 8)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
