@@ -3,6 +3,7 @@
 
 # Load the packages
 library(tidyverse)
+library(coda)
 source("R/SignatureAnalyzer.R")
 source("R/SigProfilerExtractor.R")
 source("R/signeR.R")
@@ -11,6 +12,7 @@ source("R/CompressiveNMF.R")
 source("R/plot_signatures.R")
 source("R/Postprocess_functions.R")
 source("R/plot_signatures.R")
+
 
 # Load the dataset
 mut <- t(read.table(system.file("extdata","21_breast_cancers.mutations.txt", package="signeR"), header=TRUE, check.names=FALSE))
@@ -237,6 +239,15 @@ round(sqrt(mean((X - out_ARD_pcawg$Signature.norm %*% out_ARD_pcawg$Exposure)^2)
 round(sqrt(mean((X - out_sigPro$Signatures %*% out_sigPro$Weights)^2)), 2)
 
 
+#--------------------------------------------------------------------- 
+# Effective Sample size for the Bayesian methods
+df_ess <- rbind(get_ESS_Comp(out_CompNMF), 
+                get_ESS_Comp(out_CompNMF_cosmic_all), 
+                get_ESS_signeR(out_signeR, which_samples = 1:2000), 
+                get_ESS_PoissonCUSP(out_CUSP))
+rownames(df_ess) <- c("CompNMF", "CompNMF+comsic", "signeR", "PoissonCUSP")
+round(df_ess, 1)
+
 #----------------------------------------------------- Figures in the supplement
 
 #-------------------------------------------------- CompNMF cosmic all
@@ -268,6 +279,9 @@ ggsave("figures/sig_suppl_CompNMF.pdf", height = 9.08, width = 9.08)
 # Plot weights
 plot_weights(Wmat, col_palette = c("darkblue", "#2473D0", "#A4C1ED","#F2DAAC", "#E82C36", "grey45"))
 ggsave("figures/Weight_compNMF.pdf", height = 3.13, width = 5.05)
+
+
+
 
 #-------------------------------------------------- signeR 
 sigMat = out_signeR$Phat
@@ -346,6 +360,8 @@ plot_matrix_signature_v2(sigMat) + theme(aspect.ratio = .6) + labs(title = "SigP
 ggsave("figures/sig_suppl_SigProfiler.pdf", height = 9.08, width = 9.08)
 
 
+#-------------------------------------------------------- 
+# Effective Sample sizes of Bayesian methods
 
 
 

@@ -189,10 +189,10 @@ get_ESS_Comp <- function(resComp){
   return(effsize)
 }
 
-get_ESS_signeR <- function(resSigneR){
+get_ESS_signeR <- function(resSigneR, which_samples = 1001:2000){
   
-  R_all <- resSigneR$SignExposures@Sign[, , 1001:2000]
-  Theta_all <- resSigneR$SignExposures@Exp[, , 1001:2000]
+  R_all <- resSigneR$SignExposures@Sign[, , which_samples]
+  Theta_all <- resSigneR$SignExposures@Exp[, , which_samples]
   EffectiveSigs <- apply(R_all, c(1,2), function(x) coda::effectiveSize(x))
   EffectiveTheta <- apply(Theta_all, c(1, 2), function(x) coda::effectiveSize(x))
   effsize <- c("ESS_Sig_mean" = mean(colMeans(EffectiveSigs)), 
@@ -202,6 +202,34 @@ get_ESS_signeR <- function(resSigneR){
                "ESS_relweight_mean" = NA, 
                "ESS_relweight_sd" = NA)
   
+  return(effsize)
+}
+
+get_ESS_PoissonCUSP <- function(out_CUSP){
+  pos_cusp <- get_posterior_CUSP(out_CUSP)
+  Mu_all <- pos_cusp$mu_seq[, pos_cusp$nspike < 0.05]
+  sigMat <- pos_cusp$R_hat[, pos_cusp$nspike < 0.05]
+  ThetaMat <- pos_cusp$Theta_hat[pos_cusp$nspike < 0.05, ]
+  nsamples <- nrow(pos_cusp$mu_seq)
+  R_all <- array(NA, dim = c(nsamples, nrow(sigMat), ncol(sigMat)))
+  Theta_all <- array(NA, dim = c(nsamples, ncol(sigMat), ncol(ThetaMat)))
+  for(i in 1:nsamples){
+    # match the signature with closest similarity
+    cosMat <- cosine(sigMat, out_CUSP$Signatures[[i]])
+    match <- RcppHungarian::HungarianSolver(cosMat)$pairs[, 1]
+    R_all[i, ,] <- out_CUSP$Signatures[[i]][, match]
+    Theta_all[i, , ] <- out_CUSP$Weights[[i]][match, ]
+  }
+  # Calculate effective sample sizes
+  EffectiveSigs <- apply(R_all, c(2,3), function(x) coda::effectiveSize(x))
+  EffectiveTheta <- apply(Theta_all, c(2,3), function(x) coda::effectiveSize(x))
+  EffectiveRelW <- coda::effectiveSize(Mu_all)
+  effsize <- c("ESS_Sig_mean" = mean(colMeans(EffectiveSigs)), 
+               "ESS_Sig_sd" = sd(colMeans(EffectiveSigs)),
+               "ESS_Theta_mean" = mean(rowMeans(EffectiveTheta)), 
+               "ESS_Theta_sd" = sd(rowMeans(EffectiveTheta)), 
+               "ESS_relweight_mean" = mean(EffectiveRelW), 
+               "ESS_relweight_sd" = sd(EffectiveRelW))
   return(effsize)
 }
 
@@ -446,6 +474,51 @@ Postprocess_PoissonCUSP <- function(resCUSP, data) {
          ))
 }
 
+#---------------------------------------------------------------------- BayesNMF
+Postprocess_BayesNMF <- function(resBayesNMF, data) {
+  # Step 1 - calculate the number of inferred signatures
+  K <- ncol(resBayesNMF$Signatures)
+  # Step 2 - Calculate RMSE wrt to the count matrix and the rate matrix
+  Lambda <- resBayesNMF$Signatures %*% resBayesNMF$Theta
+  Lambda_true <- data$Rmat %*% data$Theta
+  rmse_Lambda <- sqrt(mean((Lambda_true - Lambda)^2))
+  rmse_Counts <- sqrt(mean((data$X - Lambda)^2))
+  # Step 3 - calculate the cosine similarity between the true and the inferred signatures
+  R_true <- apply(data$Rmat, 2, function(x) x / sum(x))
+  R_hat <- resBayesNMF$Signatures
+  matchedSign <- match_MutSign(R_true = R_true, R_hat = R_hat)
+  cos_sim <- mean(get_cosine_similarity(matchedSign))
+  # Step 4 - calculate the RMSE between Theta and the rest
+  Theta_hat <- resBayesNMF$Theta
+  rmse_R <- compute_RMSE_Signature(R_hat = matchedSign$R_hat, R_true = matchedSign$R_true)  
+  rmse_Theta <- compute_RMSE_Theta(Theta_true = data$Theta, Theta_hat = Theta_hat, matchedSign$match)  
+  # Step 5 - calculate the sensitivity and precision
+  sens_prec  <- Compute_sensitivity_precision(R_hat = R_hat, R_true)
+  # Step 6 - calculate effective sample sizes of R and Theta on average
+  effsize <- c("ESS_Sig_mean" = mean(colMeans(resBayesNMF$EffectiveSigs)), 
+               "ESS_Sig_sd" = sd(colMeans(resBayesNMF$EffectiveSigs)),
+               "ESS_Theta_mean" = mean(colMeans(resBayesNMF$EffectiveTheta)), 
+               "ESS_Theta_sd" = sd(colMeans(resBayesNMF$EffectiveTheta)), 
+               "ESS_relweight_mean" = mean(resBayesNMF$EffectiveLambda), 
+               "ESS_relweight_sd" = sd(resBayesNMF$EffectiveLambda))
+  return(list(
+    Lambda = Lambda,
+    R_hat = R_hat,
+    Theta_hat = Theta_hat,
+    Mu_hat = resBayesNMF$RelWeights,
+    signatures = matchedSign,
+    results = c("K" = K, 
+                "rmse_Lambda" = rmse_Lambda, 
+                "rmse_Counts" = rmse_Counts, 
+                rmse_R, 
+                rmse_Theta, 
+                sens_prec,
+                "cos_sim" = cos_sim, 
+                "time" = resBayesNMF$time, 
+                effsize)
+  ))
+}
+
 
 #---------------------------------------------------------------------- Extract results
 
@@ -623,6 +696,8 @@ extract_F1_range <- function(res, cutoff_range = seq(0.6, 0.9999, length.out = 1
                                              "highCI" = quantile(x, 0.95))))
   data.frame("Method" = method,  "cutoff" = cutoff_range, res)
 }
+
+
 
 
 
