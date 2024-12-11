@@ -16,9 +16,9 @@ load("data/21breast.rdata")
 # Possible range of values for the sensitivity analysis of the 21 breast cancer
 a_range <- c(1, 2, 0.5)
 alpha_range <- c(0.5, 1, 2)
-epsilon <- c(0.01, 0.1, 0.25)
+epsilon_range <- c(0.01, 0.1, 0.25)
 K_range <- c(15, 20, 25, 40)
-values_all <- expand_grid(a_range, alpha_range, epsilon, K_range)
+values_all <- expand_grid(a_range, alpha_range, epsilon_range, K_range)
   
 # Parameters of the simulation
 nsamples <- 2000
@@ -39,7 +39,7 @@ df_results <- foreach(i = 1:nrow(values_all), .combine = "rbind") %dopar%{
   K <- values_all$K_range[i]
   a <- values_all$a_range[i]
   alpha <- values_all$alpha_range[i]
-  epsilon <- values_all$epsilon[i]
+  epsilon <- values_all$epsilon_range[i]
   
   # Run the model
   out_temp <- CompressiveNMF(X = X, 
@@ -71,10 +71,10 @@ write_csv(df_results, file = "output/Application_21brca/Sensitivity_21brca_CompN
 
 
 
-df_results <-read_csv("output/Application_21brca/Sensitivity_21brca_CompNMF.csv")
-df_results$Kest
-df_results$Precision
-df_results$Sensitivity
+#df_results <-read_csv("output/Application_21brca/Sensitivity_21brca_CompNMF.csv")
+#df_results$Kest
+#df_results$Precision
+#df_results$Sensitivity
 
 
 
