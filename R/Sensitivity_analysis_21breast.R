@@ -38,7 +38,7 @@ df_results <- foreach(i = 1:nrow(values_all), .combine = "rbind") %dopar%{
   # Parameters
   K <- values_all$K_range[i]
   a <- values_all$a_range[i]
-  alpha <- values_all$a_range[i]
+  alpha <- values_all$alpha_range[i]
   epsilon <- values_all$epsilon[i]
   
   # Run the model
@@ -68,5 +68,20 @@ df_results <- foreach(i = 1:nrow(values_all), .combine = "rbind") %dopar%{
 
 df_results <- as.data.frame(df_results)
 write_csv(df_results, file = "output/Application_21brca/Sensitivity_21brca_CompNMF.csv")
+
+
+
+df_results <-read_csv("output/Application_21brca/Sensitivity_21brca_CompNMF.csv")
+df_results$Kest
+df_results$Precision
+df_results$Sensitivity
+
+
+
+
+
+
+
+
 
 
