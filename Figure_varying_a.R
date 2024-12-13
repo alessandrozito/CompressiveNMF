@@ -11,10 +11,10 @@ color_values <- c("darkblue", "lightblue", "#FCB92B", "#DB5902", "#C30027")
 # Hyperparameters for the simulation
 a_range <- c(0.1, 0.5, 1, 2)
 compressive <- c(TRUE, FALSE)
-J <- c(5, 20, 50, 100, 500)
+J <- c(5, 20, 50, 100, 200)
 params <- as.data.frame(expand_grid(a_range, compressive, J))
 N_fixed <- 10
-nsamples <- 5000
+nsamples <- 10000
 #nsamples <- 1000
 epsilon <- 0.001
 #epsilon <- 0.5
@@ -83,7 +83,34 @@ ggsave(plot = p_plot, filename = "figures/compressive_vs_fixed_varying_a.pdf",
        width = 7.78, height = 4.27)
 
 
-
+ggplot(df_plot %>%
+         filter(compressive == TRUE, 
+                a >= 0.5, J > 10 & J != 100) %>%
+         mutate(a_verb = paste0("a = ", a)))+
+  geom_segment(aes(x = a, xend = a, y = 0, yend = Inf), color = "grey40", linetype = "dotdash", linewidth = 0.25)+
+  geom_line(aes(x = Y, y = V1))+
+  geom_line(aes(x = Y, y = X10., col = as.factor(J), linetype = as.factor(J)))+
+  geom_line(aes(x = Y, y = X90., col = as.factor(J), linetype = as.factor(J)))+
+  geom_segment(x = 0, xend = 5, y = 0, yend = 5, color = "red", linetype = "solid", linewidth = 0.1)+
+  facet_grid(~a_verb) +
+  theme_test() +
+  theme(aspect.ratio = 1)+
+  #scale_color_manual("J", values = color_values)+
+  scale_color_manual("J", values = hcl.colors(6, palette = "Blues 3")[c(1,3,4)]) +
+  scale_linetype_manual("J", values = c("dashed", "dashed","dashed"))+
+  xlab(expression(bar(Y)[k]))+
+  ylab(expression(mu[k]))
+  
+  
+  
+  theme_test() +
+  theme(aspect.ratio = 1, 
+        legend.position = "right", 
+        panel.spacing = unit(0, "lines"))+
+  facet_wrap(~"Posterior relevance weights") + 
+  xlab(expression(bar(Y)[k]))+
+  ylab(expression(mu[k]))+
+  facet_grid(~a_verb)
 
 
 

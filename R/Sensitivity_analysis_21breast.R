@@ -71,17 +71,103 @@ write_csv(df_results, file = "output/Application_21brca/Sensitivity_21brca_CompN
 
 
 
-#df_results <-read_csv("output/Application_21brca/Sensitivity_21brca_CompNMF.csv")
-#df_results$Kest
-#df_results$Precision
-#df_results$Sensitivity
+df_results <-read_csv("output/Application_21brca/Sensitivity_21brca_CompNMF.csv")
+df_results$Kest
+df_results$Precision
+df_results$Sensitivity
 
 
 
+ggplot(df_results %>%
+         mutate(a = paste0("a = ", a), 
+                epsilon = paste0("eps = ", epsilon),
+                alpha = paste0("alpha = ", alpha))) +
+  geom_point(aes(x = as.factor(K), y = Kest, shape = epsilon, color = epsilon), 
+             size = 2.5, stroke = .8) +
+  scale_shape_manual(values = c(1,3,4))+
+  facet_grid(a~alpha)+
+  ylim(c(3,10))+
+  theme_bw()+
+  ylab("N. estimated signatures") +
+  xlab("K")
 
 
+p1 <- ggplot(df_results %>%
+         mutate(a = paste0("a = ", a), 
+                epsilon = paste0("eps = ", epsilon),
+                alpha = paste0("alpha = ", alpha))) +
+  geom_point(aes(x = as.factor(K), y = Precision, shape = epsilon, color = epsilon), 
+             size = 2.5, stroke = .8) +
+  scale_shape_manual(values = c(1,3,4))+
+  facet_grid(a~alpha)+
+  #ylim(c(3,10))+
+  theme_bw()+
+  ylab("Precision") +
+  xlab("K")+
+  ggtitle("Precision")
+
+p2 <- ggplot(df_results %>%
+         mutate(a = paste0("a = ", a), 
+                epsilon = paste0("eps = ", epsilon),
+                alpha = paste0("alpha = ", alpha))) +
+  geom_point(aes(x = as.factor(K), y = Sensitivity, shape = epsilon, color = epsilon), 
+             size = 2.5, stroke = .8) +
+  scale_shape_manual(values = c(1,3,4))+
+  facet_grid(a~alpha)+
+  #ylim(c(3,10))+
+  theme_bw()+
+  ylab("Sensitivity") +
+  xlab("K")+
+  ggtitle("Sensitivity")
+
+ggarrange(p1, p2, common.legend = TRUE)
 
 
+p3 <- ggplot(df_results %>%
+               mutate(a = paste0("a = ", a), 
+                      epsilon = paste0("eps = ", epsilon),
+                      alpha = paste0("alpha = ", alpha))) +
+  geom_point(aes(x = as.factor(K), y = rmse_Signatures, shape = epsilon, color = epsilon), 
+             size = 2.5, stroke = .8) +
+  scale_shape_manual(values = c(1,3,4))+
+  facet_grid(a~alpha)+
+  #ylim(c(3,10))+
+  theme_bw()+
+  ylab("RMSE") +
+  xlab("K")+
+  ggtitle("Signatures")
+
+p4 <- ggplot(df_results %>%
+               mutate(a = paste0("a = ", a), 
+                      epsilon = paste0("eps = ", epsilon),
+                      alpha = paste0("alpha = ", alpha))) +
+  geom_point(aes(x = as.factor(K), y = rmse_Weights, shape = epsilon, color = epsilon), 
+             size = 2.5, stroke = .8) +
+  scale_shape_manual(values = c(1,3,4))+
+  facet_grid(a~alpha)+
+  #ylim(c(3,10))+
+  theme_bw()+
+  ylab("RMSE") +
+  xlab("K")+
+  ggtitle("Loadings")
+
+ggarrange(p3, p4, common.legend = TRUE, legend = "right")
+
+set.seed(10)
+out2 <- CompressiveNMF(X = X, K = 25, 
+                              nsamples = nsamples, burnin = burnin, 
+                              epsilon = 0.25)
+
+set.seed(10)
+out_default <- CompressiveNMF(X = X, K = 15, 
+                              nsamples = nsamples, burnin = burnin, 
+                              epsilon = 0.01)
+
+plot(out2)
+plot(out_default)
+
+Compute_sensitivity_precision(out2$Signatures, out_default$Signatures)
+Rhat <- apply(out2$mcmc_out[[1]]$Signatures, c(2,3), mean)
 
 
 

@@ -14,7 +14,6 @@ output/Application_21brca/old_models
 output/Application_21brca/CompressiveNMF.rds.gzip
 output/Application_21brca/CompressiveNMF_cosmic_all.rds.gzip
 
-
 # Simulation - remove large files
 output/old_simulations
 output/main_simulation/old_simulations
@@ -133,3 +132,6 @@ output/sparsity_simulation/Sparsity_0.25/BayesNMF_brouwer/
 output/sparsity_simulation/Sparsity_0.75/BayesNMF_brouwer/
 output/sparsity_simulation/Sparsity_0.9/BayesNMF_brouwer/
 
+output/sparse_indel_simulation/Indel_theta_50_overd_0/BayesNMF_brouwer/
+output/sparse_indel_simulation/Indel_theta_50_overd_0.15/BayesNMF_brouwer/
+output/Application_ID_mm
