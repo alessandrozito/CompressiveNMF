@@ -1,8 +1,12 @@
 ## This function plots the signatures from CompressiveNMF
+# Old palette
+# c("#084B9D", "#2473D0", "#A4C1ED", "#F2DAAC", "#F29D52", "#E82C36")
+# Cosmic palette
+# c("#40BDEE", "#020202", "#E52925", "#CCC9CA", "#A3CF62", "#ECC5C5")
 plot.SBS.signature <- function(signatures,
                                lowCI = NULL,
                                highCI = NULL,
-                               palette =c("#084B9D", "#2473D0", "#A4C1ED", "#F2DAAC", "#F29D52", "#E82C36")) {
+                               palette = c("#40BDEE", "#020202", "#E52925", "#CCC9CA", "#A3CF62", "#ECC5C5")) {
   #load("~/CompressiveNMF/data/Cosmic_data.rdata")
   signatures <- as.matrix(signatures)
   names_sig <- rownames(signatures)

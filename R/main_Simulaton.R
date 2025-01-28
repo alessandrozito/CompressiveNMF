@@ -201,16 +201,18 @@ theta_list <- c(100)
 overdispersion_list <- c(0, 0.15)
 J_list <- c(50, 100, 200)
 K_new_list <- c(2, 6)
-
 simulation_dir <- "~/CompressiveNMF/output/main_simulation/"
 create_directory(simulation_dir)
-cat("start \n", file = "check.txt")
-# Run the simulation
-for(theta in theta_list){
-  for(K_new in K_new_list){
-    for(overd in overdispersion_list){
-      for(J in J_list){
-        try(main(J = J, K_new = K_new, theta = theta,
+
+rerun <- FALSE # <----- Set to true to re-run. 
+if(rerun){
+  cat("start \n", file = "check.txt")
+  # Run the simulation
+  for(theta in theta_list){
+    for(K_new in K_new_list){
+      for(overd in overdispersion_list){
+        for(J in J_list){
+          try(main(J = J, K_new = K_new, theta = theta,
                    overdispersion = overd,
                    simulation_dir = simulation_dir, 
                    generate_data = TRUE,
@@ -221,6 +223,7 @@ for(theta in theta_list){
                    run_signeR_code = TRUE,
                    run_sigProfiler = TRUE),
               silent = FALSE, outFile = "log.txt")
+        }
       }
     }
   }
@@ -301,6 +304,10 @@ for(theta in theta_list){
         print("sigPro")
         out_sigPro <- open_rds_file(paste0(out_dir, "/sigProfiler.rds.gzip"))
         df_temp <- rbind(df_temp, extract_F1_range(out_sigPro, method = "4.SigPro"))
+        # BayesNMF
+        print("BayesNMF")
+        out_BayesNMF <- open_rds_file(paste0(out_dir, "/BayesNMF_brouwer.rds.gzip"))
+        df_temp <- rbind(df_temp, extract_F1_range(out_BayesNMF, method = "7.BayesNMF"))
         # Merge everything
         df_temp$J = J
         df_temp$theta = theta
@@ -312,8 +319,8 @@ for(theta in theta_list){
   }
 }
 
-write_csv(x = df_F1, file = paste0(simulation_dir, "/df_F1.csv"))
-
+#write_csv(x = df_F1, file = paste0(simulation_dir, "/df_F1.csv"))
+write_csv(x = df_F1, file = paste0(simulation_dir, "/df_F1_revision.csv"))
 
 
 

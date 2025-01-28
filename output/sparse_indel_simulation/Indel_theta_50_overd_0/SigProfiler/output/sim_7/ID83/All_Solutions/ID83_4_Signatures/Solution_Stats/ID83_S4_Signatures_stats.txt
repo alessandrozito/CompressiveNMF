@@ -1,0 +1,5 @@
+Signatures	Stability	Total Mutations
+ID83A	0.563	8151
+ID83B	0.998	7125
+ID83C	0.921	5865
+ID83D	0.527	4665

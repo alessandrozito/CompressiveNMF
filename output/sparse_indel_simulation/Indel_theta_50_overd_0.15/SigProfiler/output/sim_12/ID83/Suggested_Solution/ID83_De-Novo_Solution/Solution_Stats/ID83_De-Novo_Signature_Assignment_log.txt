@@ -1,0 +1,2955 @@
+
+
+
+
+
+                    ################ Sample 1 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   43.0    4.0   10.0    5.0   27.0    7.0
+L2 Error %: 0.1
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   43.0    4.0   10.0    5.0   27.0    7.0
+L2 Error %: 0.1
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 2 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0    2.0    5.0    8.0   11.0   87.0
+L2 Error %: 0.17
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0    2.0    5.0    8.0   11.0   87.0
+L2 Error %: 0.17
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.17
+Cosine Similarity 0.98
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.17
+Cosine Similarity 0.98
+
+#################### Final Composition #################################
+['ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.17
+Cosine Similarity 0.98
+####################################### Composition After Add-Remove #######################################
+   ID83C  ID83D  ID83E  ID83F
+0    5.0    8.0   11.0   89.0
+L2 Error %: 0.17
+Cosine Similarity: 0.98
+
+
+
+
+
+                    ################ Sample 3 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   30.0  194.0   10.0  102.0    7.0    5.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   30.0  194.0   10.0  102.0    7.0    5.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 4 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   12.0    5.0   40.0    1.0    3.0    1.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   12.0    5.0   40.0    1.0    3.0    1.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 5 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   25.0    6.0  164.0   23.0   35.0
+L2 Error %: 0.32
+Cosine Similarity: 0.95
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   25.0    6.0  164.0   23.0   35.0
+L2 Error %: 0.32
+Cosine Similarity: 0.95
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.32
+Cosine Similarity 0.95
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.32
+Cosine Similarity 0.95
+
+#################### Final Composition #################################
+['ID83B', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.32
+Cosine Similarity 0.95
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83D  ID83E  ID83F
+0   25.0  169.0   24.0   35.0
+L2 Error %: 0.32
+Cosine Similarity: 0.95
+
+
+
+
+
+                    ################ Sample 6 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83D
+0   32.0   10.0  142.0
+L2 Error %: 0.29
+Cosine Similarity: 0.96
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83D
+0   32.0   10.0  142.0
+L2 Error %: 0.29
+Cosine Similarity: 0.96
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.29
+Cosine Similarity 0.96
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.29
+Cosine Similarity 0.96
+
+#################### Final Composition #################################
+['ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.29
+Cosine Similarity 0.96
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83C  ID83D
+0   32.0   10.0  142.0
+L2 Error %: 0.29
+Cosine Similarity: 0.96
+
+
+
+
+
+                    ################ Sample 7 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   12.0    4.0   43.0   22.0   58.0
+L2 Error %: 0.21
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   12.0    4.0   43.0   22.0   58.0
+L2 Error %: 0.21
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.21
+Cosine Similarity 0.98
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.21
+Cosine Similarity 0.98
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.21
+Cosine Similarity 0.98
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   12.0    4.0   43.0   22.0   58.0
+L2 Error %: 0.21
+Cosine Similarity: 0.98
+
+
+
+
+
+                    ################ Sample 8 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   29.0    1.0   23.0  219.0   43.0   58.0
+L2 Error %: 0.18
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   29.0    1.0   23.0  219.0   43.0   58.0
+L2 Error %: 0.18
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 9 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   33.0   19.0   32.0   24.0   82.0
+L2 Error %: 0.26
+Cosine Similarity: 0.97
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   33.0   19.0   32.0   24.0   82.0
+L2 Error %: 0.26
+Cosine Similarity: 0.97
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.26
+Cosine Similarity 0.97
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.26
+Cosine Similarity 0.97
+
+#################### Final Composition #################################
+['ID83B', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.26
+Cosine Similarity 0.97
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   33.0   19.0   32.0   24.0   82.0
+L2 Error %: 0.26
+Cosine Similarity: 0.97
+
+
+
+
+
+                    ################ Sample 10 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   18.0   31.0   32.0    3.0   15.0    3.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   18.0   31.0   32.0    3.0   15.0    3.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 11 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    1.0    9.0   22.0   57.0    2.0   14.0
+L2 Error %: 0.43
+Cosine Similarity: 0.9
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    1.0    9.0   22.0   57.0    2.0   14.0
+L2 Error %: 0.43
+Cosine Similarity: 0.9
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 12 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0   22.0    7.0   17.0  104.0   24.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0   22.0    7.0   17.0  104.0   24.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.06
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.06
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.06
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0   22.0    7.0   17.0  104.0   24.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 13 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   35.0  100.0   72.0    1.0   28.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   35.0  100.0   72.0    1.0   28.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.11
+Cosine Similarity 0.99
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.11
+Cosine Similarity 0.99
+
+#################### Final Composition #################################
+['ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.11
+Cosine Similarity 0.99
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83C  ID83D  ID83F
+0   35.0  101.0   72.0   28.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+
+
+
+
+                    ################ Sample 14 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   40.0   16.0   52.0    2.0    8.0    2.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   40.0   16.0   52.0    2.0    8.0    2.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 15 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   37.0   19.0    6.0   35.0   17.0
+L2 Error %: 0.17
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   37.0   19.0    6.0   35.0   17.0
+L2 Error %: 0.17
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.17
+Cosine Similarity 0.99
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.17
+Cosine Similarity 0.99
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.17
+Cosine Similarity 0.99
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   37.0   19.0    6.0   35.0   17.0
+L2 Error %: 0.17
+Cosine Similarity: 0.99
+
+
+
+
+
+                    ################ Sample 16 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   38.0   23.0   14.0    1.0   13.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   38.0   23.0   14.0    1.0   13.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.11
+Cosine Similarity 0.99
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.11
+Cosine Similarity 0.99
+
+#################### Final Composition #################################
+['ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.11
+Cosine Similarity 0.99
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83C  ID83D  ID83F
+0   38.0   24.0   14.0   13.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+
+
+
+
+                    ################ Sample 17 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0  209.0   52.0   12.0   95.0   31.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0  209.0   52.0   12.0   95.0   31.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.04
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.04
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.04
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0  209.0   52.0   12.0   95.0   31.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 18 #################
+############################# Initial Composition ####################################
+   ID83A  ID83C  ID83E  ID83F
+0    6.0    1.0    9.0   39.0
+L2 Error %: 0.32
+Cosine Similarity: 0.95
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83C  ID83E  ID83F
+0    6.0    1.0    9.0   39.0
+L2 Error %: 0.32
+Cosine Similarity: 0.95
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83E', 'ID83F']
+L2 Error % 0.32
+Cosine Similarity 0.95
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83E', 'ID83F']
+L2 Error % 0.32
+Cosine Similarity 0.95
+
+#################### Final Composition #################################
+['ID83A', 'ID83E', 'ID83F']
+L2 Error % 0.32
+Cosine Similarity 0.95
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83E  ID83F
+0    6.0    9.0   40.0
+L2 Error %: 0.32
+Cosine Similarity: 0.95
+
+
+
+
+
+                    ################ Sample 19 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  248.0   16.0    5.0   17.0   25.0   17.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  248.0   16.0    5.0   17.0   25.0   17.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 20 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   13.0   30.0   44.0   35.0    3.0   22.0
+L2 Error %: 0.25
+Cosine Similarity: 0.97
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   13.0   30.0   44.0   35.0    3.0   22.0
+L2 Error %: 0.25
+Cosine Similarity: 0.97
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 21 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   22.0  167.0   86.0   14.0   91.0    2.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   22.0  167.0   86.0   14.0   91.0    2.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 22 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0  198.0   47.0  243.0  104.0   44.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0  198.0   47.0  243.0  104.0   44.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.08
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0  198.0   47.0  243.0  104.0   44.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 23 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    7.0  189.0    2.0   44.0    4.0    6.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    7.0  189.0    2.0   44.0    4.0    6.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 24 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83E  ID83F
+0  123.0  295.0   34.0   18.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83E  ID83F
+0  123.0  295.0   34.0   18.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.04
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.04
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.04
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83C  ID83E  ID83F
+0  123.0  295.0   34.0   18.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 25 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  252.0    2.0   10.0  304.0   11.0   35.0
+L2 Error %: 0.1
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  252.0    2.0   10.0  304.0   11.0   35.0
+L2 Error %: 0.1
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 26 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   55.0    6.0   70.0   54.0  188.0    7.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   55.0    6.0   70.0   54.0  188.0    7.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 27 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D
+0   43.0   57.0  116.0  191.0
+L2 Error %: 0.16
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D
+0   43.0   57.0  116.0  191.0
+L2 Error %: 0.16
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.16
+Cosine Similarity 0.99
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.16
+Cosine Similarity 0.99
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.16
+Cosine Similarity 0.99
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D
+0   43.0   57.0  116.0  191.0
+L2 Error %: 0.16
+Cosine Similarity: 0.99
+
+
+
+
+
+                    ################ Sample 28 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   29.0  404.0    1.0  129.0   26.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   29.0  404.0    1.0  129.0   26.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83D', 'ID83F']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83D', 'ID83F']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83D', 'ID83F']
+L2 Error % 0.05
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83D  ID83F
+0   29.0  405.0  129.0   26.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 29 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  146.0   11.0   31.0   22.0   15.0    6.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  146.0   11.0   31.0   22.0   15.0    6.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 30 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    7.0   62.0  206.0   87.0    2.0  290.0
+L2 Error %: 0.2
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    7.0   62.0  206.0   87.0    2.0  290.0
+L2 Error %: 0.2
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 31 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   28.0  223.0  221.0  213.0   12.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   28.0  223.0  221.0  213.0   12.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.08
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D
+0   28.0  227.0  224.0  218.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 32 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   40.0   19.0   68.0    7.0    3.0    3.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   40.0   19.0   68.0    7.0    3.0    3.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 33 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    8.0    2.0   33.0    8.0   87.0   25.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    8.0    2.0   33.0    8.0   87.0   25.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 34 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  118.0  116.0    1.0   36.0   82.0   53.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  118.0  116.0    1.0   36.0   82.0   53.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 35 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    7.0   11.0   40.0   80.0   17.0   12.0
+L2 Error %: 0.23
+Cosine Similarity: 0.97
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    7.0   11.0   40.0   80.0   17.0   12.0
+L2 Error %: 0.23
+Cosine Similarity: 0.97
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 36 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   43.0   14.0    1.0   18.0    7.0    2.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   43.0   14.0    1.0   18.0    7.0    2.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 37 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83D  ID83E  ID83F
+0   14.0   34.0    1.0    2.0    5.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83D  ID83E  ID83F
+0   14.0   34.0    1.0    2.0    5.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83E', 'ID83F']
+L2 Error % 0.07
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83E', 'ID83F']
+L2 Error % 0.07
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83E', 'ID83F']
+L2 Error % 0.07
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83E  ID83F
+0   14.0   35.0    2.0    5.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 38 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   14.0    1.0   14.0   25.0  431.0    2.0
+L2 Error %: 0.02
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   14.0    1.0   14.0   25.0  431.0    2.0
+L2 Error %: 0.02
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 39 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  471.0  108.0    3.0   81.0   59.0   34.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  471.0  108.0    3.0   81.0   59.0   34.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 40 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    3.0    6.0   40.0    2.0  116.0  160.0
+L2 Error %: 0.16
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    3.0    6.0   40.0    2.0  116.0  160.0
+L2 Error %: 0.16
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 41 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   78.0   25.0    1.0    3.0    5.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   78.0   25.0    1.0    3.0    5.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B']
+L2 Error % 0.07
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B']
+L2 Error % 0.07
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B']
+L2 Error % 0.07
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B
+0   85.0   27.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 42 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   11.0  117.0  105.0  188.0   65.0
+L2 Error %: 0.14
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   11.0  117.0  105.0  188.0   65.0
+L2 Error %: 0.14
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.14
+Cosine Similarity 0.99
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.14
+Cosine Similarity 0.99
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83F']
+L2 Error % 0.14
+Cosine Similarity 0.99
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   11.0  117.0  105.0  188.0   65.0
+L2 Error %: 0.14
+Cosine Similarity: 0.99
+
+
+
+
+
+                    ################ Sample 43 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83D  ID83E  ID83F
+0  109.0    2.0    9.0    2.0    3.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83D  ID83E  ID83F
+0  109.0    2.0    9.0    2.0    3.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83D']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83D']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83D']
+L2 Error % 0.05
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83D
+0  115.0   10.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 44 #################
+############################# Initial Composition ####################################
+   ID83A  ID83C  ID83D  ID83E  ID83F
+0   85.0   14.0   52.0   12.0    8.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83C  ID83D  ID83E  ID83F
+0   85.0   14.0   52.0   12.0    8.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.1
+Cosine Similarity 0.99
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.1
+Cosine Similarity 0.99
+
+#################### Final Composition #################################
+['ID83A', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.1
+Cosine Similarity 0.99
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83C  ID83D  ID83E
+0   89.0   15.0   55.0   12.0
+L2 Error %: 0.1
+Cosine Similarity: 0.99
+
+
+
+
+
+                    ################ Sample 45 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    7.0   97.0    2.0    5.0  190.0  146.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    7.0   97.0    2.0    5.0  190.0  146.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 46 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   51.0    8.0    7.0   14.0  134.0    9.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   51.0    8.0    7.0   14.0  134.0    9.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 47 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   55.0   50.0    5.0    1.0   57.0   17.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   55.0   50.0    5.0    1.0   57.0   17.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 48 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   72.0  183.0   18.0   83.0    1.0   38.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   72.0  183.0   18.0   83.0    1.0   38.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 49 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   19.0   28.0   51.0   62.0   19.0    8.0
+L2 Error %: 0.14
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   19.0   28.0   51.0   62.0   19.0    8.0
+L2 Error %: 0.14
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 50 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   27.0   32.0   39.0  115.0    5.0
+L2 Error %: 0.19
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   27.0   32.0   39.0  115.0    5.0
+L2 Error %: 0.19
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.19
+Cosine Similarity 0.98
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.19
+Cosine Similarity 0.98
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.19
+Cosine Similarity 0.98
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D
+0   27.0   33.0   40.0  118.0
+L2 Error %: 0.19
+Cosine Similarity: 0.98
+
+
+
+
+
+                    ################ Sample 51 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   25.0    8.0   25.0   80.0   21.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   25.0    8.0   25.0   80.0   21.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.11
+Cosine Similarity 0.99
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.11
+Cosine Similarity 0.99
+
+#################### Final Composition #################################
+['ID83B', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.11
+Cosine Similarity 0.99
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   25.0    8.0   25.0   80.0   21.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+
+
+
+
+                    ################ Sample 52 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   84.0   31.0    3.0   75.0   60.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   84.0   31.0    3.0   75.0   60.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83D', 'ID83E']
+L2 Error % 0.11
+Cosine Similarity 0.99
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83D', 'ID83E']
+L2 Error % 0.11
+Cosine Similarity 0.99
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83D', 'ID83E']
+L2 Error % 0.11
+Cosine Similarity 0.99
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83D  ID83E
+0   86.0   31.0   76.0   60.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+
+
+
+
+                    ################ Sample 53 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   20.0   51.0    9.0   62.0   34.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   20.0   51.0    9.0   62.0   34.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.09
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.09
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.09
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   20.0   51.0    9.0   62.0   34.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 54 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   15.0  110.0  126.0   11.0    9.0    8.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   15.0  110.0  126.0   11.0    9.0    8.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 55 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    9.0    1.0    8.0   13.0    3.0    1.0
+L2 Error %: 0.32
+Cosine Similarity: 0.95
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    9.0    1.0    8.0   13.0    3.0    1.0
+L2 Error %: 0.32
+Cosine Similarity: 0.95
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 56 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    3.0   62.0    5.0   49.0  235.0   63.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    3.0   62.0    5.0   49.0  235.0   63.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 57 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   62.0   46.0    2.0    7.0    4.0    3.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   62.0   46.0    2.0    7.0    4.0    3.0
+L2 Error %: 0.06
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 58 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   27.0   70.0   31.0   13.0   83.0   75.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   27.0   70.0   31.0   13.0   83.0   75.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 59 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   11.0   58.0   15.0   56.0   37.0    5.0
+L2 Error %: 0.18
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   11.0   58.0   15.0   56.0   37.0    5.0
+L2 Error %: 0.18
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 60 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   77.0    8.0   75.0   70.0   15.0  140.0
+L2 Error %: 0.14
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   77.0    8.0   75.0   70.0   15.0  140.0
+L2 Error %: 0.14
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 61 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   52.0   46.0   40.0   34.0   49.0   97.0
+L2 Error %: 0.22
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   52.0   46.0   40.0   34.0   49.0   97.0
+L2 Error %: 0.22
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 62 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    2.0  293.0   47.0   24.0   34.0   61.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    2.0  293.0   47.0   24.0   34.0   61.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 63 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0    9.0   20.0   14.0    3.0   11.0
+L2 Error %: 0.18
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0    9.0   20.0   14.0    3.0   11.0
+L2 Error %: 0.18
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E']
+L2 Error % 0.19
+Cosine Similarity 0.98
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E']
+L2 Error % 0.19
+Cosine Similarity 0.98
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83E']
+L2 Error % 0.19
+Cosine Similarity 0.98
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83E
+0   10.0   20.0   15.0   12.0
+L2 Error %: 0.19
+Cosine Similarity: 0.98
+
+
+
+
+
+                    ################ Sample 64 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   66.0   62.0    3.0    2.0    3.0   91.0
+L2 Error %: 0.21
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   66.0   62.0    3.0    2.0    3.0   91.0
+L2 Error %: 0.21
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 65 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    1.0   99.0   44.0    4.0    1.0   39.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    1.0   99.0   44.0    4.0    1.0   39.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 66 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   64.0   13.0  105.0   58.0    3.0  112.0
+L2 Error %: 0.17
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   64.0   13.0  105.0   58.0    3.0  112.0
+L2 Error %: 0.17
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 67 #################
+############################# Initial Composition ####################################
+   ID83B  ID83D  ID83E  ID83F
+0   41.0   84.0  159.0   58.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83D  ID83E  ID83F
+0   41.0   84.0  159.0   58.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.09
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.09
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83B', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.09
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83D  ID83E  ID83F
+0   41.0   84.0  159.0   58.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 68 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    8.0   40.0   10.0  167.0   22.0   11.0
+L2 Error %: 0.2
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    8.0   40.0   10.0  167.0   22.0   11.0
+L2 Error %: 0.2
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 69 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  148.0   44.0   48.0   53.0    6.0   34.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  148.0   44.0   48.0   53.0    6.0   34.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 70 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83D  ID83E  ID83F
+0    2.0   12.0   13.0    1.0    2.0
+L2 Error %: 0.34
+Cosine Similarity: 0.94
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83D  ID83E  ID83F
+0    2.0   12.0   13.0    1.0    2.0
+L2 Error %: 0.34
+Cosine Similarity: 0.94
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83D']
+L2 Error % 0.36
+Cosine Similarity 0.93
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83D']
+L2 Error % 0.36
+Cosine Similarity 0.93
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83D']
+L2 Error % 0.36
+Cosine Similarity 0.93
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83D
+0    3.0   13.0   14.0
+L2 Error %: 0.36
+Cosine Similarity: 0.93
+
+
+
+
+
+                    ################ Sample 71 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  215.0   21.0  184.0   44.0   13.0   43.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  215.0   21.0  184.0   44.0   13.0   43.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 72 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0   13.0   67.0    4.0   21.0   92.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0   13.0   67.0    4.0   21.0   92.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.09
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.09
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.09
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0   13.0   67.0    4.0   21.0   92.0
+L2 Error %: 0.09
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 73 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    2.0  130.0   23.0   49.0   44.0   88.0
+L2 Error %: 0.12
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    2.0  130.0   23.0   49.0   44.0   88.0
+L2 Error %: 0.12
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 74 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  254.0  123.0    9.0   59.0    9.0   27.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0  254.0  123.0    9.0   59.0    9.0   27.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 75 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   86.0  166.0  126.0  135.0    3.0   13.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   86.0  166.0  126.0  135.0    3.0   13.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 76 #################
+############################# Initial Composition ####################################
+   ID83C  ID83E  ID83F
+0    4.0    1.0   28.0
+L2 Error %: 0.49
+Cosine Similarity: 0.87
+############################## Composition After Initial Remove ###############################
+   ID83C  ID83E  ID83F
+0    4.0    1.0   28.0
+L2 Error %: 0.49
+Cosine Similarity: 0.87
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83C', 'ID83F']
+L2 Error % 0.49
+Cosine Similarity 0.87
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83C', 'ID83F']
+L2 Error % 0.49
+Cosine Similarity 0.87
+
+#################### Final Composition #################################
+['ID83C', 'ID83F']
+L2 Error % 0.49
+Cosine Similarity 0.87
+####################################### Composition After Add-Remove #######################################
+   ID83C  ID83F
+0    4.0   29.0
+L2 Error %: 0.49
+Cosine Similarity: 0.87
+
+
+
+
+
+                    ################ Sample 77 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   26.0   13.0   57.0   96.0   13.0
+L2 Error %: 0.21
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   26.0   13.0   57.0   96.0   13.0
+L2 Error %: 0.21
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.21
+Cosine Similarity 0.98
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.21
+Cosine Similarity 0.98
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.21
+Cosine Similarity 0.98
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   26.0   13.0   57.0   96.0   13.0
+L2 Error %: 0.21
+Cosine Similarity: 0.98
+
+
+
+
+
+                    ################ Sample 78 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   77.0   24.0    1.0   10.0   43.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   77.0   24.0    1.0   10.0   43.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83D', 'ID83E']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83D', 'ID83E']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83D', 'ID83E']
+L2 Error % 0.08
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83D  ID83E
+0   76.0   25.0   11.0   43.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 79 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0    6.0  104.0   10.0    1.0   14.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0    6.0  104.0   10.0    1.0   14.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83F']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83F']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83F']
+L2 Error % 0.05
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83F
+0    6.0  105.0   10.0   14.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 80 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83D  ID83E
+0   18.0  275.0   51.0    8.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83D  ID83E
+0   18.0  275.0   51.0    8.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.05
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83C  ID83D
+0   19.0  281.0   52.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 81 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   15.0   31.0   41.0    2.0  118.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   15.0   31.0   41.0    2.0  118.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83E']
+L2 Error % 0.08
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83E
+0   15.0   32.0   42.0  118.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 82 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0  219.0   27.0  102.0    4.0    1.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0  219.0   27.0  102.0    4.0    1.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C']
+L2 Error % 0.03
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C']
+L2 Error % 0.03
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C']
+L2 Error % 0.03
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C
+0  223.0   27.0  103.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 83 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   88.0    5.0  446.0    1.0  121.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0   88.0    5.0  446.0    1.0  121.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83C', 'ID83F']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83C', 'ID83F']
+L2 Error % 0.08
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83C', 'ID83F']
+L2 Error % 0.08
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83C  ID83F
+0   89.0  449.0  123.0
+L2 Error %: 0.08
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 84 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   10.0   58.0   18.0   14.0    3.0   68.0
+L2 Error %: 0.2
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   10.0   58.0   18.0   14.0    3.0   68.0
+L2 Error %: 0.2
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 85 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   39.0   47.0   12.0    6.0   27.0   19.0
+L2 Error %: 0.18
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   39.0   47.0   12.0    6.0   27.0   19.0
+L2 Error %: 0.18
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 86 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    2.0    4.0   30.0   11.0    6.0    5.0
+L2 Error %: 0.25
+Cosine Similarity: 0.97
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    2.0    4.0   30.0   11.0    6.0    5.0
+L2 Error %: 0.25
+Cosine Similarity: 0.97
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 87 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    8.0    4.0   21.0    6.0   33.0    5.0
+L2 Error %: 0.19
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    8.0    4.0   21.0    6.0   33.0    5.0
+L2 Error %: 0.19
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 88 #################
+############################# Initial Composition ####################################
+   ID83A  ID83C  ID83D  ID83E  ID83F
+0   26.0   13.0    7.0   21.0   26.0
+L2 Error %: 0.27
+Cosine Similarity: 0.96
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83C  ID83D  ID83E  ID83F
+0   26.0   13.0    7.0   21.0   26.0
+L2 Error %: 0.27
+Cosine Similarity: 0.96
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.27
+Cosine Similarity 0.96
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.27
+Cosine Similarity 0.96
+
+#################### Final Composition #################################
+['ID83A', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.27
+Cosine Similarity 0.96
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83C  ID83D  ID83E  ID83F
+0   26.0   13.0    7.0   21.0   26.0
+L2 Error %: 0.27
+Cosine Similarity: 0.96
+
+
+
+
+
+                    ################ Sample 89 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   16.0   31.0   41.0   37.0    1.0   19.0
+L2 Error %: 0.19
+Cosine Similarity: 0.98
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   16.0   31.0   41.0   37.0    1.0   19.0
+L2 Error %: 0.19
+Cosine Similarity: 0.98
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 90 #################
+############################# Initial Composition ####################################
+   ID83A  ID83C  ID83D  ID83E  ID83F
+0  270.0    6.0   29.0   13.0    9.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83C  ID83D  ID83E  ID83F
+0  270.0    6.0   29.0   13.0    9.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83D', 'ID83E']
+L2 Error % 0.04
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83D', 'ID83E']
+L2 Error % 0.04
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83D', 'ID83E']
+L2 Error % 0.04
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83D  ID83E
+0  282.0   31.0   14.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 91 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0  125.0   60.0   11.0  209.0   14.0
+L2 Error %: 0.02
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0  125.0   60.0   11.0  209.0   14.0
+L2 Error %: 0.02
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.02
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.02
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83E', 'ID83F']
+L2 Error % 0.02
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83E  ID83F
+0  125.0   60.0   11.0  209.0   14.0
+L2 Error %: 0.02
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 92 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   14.0  147.0   21.0   10.0   11.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   14.0  147.0   21.0   10.0   11.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.05
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D', 'ID83E']
+L2 Error % 0.05
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D  ID83E
+0   14.0  147.0   21.0   10.0   11.0
+L2 Error %: 0.05
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 93 #################
+############################# Initial Composition ####################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   29.0   18.0   31.0   12.0   13.0
+L2 Error %: 0.16
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   29.0   18.0   31.0   12.0   13.0
+L2 Error %: 0.16
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.16
+Cosine Similarity 0.99
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83B', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.16
+Cosine Similarity 0.99
+
+#################### Final Composition #################################
+['ID83B', 'ID83C', 'ID83D', 'ID83E', 'ID83F']
+L2 Error % 0.16
+Cosine Similarity 0.99
+####################################### Composition After Add-Remove #######################################
+   ID83B  ID83C  ID83D  ID83E  ID83F
+0   29.0   18.0   31.0   12.0   13.0
+L2 Error %: 0.16
+Cosine Similarity: 0.99
+
+
+
+
+
+                    ################ Sample 94 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   42.0   79.0   53.0   28.0  103.0    3.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   42.0   79.0   53.0   28.0  103.0    3.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 95 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    8.0   63.0    5.0    5.0    3.0   16.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0    8.0   63.0    5.0    5.0    3.0   16.0
+L2 Error %: 0.11
+Cosine Similarity: 0.99
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 96 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   18.0   11.0   30.0    2.0  177.0   33.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   18.0   11.0   30.0    2.0  177.0   33.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 97 #################
+############################# Initial Composition ####################################
+   ID83A  ID83C  ID83D  ID83F
+0  256.0   33.0   14.0   34.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83C  ID83D  ID83F
+0  256.0   33.0   14.0   34.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83C', 'ID83F']
+L2 Error % 0.04
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83C', 'ID83F']
+L2 Error % 0.04
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83C', 'ID83F']
+L2 Error % 0.04
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83C  ID83F
+0  265.0   35.0   37.0
+L2 Error %: 0.04
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 98 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   14.0   39.0    4.0    1.0   45.0    7.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83E  ID83F
+0   14.0   39.0    4.0    1.0   45.0    7.0
+L2 Error %: 0.07
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+                    ################ Sample 99 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D
+0   30.0  319.0  128.0   20.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D
+0   30.0  319.0  128.0   20.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.03
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.03
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83C', 'ID83D']
+L2 Error % 0.03
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83C  ID83D
+0   30.0  319.0  128.0   20.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0
+
+
+
+
+
+                    ################ Sample 100 #################
+############################# Initial Composition ####################################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0  443.0   25.0   11.0   14.0   58.0
+L2 Error %: 0.02
+Cosine Similarity: 1.0
+############################## Composition After Initial Remove ###############################
+   ID83A  ID83B  ID83C  ID83D  ID83F
+0  443.0   25.0   11.0   14.0   58.0
+L2 Error %: 0.02
+Cosine Similarity: 1.0
+
+############################## Performing Add-Remove Step ##############################
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 0 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83F']
+L2 Error % 0.03
+Cosine Similarity 1.0
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!! LAYER: 1 !!!!!!!!!!!!!!!!!!!!!!!!!
+Best Signature Composition ['ID83A', 'ID83B', 'ID83F']
+L2 Error % 0.03
+Cosine Similarity 1.0
+
+#################### Final Composition #################################
+['ID83A', 'ID83B', 'ID83F']
+L2 Error % 0.03
+Cosine Similarity 1.0
+####################################### Composition After Add-Remove #######################################
+   ID83A  ID83B  ID83F
+0  462.0   27.0   62.0
+L2 Error %: 0.03
+Cosine Similarity: 1.0

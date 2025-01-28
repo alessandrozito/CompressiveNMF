@@ -135,3 +135,8 @@ output/sparsity_simulation/Sparsity_0.9/BayesNMF_brouwer/
 output/sparse_indel_simulation/Indel_theta_50_overd_0/BayesNMF_brouwer/
 output/sparse_indel_simulation/Indel_theta_50_overd_0.15/BayesNMF_brouwer/
 output/Application_ID_mm
+
+output/Application_ID_panc/CompressiveNMF_cosmic.rds.gzip
+output/Application_ID_panc/CompressiveNMF.rds.gzip
+
+

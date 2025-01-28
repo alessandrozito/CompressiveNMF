@@ -1,7 +1,14 @@
-
+# In this file, we plot the compressive "elbow" for varing values of a. We also
+# include the non-compressive case. 
+library(foreach)
+library(doParallel)
 library(tidyverse)
+
+# Source function to sample from the Inverse Kummer
 source("R/rInvKummer.R")
 
+
+# Figure 1 Panel (A)
 #--------------------------------------------------------------- Panel (A) - bottom 
 
 x <- seq(0.001, 8, 0.01)
@@ -60,156 +67,136 @@ ggplot(df_all) +
   facet_wrap(.~values, scales = "free", ncol = 1)+
   scale_color_manual(expression(bar(Y)[k]), values = color_values)+
   xlab(expression(mu[k]))+ylab("Posterior density")
-ggsave("figures/densities.pdf", height = 3.58, width=4.53)
+ggsave("figures/densities.pdf", height = 3.08, width=4.33)
 
-#--------------------------------------------------------------- Panel (B)
-set.seed(10)
-J <- c(20, 50, 100, 500)
+
+
+#----------------------------- Figure S7.1
+a_range <- c(0.1, 0.5, 1, 2)
+compressive <- c(TRUE, FALSE)
+J <- c(5, 20, 50, 100, 200)
+params <- as.data.frame(expand_grid(a_range, compressive, J))
+N_fixed <- 10
+nsamples <- 5000
+epsilon <- 0.001
+# Range of values of y for the plot
 mean_y <- seq(0, 5, length.out = 100)
-epsilon <- 0.001
-df_plot3 <- data.frame()
-for(j in 1:length(J)){
-  print(j)
+
+# Set the numer of cores to run it in parallel
+ncores <- 23
+registerDoParallel(ncores)
+
+df_plot_a <- foreach(j = 1:nrow(params), .combine = "rbind")  %dopar% {
+  # Find simulation parameters
+  a <- params$a_range[j]
+  compressive <- params$compressive[j] 
+  J <- params$J[j] 
+  # Sample from the Inverse Kummer
+  if(compressive){
+    a0 <- a * J + 1
+    b0 <- a * J * epsilon
+  } else {
+    a0 <- a * N_fixed + 1
+    b0 <- a * N_fixed * epsilon
+  }
+  # Sample from the Inverse Kummer
   res <- sapply(mean_y, function(y) {
     a <- 1
-    alpha <- 2 * a * J[j] + 1
-    beta <- epsilon * a * J[j]
-    delta <- a
-    gamma <- 2 * J[j] * (y/2) + a * J[j]
-    dd <- rInvKummer(10000, alpha, beta, gamma, delta)
-    c(mean(dd), quantile(dd, 0.1), quantile(dd, 0.9))
-  })
-  df_temp <- data.frame(t(res), "J" = J[j], "Y" = mean_y)
-  df_plot3 <- rbind(df_plot3,df_temp)
-}
-
-ggplot(df_plot3)+
-  geom_line(aes(x = Y, y = V1, col = as.factor(J)))+
-  geom_line(aes(x = Y, y = X10., col = as.factor(J)), linetype = "dashed")+
-  geom_line(aes(x = Y, y = X90., col = as.factor(J)), linetype = "dashed")+
-  geom_segment(x = 0, xend = 5, y = 0, yend = 5, linewidth = 0.1)+
-  scale_color_manual("J", values = color_values)+
-  theme_bw() +theme(aspect.ratio = .6, legend.position = "right")+
-  facet_wrap(~"Posterior relevance weights") + 
-  xlab(expression(bar(Y)[k]))+
-  ylab(expression(mu[k]))
-ggsave("figures/shrinkage.pdf", height = 3.58, width=4.53)
-
-
-
-set.seed(10)
-a0 <- 11
-b0 <- 0.001 * 10
-J <- c(20, 50, 100, 500)
-mean_y <- seq(0, 3, length.out = 100)
-epsilon <- 0.001
-df_plot3 <- data.frame()
-for(j in 1:length(J)){
-  print(j)
-  res <- sapply(mean_y, function(y) {
-    a <- 1
-    alpha <-  a0 + a * J[j] 
+    alpha <-  a0 + a * J
     beta <- b0
     delta <- a
-    gamma <- J[j] * y + a * J[j]
-    dd <- rInvKummer(2000, alpha, beta, gamma, delta)
+    gamma <- J * y + a * J
+    dd <- rInvKummer(nsamples, alpha, beta, gamma, delta)
     c(mean(dd), quantile(dd, 0.1), quantile(dd, 0.9))
   })
-  df_temp <- data.frame(t(res), "J" = J[j], "Y" = mean_y)
-  df_plot3 <- rbind(df_plot3,df_temp)
+  df_temp <- data.frame(t(res), 
+                        "J" = J, 
+                        "Y" = mean_y, 
+                        "compressive" = compressive, 
+                        "a" = a)
 }
 
-ggplot(df_plot3)+
-  geom_line(aes(x = Y, y = V1, col = as.factor(J)))+
-  #geom_line(aes(x = Y, y = X10., col = as.factor(J)), linetype = "dashed")+
-  #geom_line(aes(x = Y, y = X90., col = as.factor(J)), linetype = "dashed")+
-  geom_segment(x = 0, xend = 5, y = 0, yend = 5, linewidth = 0.1)+
-  scale_color_manual("J", values = color_values)+
-  theme_bw() +theme(aspect.ratio = .6, legend.position = "right")+
-  facet_wrap(~"Posterior relevance weights") + 
-  xlab(expression(bar(Y)[k]))+
-  ylab(expression(mu[k]))
 
-
-# Let's try the value for theta_kj
-
-# The easier solution is to sample mu_k, and then sample theta from the implied 
-# full conditional, that is, a gamma
-
-
-J <- 100
-a <- 1
-
-
-# Keep the mean_y_no_j fixed. What varies is y_j 
-alpha <-  a0 + a * J 
-beta <- b0
-delta <- a
-gamma <- J * mean_y + a * J
-
-
-mu <- rInvKummer(1, alpha, beta, gamma, delta)
-rgamma(1, a + y, a/mu + 1)
-
-J <- 500
-mean_y_no_j <- 10
-y_j <- c(seq(0, 10, length.out = 200))
-a0 <- 11 #a * J + 1
-b0 <- 0.01 * 10 #0.01 * a * J
-res <- sapply(y_j, function(y) {
-  a <- 1
-  alpha <-  a0 + a * J
-  beta <- b0
-  delta <- a
-  mean_y <- y/J + (J-1)/J * mean_y_no_j
-  gamma <- J * mean_y + a * J
-  mu <- rInvKummer(2000, alpha, beta, gamma, delta)
-  theta <- rgamma(length(mu), a + y, 1 + a/mu)
-  c(mean(theta), quantile(theta, 0.1), quantile(theta, 0.9))
-})
-
-plot(y_j, res[1, ], type = "l")
-abline(a = 0, b = 1, col = "red")
-lines(y_j, old, col = "blue")
-
-old <- res[1, ]
+p_plot <- ggplot(df_plot_a %>%
+                   mutate(a_verb = paste0("a = ", a),
+                          comp = case_when(compressive ~ "Compressive",
+                                           TRUE ~ "Fixed")))+
+  geom_segment(aes(x = a, xend = a, y = 0, yend = Inf), color = "grey40", 
+               linetype = "dotdash", linewidth = 0.25)+
+  geom_line(aes(x = Y, y = V1, col = as.factor(J), linetype = as.factor(J)), linewidth = 0.6)+
+  #geom_line(aes(x = Y, y = X10., col = as.factor(a)), linetype = "dashed")+
+  #geom_line(aes(x = Y, y = X90., col = as.factor(a)), linetype = "dashed")+
+  geom_segment(x = 0, xend = 5, y = 0, yend = 5, color = "red", linewidth = 0.1, linetype = "solid")+
   
-set.seed(10)
-a0 <- 11
-b0 <- 0.001 * 10
-J <- c(20, 50, 100, 500)
-mean_y <- seq(0, 3, length.out = 100)
-epsilon <- 0.001
-df_plot3 <- data.frame()
-for(j in 1:length(J)){
-  print(j)
-  res <- sapply(mean_y, function(y) {
-    a <- 1
-    alpha <-  a0 + a * J[j] 
-    beta <- b0
-    delta <- a
-    gamma <- J[j] * y + a * J[j]
-    dd <- rInvKummer(2000, alpha, beta, gamma, delta)
-    c(mean(dd), quantile(dd, 0.1), quantile(dd, 0.9))
-  })
-  df_temp <- data.frame(t(res), "J" = J[j], "Y" = mean_y)
-  df_plot3 <- rbind(df_plot3,df_temp)
-}
-
-ggplot(df_plot3)+
-  geom_line(aes(x = Y, y = V1, col = as.factor(J)))+
-  #geom_line(aes(x = Y, y = X10., col = as.factor(J)), linetype = "dashed")+
-  #geom_line(aes(x = Y, y = X90., col = as.factor(J)), linetype = "dashed")+
-  geom_segment(x = 0, xend = 5, y = 0, yend = 5, linewidth = 0.1)+
-  scale_color_manual("J", values = color_values)+
-  theme_bw() +theme(aspect.ratio = .6, legend.position = "right")+
+  #scale_color_manual("J", values = color_values)+
+  scale_color_manual("J", values = hcl.colors(6, palette = "Blues 3")) +
+  scale_linetype_manual("J", values = rev(c("solid", "longdash", "dashed", "dotdash", "dotted"))) +
+  theme_test() +
+  theme(aspect.ratio = 1, 
+        legend.position = "right", 
+        panel.spacing = unit(0, "lines"))+
   facet_wrap(~"Posterior relevance weights") + 
   xlab(expression(bar(Y)[k]))+
+  ylab(expression(mu[k]))+
+  facet_grid(comp~a_verb)
+
+ggsave(plot = p_plot, filename = "figures/compressive_vs_fixed_varying_a.pdf", 
+       width = 7.78, height = 4.27)
+
+
+#----------------------------------- Figure 1 Panel (B)
+p_elbow <- ggplot(df_plot_a %>%
+         filter(compressive == TRUE, 
+                a >= 0.5, J %in% c(20, 50, 200)) %>%
+         mutate(a_verb = paste0("a = ", a), 
+                J = as.factor(J))) +
+  geom_segment(aes(x = a, xend = a, y = 0, yend = Inf), color = "grey70", 
+               linetype = "dotdash", linewidth = 0.25)+
+  geom_line(aes(x = Y, y = V1), color = "red")+
+  geom_line(aes(x = Y, y = X10., col = J, linetype = J))+
+  geom_line(aes(x = Y, y = X90., col = J, linetype = J))+
+  geom_segment(x = 0, xend = 5, y = 0, yend = 5, color = "black", 
+               linetype = "solid", linewidth = 0.1)+
+  facet_grid(~a_verb) +
+  #xlim(c(0, 4)) +
+  theme_test() +
+  theme(aspect.ratio = 1)+
+  scale_color_manual("J", values = hcl.colors(6, palette = "Blues 3")[c(4,3,1)]) +
+  scale_linetype_manual("J", values = c("dashed", "dashed","dashed"))+
+  xlab(expression(bar(Y)[k]))+
   ylab(expression(mu[k]))
+ggsave(plot = p_elbow, "figures/shrinkage.pdf", height = 3.05, width=8.05)
 
-
-
-
-
-
+#--------------------------------------------------------------- OLD PANEL (B)
+# set.seed(10)
+# J <- c(20, 50, 100, 500)
+# mean_y <- seq(0, 5, length.out = 100)
+# epsilon <- 0.001
+# df_plot3 <- data.frame()
+# for(j in 1:length(J)){
+#   print(j)
+#   res <- sapply(mean_y, function(y) {
+#     a <- 1
+#     alpha <- 2 * a * J[j] + 1
+#     beta <- epsilon * a * J[j]
+#     delta <- a
+#     gamma <- 2 * J[j] * (y/2) + a * J[j]
+#     dd <- rInvKummer(10000, alpha, beta, gamma, delta)
+#     c(mean(dd), quantile(dd, 0.1), quantile(dd, 0.9))
+#   })
+#   df_temp <- data.frame(t(res), "J" = J[j], "Y" = mean_y)
+#   df_plot3 <- rbind(df_plot3,df_temp)
+# }
+# 
+# ggplot(df_plot3)+
+#   geom_line(aes(x = Y, y = V1, col = as.factor(J)))+
+#   geom_line(aes(x = Y, y = X10., col = as.factor(J)), linetype = "dashed")+
+#   geom_line(aes(x = Y, y = X90., col = as.factor(J)), linetype = "dashed")+
+#   geom_segment(x = 0, xend = 5, y = 0, yend = 5, linewidth = 0.1)+
+#   scale_color_manual("J", values = color_values)+
+#   theme_bw() +theme(aspect.ratio = .6, legend.position = "right")+
+#   facet_wrap(~"Posterior relevance weights") + 
+#   xlab(expression(bar(Y)[k]))+
+#   ylab(expression(mu[k]))
+# ggsave("figures/shrinkage.pdf", height = 3.58, width=4.53)
 

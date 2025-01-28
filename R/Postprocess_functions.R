@@ -215,7 +215,7 @@ get_ESS_PoissonCUSP <- function(out_CUSP){
   Theta_all <- array(NA, dim = c(nsamples, ncol(sigMat), ncol(ThetaMat)))
   for(i in 1:nsamples){
     # match the signature with closest similarity
-    cosMat <- cosine(sigMat, out_CUSP$Signatures[[i]])
+    cosMat <- sigminer::cosine(sigMat, out_CUSP$Signatures[[i]])
     match <- RcppHungarian::HungarianSolver(cosMat)$pairs[, 1]
     R_all[i, ,] <- out_CUSP$Signatures[[i]][, match]
     Theta_all[i, , ] <- out_CUSP$Weights[[i]][match, ]
@@ -432,7 +432,6 @@ get_posterior_CUSP <- function(resCUSP) {
 }
 
 
-##resCUSP <- PoissonCUSP(data_all[[1]]$X, K = 25, burnin = 1000, nsamples = 500, mu_inf = 0.05)
 Postprocess_PoissonCUSP <- function(resCUSP, data) {
   # Step 1 - find the number of signatures
   Kchain <- unlist(lapply(resCUSP$Mu, function(x) sum(x != 0.01)))
@@ -455,6 +454,8 @@ Postprocess_PoissonCUSP <- function(resCUSP, data) {
   rmse_Theta <- compute_RMSE_Theta(Theta_true = data$Theta, Theta_hat = Theta_hat, matchedSign$match)
   # Step 5 - calculate the sensitivity and precision
   sens_prec  <- Compute_sensitivity_precision(R_hat = R_hat, data$Rmat)
+  # Step 6 - add Effective sample sizes
+  effsize <- get_ESS_PoissonCUSP(resCUSP)
   return(list("Lambda" = Lambda,
               "R_hat" = R_hat, #post_CUSP$R_hat,
               "Theta_hat" = Theta_hat, #post_CUSP$Theta_hat,
@@ -470,7 +471,8 @@ Postprocess_PoissonCUSP <- function(resCUSP, data) {
                             rmse_Theta, 
                             sens_prec,
                             "cos_sim" = cos_sim, 
-                            "time" = resCUSP$time)
+                            "time" = resCUSP$time, 
+                            effsize)
          ))
 }
 

@@ -1,6 +1,6 @@
 # This file analyzes the 21breast cancer dataset from NikZainal et al (2016)
 # The dataset is available in the package signeR
-
+library(CompressiveNMF)
 # Load the packages
 library(tidyverse)
 library(coda)
@@ -176,7 +176,10 @@ df_temp$avg_theta <- rowMeans(out_ARD_pcawg$Exposure)
 df_temp$method <- "SignatureAnalyzer"
 df_matrix <- rbind(df_matrix, df_temp)
 
-col_values <- c("darkblue", "royalblue", "#02DB9E", "#FCB92B", "#DB5902", "#C30027")
+col_values <- c("blue", "skyblue1", "darkorange", "#FFD166", "red", "brown", "#999999")
+
+
+#------------------------------------------------------------------ # Figure 3 (A)
 df_matrix %>%
   mutate(best_cosmic = fct_relevel(best_cosmic,
                                    "SBS1", "SBS2", "SBS3", "SBS8", "SBS9", "SBS13", "SBS34", "SBS40a", "SBS96", "SBS98"), 
@@ -194,9 +197,10 @@ df_matrix %>%
         axis.title.x = element_blank(),
         strip.text = element_text(colour = "black", size = 12),
         legend.position = "none") +
-  facet_wrap(~method, ncol = 2) +
+  facet_wrap(~method, ncol = 1) +
   ylab("Cosine Similarity with closest cosmic signature")
-ggsave("figures/uncertainty_all_methods.pdf", height = 6.97, width = 2.50)
+ggsave("figures/uncertainty_all_methods.pdf", height = 6.44, width = 2.50)
+
 
 #------------------------------------------------------------ Figure 3 - Panel B,C
 # Plot the signature of CompNMF + cosmic.
@@ -205,10 +209,11 @@ sigMat <- out_CompNMF_cosmic_all$Signatures
 chain <- out_CompNMF_cosmic_all$mcmc_out[[out_CompNMF_cosmic_all$selected_chain]]
 nonzero_sign <- which(colMeans(chain$Mu) > 0.05)
 sigChain <- chain$Signatures[, , nonzero_sign]
-plot_matrix_signature_v2(sigMat, sigChain = sigChain, add_cosine_cosmic = FALSE) +
-  theme(axis.title = element_blank(), axis.ticks = element_blank())
-ggsave("figures/sig_CompNMF_cosmic.pdf", height = 7, width = 5.22)
-plot_matrix_signature_v2(sigMat, sigChain = sigChain)
+lowCI <- apply(sigChain, c(2,3), function(x) quantile(x, 0.05))
+highCI <- apply(sigChain, c(2,3), function(x) quantile(x, 0.95))
+colnames(lowCI) <- colnames(highCI) <- colnames(sigMat)
+rownames(sigMat) <- rownames(lowCI) <- rownames(highCI) <- CompressiveNMF::COSMIC_SBS96_GRCh37_v3.4$Channel
+pCompNMF_cos <- CompressiveNMF:::plot.SBS.signature(sigMat, lowCI = lowCI, highCI = highCI) + theme(axis.text.x = element_blank())
 
 # Plot the signature of CompNMF.
 sigMat <- out_CompNMF$Signatures
@@ -218,11 +223,15 @@ nonzero_sign <- which(colMeans(chain$Mu) > 0.05)
 df_sim <- match_to_cosmic(sigMat) %>% arrange(best_cosmic)
 colnames(sigMat) <- paste0("Sig", c("D", "F", "A", "B", "E", "C"))
 sigChain <- chain$Signatures[, , nonzero_sign]
-plot_matrix_signature_v2(sigMat, sigChain = sigChain, add_cosine_cosmic = FALSE, n_signs_to_add = 2) +
-  theme(axis.title = element_blank(), axis.ticks = element_blank())
-ggsave("figures/sig_CompNMF.pdf", height = 7, width = 5.22)
+lowCI <- cbind(apply(sigChain, c(2,3), function(x) quantile(x, 0.05)), matrix(0, ncol = 2, nrow = 96))
+highCI <- cbind(apply(sigChain, c(2,3), function(x) quantile(x, 0.95)), matrix(0, ncol = 2, nrow = 96))
+sigMat <- cbind(sigMat, matrix(0, ncol = 2, nrow = 96))
+colnames(lowCI) <- colnames(highCI) <- colnames(sigMat)
+rownames(sigMat) <- rownames(lowCI) <- rownames(highCI) <- CompressiveNMF::COSMIC_SBS96_GRCh37_v3.4$Channel
+pCompNMF <- CompressiveNMF:::plot.SBS.signature(sigMat, lowCI = lowCI, highCI = highCI)  + theme(axis.text.x = element_blank())
 
-
+ggpubr::ggarrange(pCompNMF_cos, pCompNMF, nrow = 1)
+ggsave("figures/sig_CompNMF_and_CompNMF_cos_21breast.pdf", width = 9.72, height = 6.44)
 #--------------------------------------------------------------------- RMSE
 
 # CompNMF
@@ -279,8 +288,6 @@ ggsave("figures/sig_suppl_CompNMF.pdf", height = 9.08, width = 9.08)
 # Plot weights
 plot_weights(Wmat, col_palette = c("darkblue", "#2473D0", "#A4C1ED","#F2DAAC", "#E82C36", "grey45"))
 ggsave("figures/Weight_compNMF.pdf", height = 3.13, width = 5.05)
-
-
 
 
 #-------------------------------------------------- signeR 
@@ -360,12 +367,6 @@ plot_matrix_signature_v2(sigMat) + theme(aspect.ratio = .6) + labs(title = "SigP
 ggsave("figures/sig_suppl_SigProfiler.pdf", height = 9.08, width = 9.08)
 
 
-#-------------------------------------------------------- 
-# Effective Sample sizes of Bayesian methods
-
-
-
-
 
 #-------------------------------------------------------- Add BayesNMF from brouwer
 dir_files <- "~/CompressiveNMF/output/Application_21brca/BayesNMF_brouwer/"
@@ -418,32 +419,6 @@ ReshapeResults_BayesNMF_application <- function(dir_files, J = 21){
     time = unname(time_exec)
   ))
 }
-Xbrca <- as.matrix(read.table(file = "~/CompressiveNMF/R/run_BayesNMF_python/X_21breast.txt"))
-brca_appl <- ReshapeResults_BayesNMF_application(dir_files)
-
-rownames(brca_appl$Signatures) <- rownames(CompressiveNMF::COSMIC_v3.4_SBS96_GRCh37)
-rownames(brca_appl$CIsigs$lowCI) <- rownames(brca_appl$CIsigs$highCI) <- rownames(brca_appl$Signatures)
-CompressiveNMF:::plot.SBS.signature(brca_appl$Signatures, 
-                                    lowCI = brca_appl$CIsigs$lowCI,
-                                    highCI = brca_appl$CIsigs$highCI)
-
-
-
-plot(as.matrix(brca_appl$Signatures %*% brca_appl$Theta), Xbrca)
-
-
-rowMeans(brca_appl$Theta)
-
-Theta_norm <- apply(brca_appl$Theta, 2, function(x) x/sum(x))
-colnames(Theta_norm) <- paste0("pat", 1:ncol(Theta_norm))
-rownames(Theta_norm) <- paste0("sig",1:nrow(Theta_norm))
-CompressiveNMF:::plot_weights(t(Theta_norm))
-
-dist_unif <- apply(brca_appl$Signatures, 2, function(x) cosine(x, rep(1, 96)))
-brca_appl$RelWeights
-plot(dist_unif, brca_appl$RelWeights)
-
-plot(rowMeans(brca_appl$Theta), 1/brca_appl$RelWeights)
 
 
 
