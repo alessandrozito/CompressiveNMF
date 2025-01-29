@@ -8,7 +8,7 @@ mutational signatures analysis, arxiv: https://arxiv.org/abs/2404.10974
 ## As a first step, install the CompressiveNMF package
 
 ```
-devtools::install_github("alessandrozito/CompressiveNMF/CompressiveNMF")
+install.packages("CompressiveNMF_1.0.0.tar.gz")
 library(CompressiveNMF)
 ```
 

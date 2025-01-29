@@ -126,6 +126,8 @@ output/main_simulation/Scenario_50_overdisp_0.15_Knew_6_theta_100/sigpro
 output/main_simulation/Scenario_50_overdisp_0.15_Knew_6_theta_100/SigPro
 output/main_simulation/Scenario_50_overdisp_0.15_Knew_6_theta_100/BayesNMF_brouwer
 
+output/sparsity_simulation/
+
 output/sparsity_simulation/Sparsity_0/BayesNMF_brouwer/
 output/sparsity_simulation/Sparsity_0.5/BayesNMF_brouwer/
 output/sparsity_simulation/Sparsity_0.25/BayesNMF_brouwer/
