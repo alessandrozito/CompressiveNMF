@@ -51,9 +51,3 @@ dInvKummer <- function(x, alpha, beta, gamma, delta, nsamples_birdge = 1e5){
 }
 
 
-############################################### Make figure for the shrinkage
-make_plot <- FALSE
-if(make_plot){
-
-  
-}

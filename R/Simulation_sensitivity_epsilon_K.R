@@ -4,6 +4,8 @@
 # the values of epsilon, K, a and alpha.  
 library(CompressiveNMF)
 library(tidyverse)
+library(ggpubr)
+library(grid)
 library(mcmcse)
 library(foreach)
 library(lsa)
@@ -145,42 +147,63 @@ df_Keps <- rbind(read_csv("output/sensitivity_simulation/sensitivity_epsilon_K_1
                     read_csv("output/sensitivity_simulation/sensitivity_epsilon_K_100_misp.csv"))
 
 
-# RMSE as a function of K and epsilon
-pK_rmse <- df_Keps %>%
+# Plot for K
+p_K <- df_Keps %>%
   filter(epsilon < 2) %>%
   mutate(epsilon = as.factor(epsilon),
          overdispersion = paste0("tau = ", overdispersion)) %>%
   group_by(epsilon, Kused, overdispersion) %>%
-  summarise(rmse = mean(rmse_Counts)) %>%
-  ggplot() +
-  geom_point(aes(x = Kused, y = rmse, color = epsilon)) +
-  geom_line(aes(x = Kused, y = rmse, color = epsilon)) +
-  theme_bw() +
-  facet_wrap(~overdispersion, scales = "free")+
-  ylab("RMSE for the counts")+
-  xlab("Value of K in the model") +
-  ylim(c(2, 6.3))
- 
-# # ## Number of factors as a function of K and epsilon
-pK_sig <- df_Keps %>%
-  filter(epsilon < 2) %>%
-  mutate(epsilon = as.factor(epsilon),
-         overdispersion = paste0("tau = ", overdispersion)) %>%
-  group_by(epsilon, Kused, overdispersion) %>%
-  summarise(Kest = mean(Kest)) %>%
+  summarise(`Estimated K` = mean(Kest)) %>%
+  gather(key = "quant", value = "value", -epsilon, -Kused, -overdispersion) %>%
   ggplot() +
   geom_hline(yintercept =  6, linetype = "dashed", color = "gray50") +
-  geom_point(aes(x = Kused, y = Kest, color = epsilon)) +
-  geom_line(aes(x = Kused, y = Kest, color = epsilon)) +
+  geom_point(aes(x = Kused, y = value, color = epsilon)) +
+  geom_line(aes(x = Kused, y = value, color = epsilon)) +
   theme_bw() +
-  facet_wrap(~overdispersion, scales = "free")+
-  ylab("Estimated n. of signatures")+
-  xlab("Value of K in the model") +
-  ylim(c(4.8, 7.1))
+  facet_wrap(overdispersion~quant, scales = "free_y", nrow = 2)+
+  theme(axis.title = element_blank(), 
+        panel.spacing.y = unit(0, "lines")) +
+  ylim(c(5, 7.1))
+  
 
-p_K_sig_eps <- ggpubr::ggarrange(pK_rmse, pK_sig, 
-                                 common.legend = TRUE, 
-                                 legend = "right") 
-ggsave(plot = p_K_sig_eps, filename = "figures/sensitivity_epsilon_K_all.pdf", 
-       width = 10.45, height = 2.65)
+# Plot for RMSE of the loadings
+p_load <- df_Keps %>%
+  filter(epsilon < 2) %>%
+  mutate(epsilon = as.factor(epsilon),
+         overdispersion = paste0("tau = ", overdispersion)) %>%
+  group_by(epsilon, Kused, overdispersion) %>%
+  summarise(`RMSE Loadings` = mean(rmse_Weights)) %>%
+  gather(key = "quant", value = "value", -epsilon, -Kused, -overdispersion) %>%
+  ggplot() +
+  geom_point(aes(x = Kused, y = value, color = epsilon)) +
+  geom_line(aes(x = Kused, y = value, color = epsilon)) +
+  theme_bw() +
+  facet_wrap(overdispersion~quant, scales = "free_y", nrow = 2)+
+  theme(axis.title = element_blank(), 
+        panel.spacing.y = unit(0, "lines"))
+
+# Plot for RMSE of the signatures
+p_sig <- df_Keps %>%
+  filter(epsilon < 2) %>%
+  mutate(epsilon = as.factor(epsilon),
+         overdispersion = paste0("tau = ", overdispersion)) %>%
+  group_by(epsilon, Kused, overdispersion) %>%
+  summarise(`RMSE Signatures` = mean(rmse_Signatures)) %>%
+  gather(key = "quant", value = "value", -epsilon, -Kused, -overdispersion) %>%
+  ggplot() +
+  geom_point(aes(x = Kused, y = value, color = epsilon)) +
+  geom_line(aes(x = Kused, y = value, color = epsilon)) +
+  theme_bw() +
+  facet_wrap(overdispersion~quant, scales = "free_y", nrow = 2)+
+  theme(axis.title = element_blank(), 
+        panel.spacing.y = unit(0, "lines"))
+
+# Combine all plots
+figure <- ggpubr::ggarrange(p_K, p_load, p_sig, common.legend = TRUE, nrow = 1)
+  
+figure <- annotate_figure(figure, 
+                bottom = textGrob("Value of K in the model", gp = gpar(cex = 1)))
+ggsave(plot = figure, filename = "figures/sensitivity_epsilon_K_all_new.pdf", 
+       width = 7.58, height = 4.45)
+ 
 
