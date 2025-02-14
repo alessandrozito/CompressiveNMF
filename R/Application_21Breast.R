@@ -249,6 +249,7 @@ round(sqrt(mean((X - out_sigPro$Signatures %*% out_sigPro$Weights)^2)), 2)
 
 
 #--------------------------------------------------------------------- 
+# Table 8.1
 # Effective Sample size for the Bayesian methods
 df_ess <- rbind(get_ESS_Comp(out_CompNMF), 
                 get_ESS_Comp(out_CompNMF_cosmic_all), 

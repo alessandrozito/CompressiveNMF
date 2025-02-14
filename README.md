@@ -16,23 +16,23 @@ library(CompressiveNMF)
 
 ### Interpretation
 * Figure 1 and Figure S7.1 - Density of the Inverse Kummer and concentration behavior
-  - `R/reproduce_Figure1.R`
+  - `R/reproduce_Figures_1_7_1.R`
   
 ### Simulation
 * Figure 2, and Figure S6.1 to S6.6 in the Supplementary material - Main simulation
   - `R/main_Simulation_analysis.R`
+* Figure S6.7 - Sparse indel simulation
+  - `R/Simulation_sparsity_indels_suppl.R`
 * Figure S7.2, S7.3 and S7.4 - Fixed strength vs Compressive hyperprior
   - `R/Simulation_fixed_vs_compressive.R`
 * Figure S7.5 - Sensitivity to epsilon and K
   - `R/Simulation_sensitivity_epsilon_K.R`
 * Figure S7.6 - Sensitivity to a and alpha
   - `R/Simulation_sensitivity_alpha_a_suppl.R`
-* Figure S7.7 - Sparse indel simulation
-  - `R/Simulation_sparsity_indels_suppl.R`
 
 ### Application
 
-* Figure 3, 4 and Figure S8.1 to S8.7 in the Supplementary material - 21 breast cancer application
+* Figure 3, 4, and Figure S8.1 to S8.7, Table S8.1 in the Supplementary material - 21 breast cancer application
   - `R/Application_21Breast.R`
 * Figure S8.9 and S8.9 - Sensitivity to hyperparameters in 21 breast cancer
   - `R/Application_21Breast_sensitivity_analysis.R`
