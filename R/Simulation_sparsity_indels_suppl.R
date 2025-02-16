@@ -156,7 +156,7 @@ if (run_compNMF) {
     out_CompressiveNMF <- foreach(i = 1:length(data_all)) %dopar% {
       out <- CompressiveNMF(X = data_all[[i]]$X, 
                             K = 20, 
-                            epsilon = 0.01, 
+                            epsilon = 0.001, 
                             nsamples = nsamples, 
                             burnin = burnin, 
                             nchains = 1, 
@@ -181,7 +181,7 @@ if (run_compNMF_cos) {
       out <- CompressiveNMF(X = data_all[[i]]$X, 
                             K = 10,
                             use_cosmic = TRUE,
-                            epsilon = 0.01, 
+                            epsilon = 0.001, 
                             nsamples = nsamples, 
                             burnin = burnin, 
                             nchains = 1, 

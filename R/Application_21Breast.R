@@ -62,7 +62,7 @@ if (rerun) {
   #-------------------------------------------------------------------------------
   
   #--------------------------- CompressiveNMF
-  out_CompNMF <- CompressiveNMF(X = X, K = 15, alpha = 0.5, a = 1, burnin = 10000, 
+  out_CompNMF <- CompressiveNMF(X = X, K = 15, alpha = 0.5, a = 1, burnin = 10000, epsilon = 0.01,
                                 nsamples = 2000, progressbar = FALSE, ncores = 4, nchains = 4)
   print(out_CompNMF)
   saveRDS(out_CompNMF, file = "output/Application_21brca/CompressiveNMF.rds.gzip", compress = "gzip")
@@ -75,7 +75,7 @@ if (rerun) {
   
   #-------------- CompressiveNMF + cosmic
   out_CompNMF_cosmic_all <- CompressiveNMF(X = X, use_cosmic = TRUE,
-                                           K = 10, 
+                                           K = 10, epsilon = 0.01,
                                            alpha = 0.5, a = 1, burnin = 10000, 
                                            nsamples = 2000, progressbar = FALSE, ncores = 4, nchains = 4, swap_prior = TRUE)
   print(out_CompNMF_cosmic_all)
