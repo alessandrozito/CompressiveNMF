@@ -11,6 +11,45 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// eval_logPosterior
+double eval_logPosterior(arma::mat& X, arma::mat& R, arma::mat& Theta, arma::vec& Mu, double a, double a0, double b0, arma::mat& SigPrior);
+RcppExport SEXP _CompressiveNMF_eval_logPosterior(SEXP XSEXP, SEXP RSEXP, SEXP ThetaSEXP, SEXP MuSEXP, SEXP aSEXP, SEXP a0SEXP, SEXP b0SEXP, SEXP SigPriorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type R(RSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type Theta(ThetaSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type Mu(MuSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type a0(a0SEXP);
+    Rcpp::traits::input_parameter< double >::type b0(b0SEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type SigPrior(SigPriorSEXP);
+    rcpp_result_gen = Rcpp::wrap(eval_logPosterior(X, R, Theta, Mu, a, a0, b0, SigPrior));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_CompressiveNMF_MAP
+List compute_CompressiveNMF_MAP(arma::mat X, arma::mat R_start, arma::mat Theta_start, arma::vec Mu_start, arma::mat& SigPrior, double a0, double b0, double a, int maxiter, double tol, bool use_logpost_for_convergence);
+RcppExport SEXP _CompressiveNMF_compute_CompressiveNMF_MAP(SEXP XSEXP, SEXP R_startSEXP, SEXP Theta_startSEXP, SEXP Mu_startSEXP, SEXP SigPriorSEXP, SEXP a0SEXP, SEXP b0SEXP, SEXP aSEXP, SEXP maxiterSEXP, SEXP tolSEXP, SEXP use_logpost_for_convergenceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type R_start(R_startSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Theta_start(Theta_startSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type Mu_start(Mu_startSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type SigPrior(SigPriorSEXP);
+    Rcpp::traits::input_parameter< double >::type a0(a0SEXP);
+    Rcpp::traits::input_parameter< double >::type b0(b0SEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< bool >::type use_logpost_for_convergence(use_logpost_for_convergenceSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_CompressiveNMF_MAP(X, R_start, Theta_start, Mu_start, SigPrior, a0, b0, a, maxiter, tol, use_logpost_for_convergence));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sample_weights_cpp
 void sample_weights_cpp(arma::mat& shape_mat, arma::mat& rate_mat, arma::mat& Theta);
 RcppExport SEXP _CompressiveNMF_sample_weights_cpp(SEXP shape_matSEXP, SEXP rate_matSEXP, SEXP ThetaSEXP) {
@@ -113,6 +152,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_CompressiveNMF_eval_logPosterior", (DL_FUNC) &_CompressiveNMF_eval_logPosterior, 8},
+    {"_CompressiveNMF_compute_CompressiveNMF_MAP", (DL_FUNC) &_CompressiveNMF_compute_CompressiveNMF_MAP, 11},
     {"_CompressiveNMF_sample_weights_cpp", (DL_FUNC) &_CompressiveNMF_sample_weights_cpp, 3},
     {"_CompressiveNMF_sample_signatures_cpp", (DL_FUNC) &_CompressiveNMF_sample_signatures_cpp, 2},
     {"_CompressiveNMF_randmult", (DL_FUNC) &_CompressiveNMF_randmult, 2},

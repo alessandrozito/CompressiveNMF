@@ -524,7 +524,6 @@ Postprocess_BayesNMF <- function(resBayesNMF, data) {
 
 #---------------------------------------------------------------------- Extract results
 
-
 add_ess <- function(x) {
   names_ess <- c("ESS_Sig_mean", "ESS_Sig_sd", "ESS_Theta_mean",
                  "ESS_Theta_sd", "ESS_relweight_mean", "ESS_relweight_sd")
@@ -698,8 +697,5 @@ extract_F1_range <- function(res, cutoff_range = seq(0.6, 0.9999, length.out = 1
                                              "highCI" = quantile(x, 0.95))))
   data.frame("Method" = method,  "cutoff" = cutoff_range, res)
 }
-
-
-
 
 

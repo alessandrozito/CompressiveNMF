@@ -3,6 +3,11 @@
 # c("#084B9D", "#2473D0", "#A4C1ED", "#F2DAAC", "#F29D52", "#E82C36")
 # Cosmic palette
 # c("#40BDEE", "#020202", "#E52925", "#CCC9CA", "#A3CF62", "#ECC5C5")
+#' Plot SBS signatures
+#' @param signatures Matrix of SBS signatures
+#' @param lowCI Matrix of lower credible interval
+#' @param highCI Matrix of lower credible interval
+#' @export
 plot.SBS.signature <- function(signatures,
                                lowCI = NULL,
                                highCI = NULL,
@@ -65,6 +70,11 @@ plot.SBS.signature <- function(signatures,
 
 }
 
+#' Plot Double-based-substitution signatures
+#' @param signatures Matrix of SBS signatures
+#' @param lowCI Matrix of lower credible interval
+#' @param highCI Matrix of lower credible interval
+#' @export
 plot.DBS.signature <- function(signatures,
                                lowCI = NULL,
                                highCI = NULL,
@@ -129,6 +139,11 @@ plot.DBS.signature <- function(signatures,
 
 }
 
+#' Plot Indel signatures
+#' @param signatures Matrix of SBS signatures
+#' @param lowCI Matrix of lower credible interval
+#' @param highCI Matrix of lower credible interval
+#' @export
 plot.ID.signature <- function(signatures,
                                lowCI = NULL,
                                highCI = NULL,
@@ -143,8 +158,8 @@ plot.ID.signature <- function(signatures,
 
   df_plot <- data.frame(signatures) %>%
     dplyr::mutate(Channel = names_sig) %>%
-    left_join(CompressiveNMF::df_Indel_names, by = 'Channel') %>%
-    gather(key = "Sig", value = "Prob", -Channel, -Type, -Mutation)
+    dplyr::left_join(CompressiveNMF::df_Indel_names, by = 'Channel') %>%
+    dplyr::gather(key = "Sig", value = "Prob", -Channel, -Type, -Mutation)
 
   if(!is.null(lowCI) & !is.null(highCI)){
     if(is.null(colnames(lowCI))){
@@ -157,58 +172,69 @@ plot.ID.signature <- function(signatures,
     df_plot <- df_plot %>%
       dplyr::left_join(data.frame(lowCI) %>%
                          dplyr::mutate(Channel = names_sig) %>%
-                         left_join(CompressiveNMF::df_Indel_names, by = 'Channel') %>%
-                         gather(key = "Sig", value = "lowCI", -Channel, -Type, -Mutation),
+                         dplyr::left_join(CompressiveNMF::df_Indel_names, by = 'Channel') %>%
+                         dplyr::gather(key = "Sig", value = "lowCI", -Channel, -Type, -Mutation),
                        by = c("Channel", "Type", "Mutation", "Sig")) %>%
       dplyr::left_join(data.frame(highCI) %>%
                         dplyr::mutate(Channel = names_sig) %>%
-                        left_join(CompressiveNMF::df_Indel_names, by = 'Channel') %>%
-                        gather(key = "Sig", value = "highCI", -Channel, -Type, -Mutation),
+                        dplyr::left_join(CompressiveNMF::df_Indel_names, by = 'Channel') %>%
+                        dplyr::gather(key = "Sig", value = "highCI", -Channel, -Type, -Mutation),
                       by = c("Channel", "Type", "Mutation", "Sig"))
   }
 
   p <- ggplot(df_plot, aes(x = Mutation, y = Prob, fill = Type))+
-    geom_bar(stat = "identity", width = 0.5) +
-    facet_grid(Sig~Type, scales = "free", space='free_x')+
-    theme_minimal()+
-    scale_fill_manual(values = palette)+
-    theme(
+    ggplot2::geom_bar(stat = "identity", width = 0.5) +
+    ggplot2::facet_grid(Sig~Type, scales = "free", space='free_x')+
+    ggplot2::theme_minimal()+
+    ggplot2::scale_fill_manual(values = palette)+
+    ggplot2::theme(
       legend.position = "none",
-      axis.title = element_blank(),
-      axis.text.y = element_blank(),
-      axis.text.x = element_text(angle = 90, color = "gray35",
+      axis.title = ggplot2::element_blank(),
+      axis.text.y = ggplot2::element_blank(),
+      axis.text.x = ggplot2::element_text(angle = 90, color = "gray35",
                                  vjust = .5, size = 6, margin = margin(t = -5)),
-      panel.grid = element_blank(),
-      panel.spacing.x=unit(0.1, "lines"),
-      panel.spacing.y=unit(0.2,"lines"))
+      panel.grid = ggplot2::element_blank(),
+      panel.spacing.x= ggplot2::unit(0.1, "lines"),
+      panel.spacing.y= ggplot2::unit(0.2,"lines"))
 
   if(!is.null(lowCI) & !is.null(highCI)){
     p <- p +
-      geom_linerange(aes(x = Mutation, ymin =lowCI, ymax = highCI), color = "grey65")
+      ggplot2::geom_linerange(aes(x = Mutation, ymin =lowCI, ymax = highCI), color = "grey65")
   }
   return(p)
 }
 
-
-plot_weights <- function(Wmat) {
-  clust <- cutree(hclust(dist(Wmat)), k = 10)
+#' Plot the signature loadings (exposures or weights)
+#' @param signatures Matrix of SBS signatures
+#' @param lowCI Matrix of lower credible interval
+#' @param highCI Matrix of lower credible interval
+#' @export
+plot_weights <- function(Wmat, clust = NULL, nclust = 10) {
+  Wmat <- t(Wmat)
+  if(is.null(clust)){
+    clust <- stats::cutree(stats::hclust(dist(Wmat)), k = nclust)
+  } else {
+    if(length(clust) != nrow(Wmat)){
+      stop("Length of clust must be equal to ncol(Wmat)")
+    }
+  }
   Wmat <- Wmat[order(clust), ]
   pW <- Wmat %>%
     as.data.frame() %>%
-    mutate(patient = rownames(Wmat))%>%
-    gather(key = "Signature", value = "weight", -patient) %>%
-    mutate(Signature = as.factor(Signature),
+    dplyr::mutate(patient = rownames(Wmat))%>%
+    dplyr::gather(key = "Signature", value = "weight", -patient) %>%
+    dplyr::mutate(Signature = as.factor(Signature),
            patient = as.factor(patient))%>%
-    mutate(patient = ordered(patient, unique(patient))) %>%
+    dplyr::mutate(patient = ordered(patient, unique(patient))) %>%
     ggplot() +
-    theme_minimal() +
-    geom_bar(aes(x=patient, y = weight, fill = Signature), stat = "identity") +
-    scale_x_discrete(position = "top") +
-    theme(axis.text.x =  element_blank(),
+    ggplot2::theme_minimal() +
+    ggplot2::geom_bar(aes(x=patient, y = weight, fill = Signature), stat = "identity") +
+    ggplot2::scale_x_discrete(position = "top") +
+    ggplot2::theme(axis.text.x =  element_blank(),
           axis.title.x = element_blank(),
           legend.position = "right",
           panel.grid = element_blank())+
-    ylab("Loadings")
+    ggplot2::ylab("Loadings")
 
   return(pW)
 }
@@ -238,7 +264,7 @@ plot.CompressiveNMF <- function(object, type = "signatures", ...){
       plot.ID.signature(signatures = object$Signatures, lowCI = lowCI, highCI = highCI)
     }
   } else if (type == "loadings") {
-    Wnorm <- t(apply(object$Weights, 2, function(x) x/sum(x)))
+    Wnorm <- apply(object$Weights, 2, function(x) x/sum(x))
     plot_weights(Wnorm)
   }
 }
