@@ -1,0 +1,21 @@
+Package: CompressiveNMF
+Type: Package
+Title: Compressive Bayesian non-negative matrix factorization for
+        mutational signature analysis
+Version: 1.0.0
+Author: First Last
+Maintainer: First Last <FirstLast@university.edu>
+Description: Implements CompressiveNMF model for mutational signatures
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
+Imports: Rcpp, RcppArmadillo, LaplacesDemon, RcppHungarian, ggplot2,
+        dplyr, stringr, foreach, doParallel, knitr, lsa, magrittr
+LinkingTo: Rcpp, RcppArmadillo
+Suggests: rmarkdown
+VignetteBuilder: knitr
+Depends: R (>= 4.0)
+NeedsCompilation: yes
+Packaged: 2025-05-23 22:32:50 UTC; alezito
+Built: R 4.3.1; x86_64-pc-linux-gnu; 2025-05-23 22:32:51 UTC; unix

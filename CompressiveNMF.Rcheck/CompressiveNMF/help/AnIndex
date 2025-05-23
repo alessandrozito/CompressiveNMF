@@ -1,0 +1,8 @@
+%>%	pipe
+CompressiveNMF	CompressiveNMF
+CompressiveNMF_map	CompressiveNMF_map
+plot.CompressiveNMF	plot.CompressiveNMF
+plot_DBS_signature	plot_DBS_signature
+plot_ID_signature	plot_ID_signature
+plot_SBS_signature	plot_SBS_signature
+plot_weights	plot_weights

@@ -1,8 +1,4 @@
 #include <RcppArmadillo.h>
-#include <math.h>
-#include <R.h>
-#include <Rinternals.h>
-#include <Rmath.h>
 using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
@@ -62,11 +58,12 @@ List compute_CompressiveNMF_MAP(arma::mat X,
   // Updated quantities for multiplicative rules
   arma::mat R_upd(I, K);
   arma::mat Theta_upd(K, J);
-
+  double lp = eval_logPosterior(X, R, Theta, Mu, a, a0, b0, SigPrior);
   double maxdiff = 10;
   int R_show = 1000;
   int it = 0;
   for(int iter = 0; iter < maxiter; iter++){
+
     if((iter+1)%R_show==0) {
       Rprintf("Iteration %i - diff %.10f \n", iter+1, maxdiff);
     }
@@ -84,8 +81,13 @@ List compute_CompressiveNMF_MAP(arma::mat X,
     Theta.elem(arma::find(Theta < arma::datum::eps)).fill(arma::datum::eps);
     // Update Mu
     Mu_new = (a * sum(Theta, 1) + b0)/ (a * J + a0 + 1);
+    //Mu = (a * sum(Theta, 1) + b0)/ (a * J + a0 + 1);
     // Evaluate the difference on average with relevance weights
     maxdiff = arma::abs(Mu_new/Mu - 1).max();
+    //double lp_new = eval_logPosterior(X, R, Theta, Mu, a, a0, b0, SigPrior);
+    //maxdiff = arma::abs(lp_new/lp - 1).max();
+    //maxdiff = std::abs(lp_new - lp);
+    //lp = lp_new;
     Mu = Mu_new;
     if(iter >= maxiter || maxdiff < tol) {
       break;

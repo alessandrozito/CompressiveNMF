@@ -9,31 +9,3 @@ compute_CompressiveNMF_MAP <- function(X, R_start, Theta_start, Mu_start, SigPri
     .Call('_CompressiveNMF_compute_CompressiveNMF_MAP', PACKAGE = 'CompressiveNMF', X, R_start, Theta_start, Mu_start, SigPrior, a0, b0, a, maxiter, tol, use_logpost_for_convergence)
 }
 
-sample_weights_cpp <- function(shape_mat, rate_mat, Theta) {
-    invisible(.Call('_CompressiveNMF_sample_weights_cpp', PACKAGE = 'CompressiveNMF', shape_mat, rate_mat, Theta))
-}
-
-sample_signatures_cpp <- function(Alpha, R) {
-    invisible(.Call('_CompressiveNMF_sample_signatures_cpp', PACKAGE = 'CompressiveNMF', Alpha, R))
-}
-
-randmult <- function(n, prob) {
-    .Call('_CompressiveNMF_randmult', PACKAGE = 'CompressiveNMF', n, prob)
-}
-
-sample_mu_ARD_cpp <- function(a, a0, b0, Theta, mu) {
-    invisible(.Call('_CompressiveNMF_sample_mu_ARD_cpp', PACKAGE = 'CompressiveNMF', a, a0, b0, Theta, mu))
-}
-
-sample_Y_cpp <- function(X, nonzero_ids, R, Theta, Y) {
-    invisible(.Call('_CompressiveNMF_sample_Y_cpp', PACKAGE = 'CompressiveNMF', X, nonzero_ids, R, Theta, Y))
-}
-
-sample_Y_cpp2 <- function(X, nonzero_ids, R, Theta, Yt) {
-    .Call('_CompressiveNMF_sample_Y_cpp2', PACKAGE = 'CompressiveNMF', X, nonzero_ids, R, Theta, Yt)
-}
-
-CompressiveNMF_cpp <- function(X, nonzero_ids, R, Theta, Y, mu, SignaturePrior, nsamples, burnin, a, a0, b0) {
-    .Call('_CompressiveNMF_CompressiveNMF_cpp', PACKAGE = 'CompressiveNMF', X, nonzero_ids, R, Theta, Y, mu, SignaturePrior, nsamples, burnin, a, a0, b0)
-}
-

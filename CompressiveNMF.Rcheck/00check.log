@@ -1,0 +1,187 @@
+* using log directory ‘/home/alezito/CompressiveNMF/CompressiveNMF.Rcheck’
+* using R version 4.3.1 (2023-06-16)
+* using platform: x86_64-pc-linux-gnu (64-bit)
+* R was compiled by
+    gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+    GNU Fortran (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+* running under: Ubuntu 20.04.6 LTS
+* using session charset: UTF-8
+* using options ‘--no-manual --as-cran’
+* checking for file ‘CompressiveNMF/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘CompressiveNMF’ version ‘1.0.0’
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘CompressiveNMF’ can be installed ... WARNING
+Found the following significant warnings:
+  Warning: object ‘optimal_betah’ is created by more than one data call
+See ‘/home/alezito/CompressiveNMF/CompressiveNMF.Rcheck/00install.out’ for details.
+* used C++ compiler: ‘g++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0’
+* checking installed package size ... NOTE
+  installed size is  5.4Mb
+  sub-directories of 1Mb or more:
+    libs   5.0Mb
+* checking package directory ... OK
+* checking for future file timestamps ... NOTE
+unable to verify current time
+* checking DESCRIPTION meta-information ... NOTE
+Malformed Description field: should contain one or more complete sentences.
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking dependencies in R code ... WARNING
+'::' or ':::' imports not declared from:
+  ‘coda’ ‘tidyr’
+Namespaces in Imports field not imported from:
+  ‘Rcpp’ ‘RcppArmadillo’ ‘knitr’
+  All declared Imports should be used.
+* checking S3 generic/method consistency ... WARNING
+print:
+  function(x, ...)
+print.CompressiveNMF:
+  function(object, ...)
+
+plot:
+  function(x, ...)
+plot.CompressiveNMF:
+  function(object, type, ...)
+See section ‘Generic functions and methods’ in the ‘Writing R
+Extensions’ manual.
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+CompressiveNMF: no visible binding for global variable ‘i’
+CompressiveNMF_map: no visible global function definition for ‘rgamma’
+Initialize_CompressiveNMF: no visible global function definition for
+  ‘rgamma’
+Run_mcmc_CompressiveNMF: no visible global function definition for
+  ‘txtProgressBar’
+Run_mcmc_CompressiveNMF: no visible global function definition for
+  ‘setTxtProgressBar’
+Run_mcmc_CompressiveNMF: no visible global function definition for
+  ‘rgamma’
+calculate_logPosterior: no visible global function definition for
+  ‘dpois’
+calculate_logPosterior : <anonymous>: no visible global function
+  definition for ‘dgamma’
+plot.CompressiveNMF : <anonymous>: no visible global function
+  definition for ‘quantile’
+plot_DBS_signature: no visible binding for global variable ‘Channel’
+plot_DBS_signature: no visible binding for global variable ‘Pair’
+plot_DBS_signature: no visible binding for global variable ‘Mutation’
+plot_DBS_signature: no visible binding for global variable ‘Prob’
+plot_ID_signature: no visible binding for global variable ‘Channel’
+plot_ID_signature: no visible binding for global variable ‘Type’
+plot_ID_signature: no visible binding for global variable ‘Mutation’
+plot_ID_signature: no visible global function definition for ‘ggplot’
+plot_ID_signature: no visible binding for global variable ‘Prob’
+plot_ID_signature: no visible global function definition for ‘margin’
+plot_SBS_signature: no visible binding for global variable ‘Mutation’
+plot_SBS_signature: no visible binding for global variable ‘Channel’
+plot_SBS_signature: no visible binding for global variable ‘Triplet’
+plot_SBS_signature: no visible binding for global variable ‘Prob’
+plot_logpost_chain: no visible global function definition for ‘lines’
+plot_mu_chain: no visible global function definition for ‘lines’
+plot_weights: no visible global function definition for ‘dist’
+plot_weights: no visible binding for global variable ‘patient’
+plot_weights: no visible binding for global variable ‘Signature’
+plot_weights: no visible global function definition for ‘ggplot’
+plot_weights: no visible binding for global variable ‘weight’
+plot_weights: no visible global function definition for ‘element_blank’
+print.CompressiveNMF: no visible global function definition for ‘par’
+sample_Y: no visible global function definition for ‘rmultinom’
+sample_signatures: no visible global function definition for ‘rgamma’
+sample_weights: no visible global function definition for ‘rgamma’
+Undefined global functions or variables:
+  Channel Mutation Pair Prob Signature Triplet Type dgamma dist dpois
+  element_blank ggplot i lines margin par patient quantile rgamma
+  rmultinom setTxtProgressBar txtProgressBar weight
+Consider adding
+  importFrom("graphics", "lines", "par")
+  importFrom("stats", "Pair", "dgamma", "dist", "dpois", "quantile",
+             "rgamma", "rmultinom")
+  importFrom("utils", "setTxtProgressBar", "txtProgressBar")
+to your NAMESPACE file.
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... WARNING
+Undocumented code objects:
+  ‘Betah_DBS78_GRCh37_v3.4’ ‘Betah_ID83_GRCh37_v3.4’
+  ‘Betah_SBS96_GRCh37_v3.4’ ‘COSMIC_SBS96_GRCh37_v3.4’
+  ‘COSMIC_v3.4_DBS78_GRCh37’ ‘COSMIC_v3.4_DBS78_GRCh38’
+  ‘COSMIC_v3.4_ID83_GRCh37’ ‘COSMIC_v3.4_SBS96_GRCh37’
+  ‘COSMIC_v3.4_SBS96_GRCh37_no_artifacts’ ‘COSMIC_v3.4_SBS96_GRCh38’
+  ‘Initialize_CompressiveNMF’ ‘Mutations_21breast’
+  ‘Run_mcmc_CompressiveNMF’ ‘calculate_logPosterior’ ‘df_Indel_names’
+  ‘optimal_betah’ ‘postprocess_mcmc_out’ ‘sample_Y’ ‘sample_signatures’
+  ‘sample_weights’ ‘swap_SignaturePrior’
+Undocumented data sets:
+  ‘Betah_DBS78_GRCh37_v3.4’ ‘Betah_ID83_GRCh37_v3.4’
+  ‘Betah_SBS96_GRCh37_v3.4’ ‘COSMIC_SBS96_GRCh37_v3.4’
+  ‘COSMIC_v3.4_DBS78_GRCh37’ ‘COSMIC_v3.4_DBS78_GRCh38’
+  ‘COSMIC_v3.4_ID83_GRCh37’ ‘COSMIC_v3.4_SBS96_GRCh37’
+  ‘COSMIC_v3.4_SBS96_GRCh37_no_artifacts’ ‘COSMIC_v3.4_SBS96_GRCh38’
+  ‘df_Indel_names’ ‘Mutations_21breast’ ‘optimal_betah’
+All user-level objects in a package should have documentation entries.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... WARNING
+Documented arguments not in \usage in documentation object 'CompressiveNMF':
+  ‘progressbar’
+
+Undocumented arguments in documentation object 'plot.CompressiveNMF'
+  ‘type’ ‘...’
+
+Undocumented arguments in documentation object 'plot_DBS_signature'
+  ‘palette’
+
+Undocumented arguments in documentation object 'plot_ID_signature'
+  ‘palette’
+
+Undocumented arguments in documentation object 'plot_SBS_signature'
+  ‘palette’
+
+Undocumented arguments in documentation object 'plot_weights'
+  ‘Wmat’ ‘clust’ ‘nclust’
+Documented arguments not in \usage in documentation object 'plot_weights':
+  ‘signatures’ ‘lowCI’ ‘highCI’
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of ‘data’ directory ... OK
+* checking data for non-ASCII characters ... OK
+* checking LazyData ... OK
+* checking data for ASCII and uncompressed saves ... OK
+* checking line endings in C/C++/Fortran sources/headers ... OK
+* checking pragmas in C/C++ headers and code ... OK
+* checking compilation flags used ... OK
+* checking compiled code ... OK
+* checking examples ... NONE
+* checking for non-standard things in the check directory ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+Status: 5 WARNINGs, 4 NOTEs

@@ -1,0 +1,21 @@
+* installing *source* package ‘CompressiveNMF’ ...
+** using staged installation
+** libs
+using C++ compiler: ‘g++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0’
+g++ -std=gnu++17 -I"/usr/share/R/include" -DNDEBUG  -I'/home/alezito/R/x86_64-pc-linux-gnu-library/4.3/Rcpp/include' -I'/home/alezito/R/x86_64-pc-linux-gnu-library/4.3/RcppArmadillo/include'     -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-aeZVAy/r-base-4.3.1=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c RcppExports.cpp -o RcppExports.o
+g++ -std=gnu++17 -I"/usr/share/R/include" -DNDEBUG  -I'/home/alezito/R/x86_64-pc-linux-gnu-library/4.3/Rcpp/include' -I'/home/alezito/R/x86_64-pc-linux-gnu-library/4.3/RcppArmadillo/include'     -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-aeZVAy/r-base-4.3.1=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c compressiveNMF_map.cpp -o compressiveNMF_map.o
+g++ -std=gnu++17 -shared -L/usr/lib/R/lib -Wl,-Bsymbolic-functions -Wl,-z,relro -o CompressiveNMF.so RcppExports.o compressiveNMF_map.o -L/usr/lib/R/lib -lR
+installing to /home/alezito/CompressiveNMF/CompressiveNMF.Rcheck/00LOCK-CompressiveNMF/00new/CompressiveNMF/libs
+** R
+** data
+*** moving datasets to lazyload DB
+Warning: object ‘optimal_betah’ is created by more than one data call
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** checking absolute paths in shared objects and dynamic libraries
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (CompressiveNMF)

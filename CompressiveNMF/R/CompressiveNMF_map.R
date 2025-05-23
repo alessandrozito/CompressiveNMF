@@ -11,7 +11,7 @@
 #' @param cutoff Cutoff for excluded signatures
 #' @param tol Tolerance for convergence. Set to \code{1e-6}
 #' @param maxiter Maximum number of iterations for the algorithm. Set to  \code{1e6}
-#'
+#' @importFrom Rcpp sourceCpp
 #' @export
 #' @useDynLib CompressiveNMF
 CompressiveNMF_map <- function(X,
@@ -48,13 +48,21 @@ CompressiveNMF_map <- function(X,
   if(a <= 0){
     stop("Must have a > 0")
   }
+  if(K < 0 | round(K) != K){
+    stop("Must have K >= 0 and integer.")
+  }
   if(alpha < 1 | a < 1) {
     warning("Maximum-a-posteriori not guaranteed when alpha < 1 or a < 1")
   }
 
   # Fix the prior matrix for the signatures
   SignaturePrior <- cbind(S, matrix(alpha, nrow = I, ncol = K))
-  colnames(SignaturePrior) <- c(colnames(S), paste0(paste0("Sig_new", c(1:K))))
+  if(K > 0){
+    colnames(SignaturePrior) <- c(colnames(S), paste0(paste0("Sig_new", c(1:K))))
+  } else {
+    colnames(SignaturePrior) <- colnames(S)
+  }
+
   rownames(SignaturePrior) <- rownames(X)
   SignaturePrior <- pmax(SignaturePrior, 1e-10) # correction for Dirichlet
 

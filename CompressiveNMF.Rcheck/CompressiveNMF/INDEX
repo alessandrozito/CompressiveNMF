@@ -1,0 +1,9 @@
+CompressiveNMF          Function for our compressive NMF methods
+CompressiveNMF_map      Maximum-a-posteriori for the CompressiveNMF
+                        algorithm
+plot.CompressiveNMF     Plotting function for CompressiveNMF
+plot_DBS_signature      Plot Double-based-substitution signatures
+plot_ID_signature       Plot Indel signatures
+plot_SBS_signature      Plot SBS signatures
+plot_weights            Plot the signature loadings (exposures or
+                        weights)
