@@ -57,10 +57,10 @@ df_plot$values <- "Density when y > a"
 
 df_all <- rbind(df_plot, df_plot2)
 df_all$y = as.factor(df_all$y)
-df_all$J = as.factor(df_all$J)
+df_all$N = as.factor(df_all$J)
 ggplot(df_all) +
   geom_segment(x = epsilon, xend = epsilon, y = 0, yend = Inf,linetype ="dotted", color = "gray50")+
-  geom_line(aes(x = x, y = dens, linetype = J, color = y), linewidth = 0.75)+
+  geom_line(aes(x = x, y = dens, linetype = N, color = y), linewidth = 0.75)+
   theme_bw()+
   theme(legend.position = "right")+
   ylab("Density")+
@@ -71,7 +71,7 @@ ggsave("figures/densities.pdf", height = 2.90, width=4.10)
 
 
 
-#----------------------------- Figure S7.1
+#----------------------------- Figure S12
 a_range <- c(0.1, 0.5, 1, 2)
 compressive <- c(TRUE, FALSE)
 J <- c(5, 20, 50, 100, 200)
@@ -129,8 +129,8 @@ p_plot <- ggplot(df_plot_a %>%
   geom_segment(x = 0, xend = 5, y = 0, yend = 5, color = "red", linewidth = 0.1, linetype = "solid")+
   
   #scale_color_manual("J", values = color_values)+
-  scale_color_manual("J", values = hcl.colors(6, palette = "Blues 3")) +
-  scale_linetype_manual("J", values = rev(c("solid", "longdash", "dashed", "dotdash", "dotted"))) +
+  scale_color_manual("N", values = hcl.colors(6, palette = "Blues 3")) +
+  scale_linetype_manual("N", values = rev(c("solid", "longdash", "dashed", "dotdash", "dotted"))) +
   theme_test() +
   theme(aspect.ratio = 1, 
         legend.position = "right", 
@@ -149,19 +149,19 @@ p_elbow <- ggplot(df_plot_a %>%
          filter(compressive == TRUE, 
                 a >= 0.5, J %in% c(20, 50, 200)) %>%
          mutate(a_verb = paste0("a = ", a), 
-                J = as.factor(J))) +
+                N = as.factor(J))) +
   geom_segment(aes(x = a, xend = a, y = 0, yend = Inf), color = "grey70", 
                linetype = "dotdash", linewidth = 0.25)+
   geom_line(aes(x = Y, y = V1), color = "red")+
-  geom_line(aes(x = Y, y = X10., col = J, linetype = J))+
-  geom_line(aes(x = Y, y = X90., col = J, linetype = J))+
+  geom_line(aes(x = Y, y = X10., col = N, linetype = N))+
+  geom_line(aes(x = Y, y = X90., col = N, linetype = N))+
   geom_segment(x = 0, xend = 5, y = 0, yend = 5, color = "black", 
                linetype = "solid", linewidth = 0.1)+
   facet_grid(~a_verb) +
   #xlim(c(0, 4)) +
   theme_test() +
   #theme(aspect.ratio = 1)+
-  scale_color_manual("J", values = hcl.colors(6, palette = "Blues 3")[c(4,3,1)]) +
+  scale_color_manual(values = hcl.colors(6, palette = "Blues 3")[c(4,3,1)]) +
   #scale_linetype_manual("J", values = c("dashed", "dashed","dashed"))+
   xlab(expression(bar(Y)[k]))+
   ylab(expression(mu[k]))

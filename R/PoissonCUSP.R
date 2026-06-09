@@ -78,7 +78,6 @@ sample_mu_sp <- function(Z, a0, b0, sum_Y, sum_Eps, mu_inf){
 }
 
 
-
 # Main function to sample from the Poisson CUSP
 PoissonCUSP <- function(X, K, nsamples = 2000, burnin = 1000,
                         alpha = 0.5, a = 1, a0 = 1, b0 = 1,

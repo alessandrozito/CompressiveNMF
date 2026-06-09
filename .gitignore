@@ -142,4 +142,13 @@ output/Application_ID_mm
 output/Application_ID_panc/CompressiveNMF_cosmic.rds.gzip
 output/Application_ID_panc/CompressiveNMF.rds.gzip
 
+output/Compressive_vs_InfiniteFactors/*/CompressiveNMF
+output/Compressive_vs_InfiniteFactors/*/MGP
+output/Compressive_vs_InfiniteFactors/*/PoissonCUSP_gamma
+output/Compressive_vs_InfiniteFactors/*/PoissonCUSP_gammaKC
+output/Compressive_vs_InfiniteFactors/*/PoissonCUSP_invgamma
+output/Compressive_vs_InfiniteFactors/*/PoissonCUSP_invgammaKC
+
+
+
 

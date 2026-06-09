@@ -2,22 +2,22 @@
 library(tidyverse)
 
 # Source the functions
-source("R/SignatureAnalyzer.R")
-source("R/SigProfilerExtractor.R")
-source("R/signeR.R")
-source("R/PoissonCUSP.R")
-source("R/CompressiveNMF.R")
-source("R/plot_signatures.R")
-source("R/Postprocess_functions.R")
-source("R/plot_signatures.R")
+source("~/CompressiveNMF/R/SignatureAnalyzer.R")
+source("~/CompressiveNMF/R/SigProfilerExtractor.R")
+source("~/CompressiveNMF/R/signeR.R")
+source("~/CompressiveNMF/R/PoissonCUSP.R")
+source("~/CompressiveNMF/R/CompressiveNMF.R")
+source("~/CompressiveNMF/R/plot_signatures.R")
+source("~/CompressiveNMF/R/Postprocess_functions.R")
+source("~/CompressiveNMF/R/plot_signatures.R")
 
 color_values <- c("blue", "skyblue1", "darkorange", "#FFD166", "red", "brown", "#999999")
 labels <- c("CompNMF + cosmic", "CompNMF", "signeR", "SigProfiler", 
             "SignatureAnalyzer", "PoissonCUSP", "BayesNMF")
 
 # Load the output
-df_F1 <- read_csv(file = "output/main_simulation/df_F1_revision.csv")
-df_all <- read_csv(file = "output/main_simulation/simulation_output.csv")
+df_F1 <- read_csv(file = "~/CompressiveNMF/output/main_simulation/df_F1_revision.csv")
+df_all <- read_csv(file = "~/CompressiveNMF/output/main_simulation/simulation_output.csv")
 
 #-------- Figure 2 - Panel (A) - Plot for number of signatures K
 p_Ktot <- df_all %>%
@@ -25,7 +25,7 @@ p_Ktot <- df_all %>%
   mutate(J = as.factor(J),
          overd = paste0("Overdispersion=", as.factor(overd)), 
          K_tot = 4 + K_new,
-         J = factor(paste0("J = ", J), levels=c("J = 50", "J = 100", "J = 200")),
+         J = factor(paste0("N = ", J), levels=c("N = 50", "N = 100", "N = 200")),
          K_new2 = as.factor(paste0("K = ", K_new + 4)),
          K_new2 = fct_reorder(K_new2, as.integer(K_new))) %>%
   dplyr::select(Method, J, overd, K_new2, K,K_tot) %>%
@@ -46,7 +46,7 @@ p_Ktot <- df_all %>%
         axis.ticks.x = element_blank(),
         panel.spacing = unit(0, "lines"))+
   ylab("Estimated n. of signatures")
-ggsave(p_Ktot, filename = "figures/K_tot_v2.pdf", width = 9.20, height = 2.53)
+ggsave(p_Ktot, filename = "~/CompressiveNMF/figures/K_tot_v2.pdf", width = 9.20, height = 2.53)
 
 #-------- Figure 2 - Panel (B) - Plot for sensitivity and precision
 x <- seq(0.001, 0.99999, length.out = 100)
@@ -85,7 +85,7 @@ p_0_6 <- df_sum %>%
              size = 2.5, stroke = 1) +
   theme_bw() +
   facet_grid(~overd+K_new2)+
-  scale_shape_manual(values = c(21, 24, 22))+
+  scale_shape_manual(name = "N", values = c(21, 24, 22))+
   xlim(c(0.31, 1))+ 
   ylim(c(0.85, 1))+
   xlab("Precision") + 
@@ -109,7 +109,7 @@ p_0_10 <- df_sum %>%
              size = 2.5, stroke = 1) +
   theme_bw() +
   facet_grid(~overd+K_new2)+
-  scale_shape_manual(values = c(21, 24, 22))+
+  scale_shape_manual(name = "N", values = c(21, 24, 22))+
   xlim(c(0.53, 1))+ 
   ylim(c(0.85, 1))+
   xlab("Precision")+
@@ -134,7 +134,7 @@ p_15_6 <- df_sum %>%
              size = 2.5, stroke = 1) +
   theme_bw() +
   facet_grid(~overd+K_new2)+
-  scale_shape_manual(values = c(21, 24, 22))+
+  scale_shape_manual(name = "N", values = c(21, 24, 22))+
   xlim(c(0.4, 1)) +
   ylim(c(0.8, 1))+
   xlab("Precision") +
@@ -158,7 +158,7 @@ p_15_10 <- df_sum %>%
              size = 2.5, stroke = 1) +
   theme_bw() +
   facet_grid(~overd + K_new2)+
-  scale_shape_manual(values = c(21, 24, 22)) +
+  scale_shape_manual(name = "N", values = c(21, 24, 22)) +
   xlim(c(0.35, 1)) + 
   ylim(c(0.65, 1))+
   xlab("Precision") +
@@ -171,14 +171,14 @@ p_sens_prec <- ggpubr::ggarrange(p_0_6, p_0_10, p_15_6, p_15_10,
                                  nrow = 1, 
                                  common.legend = TRUE, 
                                  legend = "right")
-ggsave(p_sens_prec, filename = "figures/Prec_sensitivity_plot_v2.pdf", 
+ggsave(p_sens_prec, filename = "~/CompressiveNMF/figures/Prec_sensitivity_plot_v2.pdf", 
        width = 9.20, height = 2.53)
 
 #-------- Figure 2 - Panel (C) - Plot for F1 score when overdispersion = 0.15
 pF1 <- df_F1 %>%
   mutate(J = as.factor(J),
          overd = paste0("Overdispersion=", as.factor(overd)), 
-         J = factor(paste0("J = ", J), levels=c("J = 50", "J = 100", "J = 200")),
+         J = factor(paste0("N = ", J), levels=c("N = 50", "N = 100", "N = 200")),
          K_new2 = paste0("K = ", K_new + 4),
          K_new2 = fct_reorder(K_new2, as.integer(K_new)),) %>%
   ggplot()+
@@ -195,14 +195,14 @@ pF1 <- df_F1 %>%
         panel.spacing = unit(0, "lines"))+
   xlim(c(0.8, 1))+
   guides(color = guide_legend(title.position = "left", title.hjust = 0.5, nrow = 1))
-ggsave(plot = pF1, "figures/F1_score_v2.pdf", width = 9.20, height = 2.16)
+ggsave(plot = pF1, "~/CompressiveNMF/figures/F1_score_v2.pdf", width = 9.20, height = 2.16)
 
 
 ################################################################################
 # Figures in the supplementary material
 ################################################################################
 
-#-------- Figure S6.1 - RMSE with X and Lambda when overdispersion = 0
+#-------- Figure S4 - RMSE with X and Lambda when overdispersion = 0
 p_counts0 <- df_all %>%
   filter(theta == 100, overd == 0) %>%
   dplyr::select(Method, J, K_new, overd, rmse_Lambda, rmse_Counts) %>%
@@ -227,12 +227,12 @@ p_counts0 <- df_all %>%
     panel.grid.major.x = element_blank(), 
     panel.grid.minor.x = element_blank(), 
   )+
-  xlab("Number of samples J")+
+  xlab("Number of samples N")+
   ylab("RMSE")+
   labs(title = "Overdispersion = 0")
-ggsave(plot = p_counts0, filename = "figures/RMSE_plot_counts0.pdf", width = 8.51, height = 3.61)
+ggsave(plot = p_counts0, filename = "~/CompressiveNMF/figures/RMSE_plot_counts0.pdf", width = 8.51, height = 3.61)
 
-#-------- Figure S6.2 - RMSE with X and Lambda when overdispersion = 0.15
+#-------- Figure S5 - RMSE with X and Lambda when overdispersion = 0.15
 p_counts15 <- df_all %>%
   filter(theta == 100, overd == 0.15) %>%
   dplyr::select(Method, J, K_new, overd, rmse_Lambda, rmse_Counts) %>%
@@ -257,18 +257,18 @@ p_counts15 <- df_all %>%
     panel.grid.major.x = element_blank(), 
     panel.grid.minor.x = element_blank(), 
   )+
-  xlab("Number of samples J")+
+  xlab("Number of samples N")+
   ylab("RMSE")+
   labs(title = "Overdispersion = 0.15")
-ggsave(plot = p_counts15, filename = "figures/RMSE_plot_counts15.pdf", width = 8.51, height = 3.61)
+ggsave(plot = p_counts15, filename = "~/CompressiveNMF/figures/RMSE_plot_counts15.pdf", width = 8.51, height = 3.61)
 
-#-------- Figure S6.3 - RMSE for signatures and loadings when overdispersion = 0
+#-------- Figure S6 - RMSE for signatures and exposures when overdispersion = 0
 p_overd0 <- df_all %>%
   filter(theta == 100, overd == 0) %>%
   dplyr::select(Method, J, K_new, overd, rmse_Signatures, rmse_Weights) %>%
-  mutate(J = factor(paste0("J = ", J), levels=c("J = 50", "J = 100", "J = 200")),
+  mutate(J = factor(paste0("N = ", J), levels=c("N = 50", "N = 100", "N = 200")),
          Signatures = rmse_Signatures,
-         Loadings = rmse_Weights,
+         Exposures = rmse_Weights,
          overd = paste0("Overdispersion = ", as.factor(overd)), 
          K_new2 = paste0("K = ", K_new + 4),
          K_new2 = fct_reorder(K_new2, as.integer(K_new))) %>%
@@ -280,7 +280,7 @@ p_overd0 <- df_all %>%
   scale_color_manual( values = color_values, labels = labels)+
   scale_fill_manual(values = color_values, labels = labels)+
   facet_grid(Metric ~ K_new2, scales = "free_y") +
-  xlab("Number of samples J")+
+  xlab("Number of samples N")+
   ylab("RMSE")+
   theme(
     legend.position ="right",
@@ -290,15 +290,15 @@ p_overd0 <- df_all %>%
     panel.grid.minor.x = element_blank(), 
   )+
   labs(title = "Overdispersion = 0")
-ggsave(plot = p_overd0, filename = "figures/RMSE_plot_overd0.pdf", width = 8.51, height = 3.61)
+ggsave(plot = p_overd0, filename = "~/CompressiveNMF/figures/RMSE_plot_overd0.pdf", width = 8.51, height = 3.61)
 
-#-------- Figure S6.4 - RMSE for signatures and loadings when overdispersion = 0.15
+#-------- Figure S7 - RMSE for signatures and exposures when overdispersion = 0.15
 p_overd15 <- df_all %>%
   filter(theta == 100, overd == 0.15) %>%
   dplyr::select(Method, J, K_new, overd, rmse_Signatures, rmse_Weights) %>%
-  mutate(J = factor(paste0("J = ", J), levels=c("J = 50", "J = 100", "J = 200")),
+  mutate(J = factor(paste0("N = ", J), levels=c("N = 50", "N = 100", "N = 200")),
          Signatures = rmse_Signatures,
-         Loadings = rmse_Weights,
+         Exposures = rmse_Weights,
          overd = paste0("tau = ", as.factor(overd)), 
          K_new2 = paste0("K = ", K_new + 4),
          K_new2 = fct_reorder(K_new2, as.integer(K_new))) %>%
@@ -311,7 +311,7 @@ p_overd15 <- df_all %>%
   scale_fill_manual(values = color_values, labels = labels)+
   facet_grid(Metric ~ K_new2 , scales = "free_y") +
   #theme(axis.title.y = element_blank())+
-  xlab("Number of samples J")+
+  xlab("Number of samples N")+
   ylab("RMSE")+
   theme(#aspect.ratio = 1,
     legend.position ="right",
@@ -324,7 +324,7 @@ p_overd15 <- df_all %>%
 ggsave(plot = p_overd15, filename = "figures/RMSE_plot_overd15.pdf", width = 8.51, height = 3.61)
 
 
-#-------- Figure S6.5 - Execution time
+#-------- Figure S8 - Execution time
 ptime <- df_all %>%
   group_by(Method, J) %>%
   dplyr::select(time) %>%
@@ -336,19 +336,19 @@ ptime <- df_all %>%
   geom_point(aes(x = J, y = time, color = Method))+
   geom_line(aes(x = J, y = time, color = Method), linetype ="dashed")+
   ylab("Average time (m)")+
-  xlab("Sample size J")+
+  xlab("Sample size N")+
   scale_color_manual(values = color_values, labels = labels)
 ggsave(plot = ptime, "figures/Simulation_time.pdf", width = 5.25, height = 3.17)
 
-#-------- Figure S6.6 - Effective sample sizes for the Bayesian Methods
+#-------- Figure S9 - Effective sample sizes for the Bayesian Methods
 pESS <- df_all %>%
   dplyr::select(Method, J, overd, ESS_Sig_mean, ESS_Theta_mean, ESS_relweight_mean) %>%
   gather(key = "quantity", value = "ESS", -Method, -J, -overd) %>%
   drop_na() %>%
   mutate(quantity = case_when(quantity == "ESS_Sig_mean" ~ "Signatures", 
-                              quantity == "ESS_Theta_mean" ~ "Loadings", 
+                              quantity == "ESS_Theta_mean" ~ "Exposures", 
                               quantity == "ESS_relweight_mean" ~ "Relevance weights"), 
-         quantity = factor(quantity, levels = c("Signatures", "Loadings","Relevance weights")), 
+         quantity = factor(quantity, levels = c("Signatures", "Exposures","Relevance weights")), 
          Method = case_when(Method == "4.SigPro" ~ "4.SigPro",
                             Method == "3.signeR" ~ "signeR",
                             Method == "6.CUSP" ~ "PoissonCUSP",
@@ -357,9 +357,9 @@ pESS <- df_all %>%
                             Method == "2.CompNMF" ~ "CompNMF", 
                             Method == "7.BayesNMF" ~ "BayesNMF"), 
          overd = paste0("Overdispersion=", as.factor(overd)),
-         J = as.factor(J)) %>%
+         N = as.factor(J)) %>%
   ggplot() +
-  geom_boxplot(aes(x = Method, y = ESS, color = J)) +
+  geom_boxplot(aes(x = Method, y = ESS, color = N)) +
   facet_grid(overd~quantity) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+

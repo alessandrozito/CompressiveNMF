@@ -152,7 +152,7 @@ p4 <- ggplot(df_results %>%
   ylab("RMSE") +
   xlab("K")+
   theme(panel.spacing = unit(0, "lines"))+
-  ggtitle("Loadings")
+  ggtitle("Exposures")
 
 p_RMSE <- ggarrange(p3, p4, common.legend = TRUE, legend = "top")
 ggsave(p_RMSE, filename = "figures/Sensitivity_RMSE_21breast.pdf", 

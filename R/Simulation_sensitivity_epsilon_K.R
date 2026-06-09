@@ -166,13 +166,13 @@ p_K <- df_Keps %>%
   ylim(c(5, 7.1))
   
 
-# Plot for RMSE of the loadings
+# Plot for RMSE of the exposures
 p_load <- df_Keps %>%
   filter(epsilon < 2) %>%
   mutate(epsilon = as.factor(epsilon),
          overdispersion = paste0("tau = ", overdispersion)) %>%
   group_by(epsilon, Kused, overdispersion) %>%
-  summarise(`RMSE Loadings` = mean(rmse_Weights)) %>%
+  summarise(`RMSE Exposures` = mean(rmse_Weights)) %>%
   gather(key = "quant", value = "value", -epsilon, -Kused, -overdispersion) %>%
   ggplot() +
   geom_point(aes(x = Kused, y = value, color = epsilon)) +

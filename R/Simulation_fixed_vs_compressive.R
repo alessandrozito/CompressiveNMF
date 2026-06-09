@@ -1,4 +1,4 @@
-# Simulation - impact of strength-matching vs fixed choice of hyperprior. 
+# Simulation - impact of compressive vs fixed choice of hyperprior. 
 # This will show the benefit of having the compressive property
 library(CompressiveNMF)
 library(tidyverse)
@@ -254,13 +254,13 @@ for(J in J_range){
   }
 }
 
-#------- Figure S7.2
+#------- Figure S13
 p_K_prec_sens <- df_results %>%
   mutate(Jlist = as.factor(J), 
          ovd = paste0(ovd = paste0("tau = ", overd)), 
          `Estimated K` = Kest, 
          case = case_when(case == "compressive"~"Compressive",
-                          TRUE~"Fixed-strength")) %>%
+                          TRUE~"Fixed")) %>%
   dplyr::select(Jlist, ovd, case, `Estimated K`, Precision, Sensitivity) %>%
   gather(key = "quant", value = "value", -Jlist, -ovd, -case) %>%
   mutate(Ktrue = case_when(quant == "Estimated K" ~ 10,
@@ -275,23 +275,23 @@ p_K_prec_sens <- df_results %>%
   theme(axis.title.y = element_blank(), 
         panel.spacing.y = unit(0, "lines"), 
         legend.position = "top")+
-  xlab("Sample size J")
+  xlab("Sample size N")
 p_K_prec_sens
 
 ggsave(plot = p_K_prec_sens, 
        filename = "figures/simulation_fixed_vs_compressive_K_prec_sens.pdf", 
        width = 8.41, height = 5.27)
 
-#------- Figure S7.4
+#------- Figure S15
 p_rmse <- df_results %>%
   mutate(Jlist = as.factor(J), 
          ovd = paste0(ovd = paste0("tau = ", overd)), 
          `RMSE Counts` = rmse_Counts, 
-         `RMSE Loadings` = rmse_Weights, 
+         `RMSE Exposures` = rmse_Weights, 
          `RMSE Signatures` = rmse_Signatures, 
          case = case_when(case == "compressive"~"Compressive",
-                          TRUE~"Fixed-strength")) %>%
-  dplyr::select(Jlist, ovd, case, `RMSE Counts`, `RMSE Loadings`, `RMSE Signatures`) %>%
+                          TRUE~"Fixed")) %>%
+  dplyr::select(Jlist, ovd, case, `RMSE Counts`, `RMSE Exposures`, `RMSE Signatures`) %>%
   gather(key = "quant", value = "value", -Jlist, -ovd, -case) %>%
   ggplot()+
   theme_bw()+
@@ -301,7 +301,7 @@ p_rmse <- df_results %>%
   scale_fill_manual("Prior", values = c("#F8766D", "#619CFF")) +
   theme(axis.title.y = element_blank(), 
         panel.spacing.y = unit(0, "lines"), legend.position = "top")+
-  xlab("Sample size J")
+  xlab("Sample size N")
 
 ggsave(plot = p_rmse, 
        filename = "figures/simulation_fixed_vs_compressive_rmse.pdf", 
@@ -309,8 +309,8 @@ ggsave(plot = p_rmse,
 
 
 
-#--------------- Figure S7.3
-# Show an individual case. How do the signatures and the loadings look like?
+#--------------- Figure S14
+# Show an individual case. How do the signatures and the exposures look like?
 data <- readRDS("output/compressive_vs_fixed_simulation/Scenario_300_overd_0.15/data.rds.gzip")[[3]]
 
 # Compressive case

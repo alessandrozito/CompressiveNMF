@@ -3,6 +3,7 @@
 library(CompressiveNMF)
 library(tidyverse)
 library(foreach)
+library(ggpubr)
 library(lsa)
 library(doParallel)
 library(sigminer)
@@ -449,7 +450,7 @@ p2 <- df_results %>%
   gather(key = "quantity", value = "value", -Method, -overd) %>%
   mutate(quantity = case_when(quantity == "rmse_Counts" ~ "RMSE Counts",
                               quantity == "rmse_Signatures" ~ "RMSE Signatures",
-                              quantity == "rmse_Weights" ~ "RMSE Loadings")) %>%
+                              quantity == "rmse_Weights" ~ "RMSE Exposures")) %>%
   ggplot() +
   geom_boxplot(aes(y = value, x = Method, color = Method, fill = Method), alpha = 0.7)+
   scale_color_manual(values = c("forestgreen", "blue", "firebrick", "darkorange", "black"))+

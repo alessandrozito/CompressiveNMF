@@ -15,28 +15,32 @@ library(CompressiveNMF)
 ## Codes to repreduce the figures:
 
 ### Interpretation
-* Figure 1 and Figure S7.1 - Density of the Inverse Kummer and concentration behavior
-  - `R/reproduce_Figures_1_7_1.R`
+* Figure 1 and Figure S12 - Density of the Inverse Kummer and concentration behavior
+  - `R/reproduce_Figures_1_S12.R`
   
 ### Simulation
-* Figure 2, and Figure S6.1 to S6.6 in the Supplementary material - Main simulation
+* Figure 2, and Figure S4 to S9 in the Supplementary material - Main simulation
   - `R/main_Simulation_analysis.R`
-* Figure S6.7 - Sparse indel simulation
+* Figure S10 - Sparse indel simulation
   - `R/Simulation_sparsity_indels_suppl.R`
-* Figure S7.2, S7.3 and S7.4 - Fixed strength vs Compressive hyperprior
+* Figure S11 - CompNMF vs Infinite factorization models
+  - `R/Simulation_Compressive_vs_InfiniteFactors.R`
+* Figure S13, S14 and S15 - Fixed vs Compressive hyperprior
   - `R/Simulation_fixed_vs_compressive.R`
-* Figure S7.5 - Sensitivity to epsilon and K
+* Figure S16 - Sensitivity to epsilon and K
   - `R/Simulation_sensitivity_epsilon_K.R`
-* Figure S7.6 - Sensitivity to a and alpha
+* Figure S17 - Sensitivity to a and alpha
   - `R/Simulation_sensitivity_alpha_a_suppl.R`
-
+* Figure S18 - Effect of hyperprior on alpha
+  - `R/comparison_with_randomAlpha.R`
+  
 ### Application
 
-* Figure 3, 4, and Figure S8.1 to S8.7, Table S8.1 in the Supplementary material - 21 breast cancer application
+* Figure 3, 4, and Figure S19 to S25, Table S1 in the Supplementary material - 21 breast cancer application
   - `R/Application_21Breast.R`
-* Figure S8.9 and S8.9 - Sensitivity to hyperparameters in 21 breast cancer
+* Figure S26 and S27 - Sensitivity to hyperparameters in 21 breast cancer
   - `R/Application_21Breast_sensitivity_analysis.R`
-* Figure 5 and Figure S8.10 - Indel Panc-AdenoCA application
+* Figure S28 and S29 - Indel Panc-AdenoCA application
   - `R/Application_PancAdeno_indels.R`
 
 ## Codes for reproducing simulation and applications

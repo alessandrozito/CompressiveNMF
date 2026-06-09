@@ -206,7 +206,7 @@ get_ESS_signeR <- function(resSigneR, which_samples = 1001:2000){
 }
 
 get_ESS_PoissonCUSP <- function(out_CUSP){
-  pos_cusp <- get_posterior_CUSP(out_CUSP)
+  pos_cusp <- get_posterior_CUSP_v2(out_CUSP)
   Mu_all <- pos_cusp$mu_seq[, pos_cusp$nspike < 0.05]
   sigMat <- pos_cusp$R_hat[, pos_cusp$nspike < 0.05]
   ThetaMat <- pos_cusp$Theta_hat[pos_cusp$nspike < 0.05, ]
@@ -379,7 +379,7 @@ Postprocess_SigProfiler <- function(resSigPro, data) {
 }
 
 
-
+#---------------------------------------------------------------------- CUSP
 get_posterior_CUSP <- function(resCUSP) {
   J <- ncol(resCUSP$Weights[[1]])
   Kmax <- max(unlist(lapply(resCUSP$Mu, length)))
@@ -474,6 +474,178 @@ Postprocess_PoissonCUSP <- function(resCUSP, data) {
                             "time" = resCUSP$time, 
                             effsize)
          ))
+}
+
+get_posterior_CUSP_v2 <- function(resCUSP) {
+  J <- ncol(resCUSP$Weights[[1]])
+  Kmax <- max(unlist(lapply(resCUSP$Mu, length)))
+  nspike <- rep(0, Kmax)
+  nsims <- length(resCUSP$Signatures)
+  
+  k0 <- length(resCUSP$Mu[[1]])
+  R_hat <- cbind(resCUSP$Signatures[[1]] , matrix(1 / 96, nrow = 96, ncol = Kmax - k0))
+  Theta_hat <- rbind(resCUSP$Weights[[1]], matrix(0, ncol = J, nrow =  Kmax - k0))
+  Mu_hat <- c(resCUSP$Mu[[1]], rep(resCUSP$spike, Kmax - k0))
+  mu_seq <- t(c(resCUSP$Mu[[1]], rep(resCUSP$spike, Kmax - k0)))
+  
+  for (i in 2:nsims) {
+    mu_temp <- resCUSP$Mu[[i]]; mu_old <- resCUSP$Mu[[i-1]]; Zold <- resCUSP$Z[[i-1]]
+    # Check if a column was dropped
+    k_new <- length(mu_temp); k_old <- length(mu_old)
+    if(k_new < k_old){
+      # Check which column was dropped
+      id_dropped <- which(Zold <= 1:k_old)#which(mu_old == resCUSP$spike) # These are the columns that were dropped. We need to take the resulting mean and move it to the end
+      R_hat <- cbind(R_hat[, -id_dropped], R_hat[, id_dropped])
+      Theta_hat <- rbind(Theta_hat[-id_dropped, ], Theta_hat[id_dropped, ])
+      Mu_hat <- c(Mu_hat[-id_dropped], Mu_hat[id_dropped])
+      if(i == 2){
+        mu_seq <- cbind(t(mu_seq[, -id_dropped]), t(mu_seq[, id_dropped]))  
+      } else {
+        mu_seq <- cbind(mu_seq[, -id_dropped], mu_seq[, id_dropped])
+      }
+      nspike <- c(nspike[-id_dropped], nspike[id_dropped])
+    }
+    # Check global mean
+    mu <- c(mu_temp, rep(resCUSP$spike, Kmax - length(mu_temp)))
+    mu_seq <- rbind(mu_seq, mu)
+    Mu_hat <- Mu_hat + mu
+    nspike <- nspike + 1 * (mu == resCUSP$spike)
+    # Check signatures
+    mat_temp <- resCUSP$Signatures[[i]]
+    R_hat <- R_hat + cbind(mat_temp, matrix(1 / 96, nrow = 96, ncol = Kmax - length(mu_temp)))
+    # Check weights
+    Theta_temp <- resCUSP$Weights[[i]]
+    Theta_hat <- Theta_hat + rbind(Theta_temp, matrix(0, ncol = ncol(Theta_temp),
+                                                      nrow =  Kmax - length(mu_temp)))
+    #mu_seq <- rbind(mu_seq, mu)
+  }
+  R_hat <- R_hat / nsims
+  nspike <- nspike / nsims
+  Theta_hat <- Theta_hat / nsims
+  Mu_hat <- Mu_hat / nsims
+  return(list("Theta_hat" = Theta_hat, "R_hat" = R_hat,
+              "Mu_hat" = Mu_hat, "nspike" = nspike, "mu_seq" = mu_seq))
+}
+
+
+Postprocess_PoissonCUSP_v2 <- function(resCUSP, data) {
+  # Step 1 - find the number of signatures
+  Kchain <- unlist(lapply(resCUSP$Z, function(x) sum(x > 1:length(x))))
+  K <- mean(Kchain)
+  # Step 2 - Calculate RMSE wrt to the count matrix and the rate matrix
+  Lambda <- get_Lambda_CUSP(resCUSP)
+  Lambda_true <- data$Rmat %*% data$Theta
+  rmse_Lambda <- sqrt(mean((Lambda_true - Lambda)^2))
+  rmse_Counts <- sqrt(mean((data$X - Lambda)^2))
+  # Step 3 - Infer the mutational signatures
+  R_true <- apply(data$Rmat, 2, function(x) x / sum(x))
+  post_CUSP <- get_posterior_CUSP_v2(resCUSP)
+  nspike <- post_CUSP$nspike
+  R_hat <- post_CUSP$R_hat[, nspike < 0.05]
+  matchedSign <- match_MutSign(R_true = R_true, R_hat = R_hat)
+  cos_sim <- mean(get_cosine_similarity(matchedSign))
+  # Step 4 - Calculate RMSE for signatures and Weights
+  Theta_hat <- post_CUSP$Theta_hat[nspike < 0.05, ]
+  rmse_R <- compute_RMSE_Signature(R_hat = matchedSign$R_hat, R_true = matchedSign$R_true)  
+  rmse_Theta <- compute_RMSE_Theta(Theta_true = data$Theta, Theta_hat = Theta_hat, matchedSign$match)
+  # Step 5 - calculate the sensitivity and precision
+  sens_prec  <- Compute_sensitivity_precision(R_hat = R_hat, data$Rmat)
+  # Step 6 - add Effective sample sizes
+  effsize <- get_ESS_PoissonCUSP(resCUSP)
+  return(list("Lambda" = Lambda,
+              "R_hat" = R_hat, #post_CUSP$R_hat,
+              "Theta_hat" = Theta_hat, #post_CUSP$Theta_hat,
+              "Mu_hat" = post_CUSP$Mu_hat,
+              "Kchain" = Kchain,
+              "Mu_chain"= post_CUSP$mu_seq,
+              "nspike" = nspike,
+              "signatures" = matchedSign,
+              "results" = c("K" = K, 
+                            "rmse_Lambda" = rmse_Lambda, 
+                            "rmse_Counts" = rmse_Counts, 
+                            rmse_R, 
+                            rmse_Theta, 
+                            sens_prec,
+                            "cos_sim" = cos_sim, 
+                            "time" = resCUSP$time, 
+                            effsize)
+  ))
+}
+
+#---------------------------------------------------------------------- MGP
+get_Lambda_MGP <- function(resMGP){
+  nsamples <- nrow(resMGP$Signatures)
+  Lambda <- 0
+  for(i in 1:nsamples){
+    Lambda <- Lambda + resMGP$Signatures[i, ,] %*% resMGP$Weights[i, ,]
+  }
+  return(Lambda/nsamples)
+}
+
+get_ESS_MGP <- function(resMGP, select){
+  
+  R_all <- resMGP$Signatures
+  Theta_all <- resMGP$Weights
+  Mu_all <- resMGP$Mu
+  
+  EffectiveSigs <- apply(R_all[, , select], c(2,3), function(x) coda::effectiveSize(x))
+  EffectiveTheta <- apply(Theta_all[, select, ], c(2,3), function(x) coda::effectiveSize(x))
+  EffectiveRelW <- coda::effectiveSize(Mu_all[, select])
+  effsize <- c("ESS_Sig_mean" = mean(colMeans(EffectiveSigs)), 
+               "ESS_Sig_sd" = sd(colMeans(EffectiveSigs)),
+               "ESS_Theta_mean" = mean(rowMeans(EffectiveTheta)), 
+               "ESS_Theta_sd" = sd(rowMeans(EffectiveTheta)), 
+               "ESS_relweight_mean" = mean(EffectiveRelW), 
+               "ESS_relweight_sd" = sd(EffectiveRelW))
+  
+  return(effsize)
+}
+
+
+Postprocess_PoissonMGP <- function(resMGP, data) {
+  # Step 1 - calculate the number of inferred signatures
+  Kchain <- apply(resMGP$Mu, 1, function(x) sum(x > 0.01))
+  #K <- mean(Kchain)
+  sigs_to_keep <- colMeans(resMGP$Mu > 0.01) > 0.95
+  # Step 2 - Calculate RMSE wrt to the count matrix and the rate matrix
+  Lambda <- get_Lambda_MGP(resMGP)
+  Lambda_true <- data$Rmat %*% data$Theta
+  rmse_Lambda <- sqrt(mean((Lambda_true - Lambda)^2))
+  rmse_Counts <- sqrt(mean((data$X - Lambda)^2))
+  # Step 3 - calculate the cosine similarity between the true and the inferred signatures
+  R_true <- apply(data$Rmat, 2, function(x) x / sum(x))
+  R_hat <- apply(resMGP$Signatures, c(2, 3), mean)
+  # Find the nonflat signatures
+  nonflat_sigs <- c(cosine(R_hat, matrix(1, nrow = 96)) < 0.975)
+  R_hat <- R_hat[, sigs_to_keep & nonflat_sigs]
+  K <- ncol(R_hat)
+  # Match the signatures
+  matchedSign <- match_MutSign(R_true = R_true, R_hat = R_hat)
+  cos_sim <- mean(get_cosine_similarity(matchedSign))
+  # Step 4 - calculate the RMSE between Theta and the rest
+  Theta_hat <- apply(resMGP$Weights, c(2, 3), mean)[sigs_to_keep & nonflat_sigs, ]
+  rmse_R <- compute_RMSE_Signature(R_hat = matchedSign$R_hat, R_true = matchedSign$R_true)  
+  rmse_Theta <- compute_RMSE_Theta(Theta_true = data$Theta, Theta_hat = Theta_hat, matchedSign$match)  
+  # Step 5 - calculate the sensitivity and precision
+  sens_prec  <- Compute_sensitivity_precision(R_hat = R_hat, R_true)
+  # Step 6 - add Effective sample sizes
+  effsize <- get_ESS_MGP(resMGP, sigs_to_keep & nonflat_sigs)
+  return(list(
+    Lambda = Lambda,
+    R_hat = R_hat,
+    Theta_hat = Theta_hat,
+    Mu_hat = colMeans(resMGP$Mu)[sigs_to_keep & nonflat_sigs],
+    signatures = matchedSign,
+    results = c("K" = K, 
+                "rmse_Lambda" = rmse_Lambda, 
+                "rmse_Counts" = rmse_Counts, 
+                rmse_R, 
+                rmse_Theta, 
+                sens_prec,
+                "cos_sim" = cos_sim, 
+                "time" = resMGP$time, 
+                effsize)
+  ))
 }
 
 #---------------------------------------------------------------------- BayesNMF

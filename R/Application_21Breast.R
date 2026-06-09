@@ -232,10 +232,11 @@ pCompNMF <- CompressiveNMF:::plot.SBS.signature(sigMat, lowCI = lowCI, highCI = 
 
 ggpubr::ggarrange(pCompNMF_cos, pCompNMF, nrow = 1)
 ggsave("figures/sig_CompNMF_and_CompNMF_cos_21breast.pdf", width = 9.72, height = 6.44)
+
 #--------------------------------------------------------------------- RMSE
 
 # CompNMF
-round(sqrt(mean((X - out_CompNMF$Signatures %*% out_CompNMF$Weights)^2)), 2)
+round(sqrt(mean((X - out_CompNMF$Signatures %*% out_CompNMF$Weights)^2)), 3)
 # CompNMF + cosmic 
 round(sqrt(mean((X - out_CompNMF_cosmic_all$Signatures %*% out_CompNMF_cosmic_all$Weights)^2)), 2)
 # signeR
@@ -247,6 +248,22 @@ round(sqrt(mean((X - out_ARD_pcawg$Signature.norm %*% out_ARD_pcawg$Exposure)^2)
 # SigProfiler
 round(sqrt(mean((X - out_sigPro$Signatures %*% out_sigPro$Weights)^2)), 2)
 
+
+#--------------------------------------------------------------------- 
+#--- RMSE with and without signatures
+# CompNMF
+SigsAll <- apply(out_CompNMF$mcmc_out[[1]]$Signatures, c(2, 3), mean)
+ThetaAll <- apply(out_CompNMF$mcmc_out[[1]]$Weights, c(2, 3), mean)
+sqrt(mean((X - out_CompNMF$Signatures %*% out_CompNMF$Weights)^2))
+sqrt(mean((X - SigsAll %*% ThetaAll)^2))
+
+# CompNMF with cosmic priors
+out_CompNMF_cosmic <- readRDS("~/CompressiveNMF/output/Application_21brca/CompressiveNMF_cosmic_all.rds.gzip")
+SigsAllCosmic <- apply(out_CompNMF_cosmic$mcmc_out[[4]]$Signatures, c(2, 3), mean)
+ThetaAllCosmic <- apply(out_CompNMF_cosmic$mcmc_out[[4]]$Weights, c(2, 3), mean)
+
+sqrt(mean((X - SigsAllCosmic %*% ThetaAllCosmic)^2))
+sqrt(mean((X - out_CompNMF_cosmic_all$Signatures %*% out_CompNMF_cosmic_all$Weights)^2))
 
 #--------------------------------------------------------------------- 
 # Table 8.1

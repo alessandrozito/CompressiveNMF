@@ -182,7 +182,7 @@ p_load <- df_a_alpha %>%
   mutate(a = as.factor(a),
          overdispersion = paste0("tau = ", overdispersion)) %>%
   group_by(a, alpha, overdispersion) %>%
-  summarise(`RMSE Loadings` = mean(rmse_Weights)) %>%
+  summarise(`RMSE Exposures` = mean(rmse_Weights)) %>%
   gather(key = "quant", value = "value", -a, -alpha, -overdispersion) %>%
   ggplot() +
   geom_point(aes(x = alpha, y = value, color = a)) +
