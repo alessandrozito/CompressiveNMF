@@ -30,8 +30,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // compute_CompressiveNMF_MAP
-List compute_CompressiveNMF_MAP(arma::mat X, arma::mat R_start, arma::mat Theta_start, arma::vec Mu_start, arma::mat& SigPrior, double a0, double b0, double a, int maxiter, double tol, bool use_logpost_for_convergence);
-RcppExport SEXP _CompressiveNMF_compute_CompressiveNMF_MAP(SEXP XSEXP, SEXP R_startSEXP, SEXP Theta_startSEXP, SEXP Mu_startSEXP, SEXP SigPriorSEXP, SEXP a0SEXP, SEXP b0SEXP, SEXP aSEXP, SEXP maxiterSEXP, SEXP tolSEXP, SEXP use_logpost_for_convergenceSEXP) {
+List compute_CompressiveNMF_MAP(arma::mat X, arma::mat R_start, arma::mat Theta_start, arma::vec Mu_start, arma::mat& SigPrior, double a0, double b0, double a, int maxiter, double tol, bool use_logpost_for_convergence, bool halfnormal);
+RcppExport SEXP _CompressiveNMF_compute_CompressiveNMF_MAP(SEXP XSEXP, SEXP R_startSEXP, SEXP Theta_startSEXP, SEXP Mu_startSEXP, SEXP SigPriorSEXP, SEXP a0SEXP, SEXP b0SEXP, SEXP aSEXP, SEXP maxiterSEXP, SEXP tolSEXP, SEXP use_logpost_for_convergenceSEXP, SEXP halfnormalSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -46,14 +46,91 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< bool >::type use_logpost_for_convergence(use_logpost_for_convergenceSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_CompressiveNMF_MAP(X, R_start, Theta_start, Mu_start, SigPrior, a0, b0, a, maxiter, tol, use_logpost_for_convergence));
+    Rcpp::traits::input_parameter< bool >::type halfnormal(halfnormalSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_CompressiveNMF_MAP(X, R_start, Theta_start, Mu_start, SigPrior, a0, b0, a, maxiter, tol, use_logpost_for_convergence, halfnormal));
+    return rcpp_result_gen;
+END_RCPP
+}
+// eval_logPosterior_MultiStudy
+double eval_logPosterior_MultiStudy(arma::mat& X, arma::mat& R, arma::mat& Theta, arma::mat& Mu, arma::vec& Mu_low, arma::mat& SigPrior, arma::uvec& cohorts_num, arma::vec& Js, double a, double a0, double b0, bool hierarchy, bool compressive, double lambda, double delta);
+RcppExport SEXP _CompressiveNMF_eval_logPosterior_MultiStudy(SEXP XSEXP, SEXP RSEXP, SEXP ThetaSEXP, SEXP MuSEXP, SEXP Mu_lowSEXP, SEXP SigPriorSEXP, SEXP cohorts_numSEXP, SEXP JsSEXP, SEXP aSEXP, SEXP a0SEXP, SEXP b0SEXP, SEXP hierarchySEXP, SEXP compressiveSEXP, SEXP lambdaSEXP, SEXP deltaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type R(RSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type Theta(ThetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type Mu(MuSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type Mu_low(Mu_lowSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type SigPrior(SigPriorSEXP);
+    Rcpp::traits::input_parameter< arma::uvec& >::type cohorts_num(cohorts_numSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type Js(JsSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type a0(a0SEXP);
+    Rcpp::traits::input_parameter< double >::type b0(b0SEXP);
+    Rcpp::traits::input_parameter< bool >::type hierarchy(hierarchySEXP);
+    Rcpp::traits::input_parameter< bool >::type compressive(compressiveSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type delta(deltaSEXP);
+    rcpp_result_gen = Rcpp::wrap(eval_logPosterior_MultiStudy(X, R, Theta, Mu, Mu_low, SigPrior, cohorts_num, Js, a, a0, b0, hierarchy, compressive, lambda, delta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_CompressiveNMF_MAP_MultiStudy
+List compute_CompressiveNMF_MAP_MultiStudy(arma::mat X, arma::mat R_start, arma::mat Theta_start, arma::mat Mu_start, arma::mat& SigPrior, arma::uvec& cohorts_num, double a0, double b0, double a, int maxiter, double tol, bool hierarchy, bool compressive);
+RcppExport SEXP _CompressiveNMF_compute_CompressiveNMF_MAP_MultiStudy(SEXP XSEXP, SEXP R_startSEXP, SEXP Theta_startSEXP, SEXP Mu_startSEXP, SEXP SigPriorSEXP, SEXP cohorts_numSEXP, SEXP a0SEXP, SEXP b0SEXP, SEXP aSEXP, SEXP maxiterSEXP, SEXP tolSEXP, SEXP hierarchySEXP, SEXP compressiveSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type R_start(R_startSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Theta_start(Theta_startSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Mu_start(Mu_startSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type SigPrior(SigPriorSEXP);
+    Rcpp::traits::input_parameter< arma::uvec& >::type cohorts_num(cohorts_numSEXP);
+    Rcpp::traits::input_parameter< double >::type a0(a0SEXP);
+    Rcpp::traits::input_parameter< double >::type b0(b0SEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< bool >::type hierarchy(hierarchySEXP);
+    Rcpp::traits::input_parameter< bool >::type compressive(compressiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_CompressiveNMF_MAP_MultiStudy(X, R_start, Theta_start, Mu_start, SigPrior, cohorts_num, a0, b0, a, maxiter, tol, hierarchy, compressive));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_MinVol_MAP_MultiStudy
+List compute_MinVol_MAP_MultiStudy(arma::mat X, arma::mat R_start, arma::mat Theta_start, arma::mat Mu_start, arma::mat& SigPrior, arma::uvec& cohorts_num, double a0, double b0, double a, double lambda, double delta, int maxiter, double tol, bool hierarchy, bool compressive);
+RcppExport SEXP _CompressiveNMF_compute_MinVol_MAP_MultiStudy(SEXP XSEXP, SEXP R_startSEXP, SEXP Theta_startSEXP, SEXP Mu_startSEXP, SEXP SigPriorSEXP, SEXP cohorts_numSEXP, SEXP a0SEXP, SEXP b0SEXP, SEXP aSEXP, SEXP lambdaSEXP, SEXP deltaSEXP, SEXP maxiterSEXP, SEXP tolSEXP, SEXP hierarchySEXP, SEXP compressiveSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type R_start(R_startSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Theta_start(Theta_startSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Mu_start(Mu_startSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type SigPrior(SigPriorSEXP);
+    Rcpp::traits::input_parameter< arma::uvec& >::type cohorts_num(cohorts_numSEXP);
+    Rcpp::traits::input_parameter< double >::type a0(a0SEXP);
+    Rcpp::traits::input_parameter< double >::type b0(b0SEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< bool >::type hierarchy(hierarchySEXP);
+    Rcpp::traits::input_parameter< bool >::type compressive(compressiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_MinVol_MAP_MultiStudy(X, R_start, Theta_start, Mu_start, SigPrior, cohorts_num, a0, b0, a, lambda, delta, maxiter, tol, hierarchy, compressive));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_CompressiveNMF_eval_logPosterior", (DL_FUNC) &_CompressiveNMF_eval_logPosterior, 8},
-    {"_CompressiveNMF_compute_CompressiveNMF_MAP", (DL_FUNC) &_CompressiveNMF_compute_CompressiveNMF_MAP, 11},
+    {"_CompressiveNMF_compute_CompressiveNMF_MAP", (DL_FUNC) &_CompressiveNMF_compute_CompressiveNMF_MAP, 12},
+    {"_CompressiveNMF_eval_logPosterior_MultiStudy", (DL_FUNC) &_CompressiveNMF_eval_logPosterior_MultiStudy, 15},
+    {"_CompressiveNMF_compute_CompressiveNMF_MAP_MultiStudy", (DL_FUNC) &_CompressiveNMF_compute_CompressiveNMF_MAP_MultiStudy, 13},
+    {"_CompressiveNMF_compute_MinVol_MAP_MultiStudy", (DL_FUNC) &_CompressiveNMF_compute_MinVol_MAP_MultiStudy, 15},
     {NULL, NULL, 0}
 };
 

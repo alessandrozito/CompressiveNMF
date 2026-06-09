@@ -14,18 +14,20 @@
 #' @importFrom Rcpp sourceCpp
 #' @export
 #' @useDynLib CompressiveNMF
-CompressiveNMF_map <- function(X,
-                               K = 30,
-                               S = NULL,
-                               alpha = 1,
-                               a = 1,
-                               epsilon = 0.001,
-                               cutoff = 5 * epsilon,
-                               tol = 1e-7,
-                               halfnormal = FALSE,
-                               a0 = a * ncol(X) / (halfnormal + 1) + 1,
-                               b0 = a * epsilon * ncol(X),
-                               maxiter = 1e6){
+CompressiveNMF_MultiStudy <- function(X,
+                                      cohorts_num,
+                                       K = 20,
+                                       S = NULL,
+                                       alpha = 1,
+                                       a = 1,
+                                       epsilon = 0.001,
+                                       cutoff = 5 * epsilon,
+                                       hierarchy = FALSE,
+                                       compressive = TRUE,
+                                       tol = 1e-7,
+                                       a0 = epsilon * 1,
+                                       b0 = 1,
+                                       maxiter = 1e6){
 
   # Check if the matrix X is made of integers
   if(any(round(X) != X)){
@@ -69,42 +71,52 @@ CompressiveNMF_map <- function(X,
 
   # Random initialization from the prior
   Ktot <- ncol(SignaturePrior)
+  Stot <- length(unique(cohorts_num))
+  Mu_start <- 1/matrix(rgamma(n = Stot * Ktot, 1, 1), ncol = Stot)
   R <- sample_signatures(SignaturePrior)
-  Mu <- 1/rgamma(Ktot, a0, b0)
   shape_mat <- matrix(a, nrow = Ktot, ncol = J)
-  rate_mat <- as.matrix(a/Mu)[, rep(1, J)]
+  rate_mat <- as.matrix(a/Mu_start[, 1])[, rep(1, J)]
   Theta <- sample_weights(shape_mat, rate_mat)
   # Run the code in Rcpp
-  res <- compute_CompressiveNMF_MAP(X, R, Theta, Mu, SignaturePrior,
-                                    a0, b0, a,
-                                    maxiter, tol, halfnormal = halfnormal)
+  res <- compute_CompressiveNMF_MAP_MultiStudy(X = X, R_start = R,
+                                              Theta_start = Theta,
+                                              Mu_start = Mu_start,
+                                              hierarchy = hierarchy,
+                                              compressive = compressive,
+                                              SigPrior = SignaturePrior,
+                                              cohorts_num = cohorts_num,
+                                              a0 = a0, b0 = b0, a = a,
+                                              maxiter = maxiter,
+                                              tol = tol)
   # Postprocess results
-  ids <- which(c(res$Mu) > cutoff)
-  R <- as.matrix(res$R[, ids])
-  colnames(R) <- colnames(SignaturePrior)[ids]; rownames(R) <- rownames(X)
-  Theta <- res$Theta[ids, ]
+  #ids <- which(c(res$Mu) > cutoff)
+  R <- as.matrix(res$R)
+  colnames(R) <- colnames(SignaturePrior); rownames(R) <- rownames(X)
+  Theta <- res$Theta
   if(!is.matrix(Theta)){
     Theta <- as.matrix(t(Theta))
   }
-  rownames(Theta) <- colnames(SignaturePrior)[ids]; colnames(Theta) <- colnames(X)
-  Mu <- c(res$Mu)[ids]
-  names(Mu) <- colnames(SignaturePrior)[ids]
-
+  rownames(Theta) <- colnames(SignaturePrior); colnames(Theta) <- colnames(X)
+  Mu <- res$Mu
+  rownames(Mu) <- colnames(SignaturePrior)
+  colnames(Mu) <- unique(cohorts_num)
+  Mu_low <- c(res$Mu_low)
+  names(Mu_low) <- colnames(SignaturePrior)
   # Calculate the lkogPosterior
-  logpost = calculate_logPosterior(X, R, Theta, Mu, a, a0, b0, SignaturePrior)
+  #logpost = calculate_logPosterior(X, R, Theta, Mu, a, a0, b0, SignaturePrior)
   return(list(Signatures = R,
               Theta = Theta,
               Mu = Mu,
+              Mu_low = Mu_low,
               mapOutput = res,
               a0 = a0,
               b0 = b0,
               a = a,
-              logPosterior = logpost,
+              compressive = compressive,
+              hierarchy = hierarchy,
+              #logPosterior = logpost,
               SignaturePrior = SignaturePrior,
               MutMatrix = X))
 }
-
-
-
 
 

@@ -1,3 +1,36 @@
+#' @export
+logFullCond_a <-  function(x, Mu, Theta, epsilon, c0, d0){
+  K <- length(Mu)
+  J <- ncol(Theta)
+  K * J * x * log(x) + (K * J * x + K)*log(epsilon*x*J) - K * J * lgamma(x) - K * lgamma(x * J + 1) -
+    x * (2 * J * sum(log(Mu)) - sum(log(Theta)) + sum(rowSums(Theta)/Mu) +
+           epsilon * J * sum(1/Mu)) + (c0 - 1) * log(x) - x * d0
+}
+
+#' @export
+sample_FullCond_a <- function(nsamples, Mu, Theta, epsilon, c0, d0,  a_start = 1) {
+  UppU <- -nlminb(start = a_start, objective = function(x) -logFullCond_a(x, Mu, Theta, epsilon, c0, d0),
+                  lower = 1e-6)$objective
+
+  UppV <- -nlminb(start = a_start, objective = function(x) -logFullCond_a(x, Mu, Theta, epsilon, c0, d0) - 2 * log(x),
+                  lower = 1e-6)$objective
+
+  s <- exp(0.5 * (UppV - UppU))
+  samples <- rep(NA, nsamples)
+  for(n in 1:nsamples){
+    accepted <- 0
+    while(accepted == 0) {
+      u <- runif(1); v <- runif(1)
+      x <- s * v / u
+      if(log(u) < 0.5 * (logFullCond_a(x, Mu, Theta, epsilon, c0, d0) - UppU)){
+        samples[n] = x
+        accepted = 1
+      }
+    }
+  }
+  samples
+}
+
 # This function runs the Gibbs sampler for the compressive non-negative matrix
 # factorization algorithm. We consider the case when also known signatures are
 # included in the analysis, with the possibility to update them.
@@ -14,6 +47,9 @@
 #' @param ncores Number of CPU cores to use.
 #' @param a0 Shape parameter for the inverse gamma compressive hyperprior. Default is \code{a * ncol(X) + 1}
 #' @param b0 Rate parameter for the inverse gamma compressive hyperprior. Default is \code{a * epsilon * ncol(X)}
+#' @param random_a Whether a should be treated as a random quantity
+#' @param c0 Prior for a
+#' @param d0 Prior for a
 #' @param S Matrix of informative prior for the signatures
 #' @param cutoff_excluded Cutoff for excluded signatures
 #' @param use_cosmic Logical, indicating whether to use Cosmic data.
@@ -27,7 +63,7 @@
 #' @return Returns a list of results from CompressiveNMF.
 #' @useDynLib CompressiveNMF
 #' @export
-CompressiveNMF <- function(X,
+CompressiveNMF_randa <- function(X,
                            K = 20,
                            nsamples = 1000,
                            burnin = 2000,
@@ -38,8 +74,11 @@ CompressiveNMF <- function(X,
                            ncores = 1,
                            a0 = a * ncol(X) + 1,
                            b0 = a * epsilon * ncol(X),
+                           random_a = FALSE,
+                           c0 = 1,
+                           d0 = 1,
                            S = NULL,
-                           cutoff_excluded = 1.5 * epsilon,
+                           cutoff_excluded = 5 * epsilon,
                            use_cosmic = FALSE,
                            swap_prior = TRUE,
                            betah = 100,
@@ -130,9 +169,13 @@ CompressiveNMF <- function(X,
   # Pack the model parameters
   model_pars <- list()
   model_pars$a <- a
+  model_pars$epsilon <- epsilon
+  model_pars$random_a <- random_a
   model_pars$alpha <- alpha
   model_pars$a0 <- a0
   model_pars$b0 <- b0
+  model_pars$c0 <- c0
+  model_pars$d0 <- d0
   model_pars$cutoff_excluded <- cutoff_excluded
   model_pars$SignaturePrior <- SignaturePrior
   model_pars$nonzero_ids <- nonzero_ids
@@ -219,7 +262,7 @@ CompressiveNMF <- function(X,
                                 verbose.out = verbose.out, nchains = nchains)
         #CompressiveNMF_cpp(X, nonzero_ids = model)
       } else {
-        Run_mcmc_CompressiveNMF(X, model_pars, init_pars, nsamples, burnin,
+        Run_mcmc_CompressiveNMF_randa(X, model_pars, init_pars, nsamples, burnin,
                                 verbose.out = verbose.out, nchains = nchains)
       }
     })
@@ -249,174 +292,25 @@ CompressiveNMF <- function(X,
   return(out)
 }
 
-# Additional functions
-
-# Calculate the value of the log-posterior
-#'@export
-calculate_logPosterior <- function(X, R, Theta, mu, a, a0, b0, SignaturePrior){
-  Lambda <- R %*% Theta
-  logpost <- 0
-  # Likelihood contribution
-  logpost <- logpost + sum(dpois(c(X), c(Lambda), log = TRUE))
-  # Prior on the weights contribution
-  logpost <- logpost + sum(sapply(1:nrow(Theta), function(k)
-    sum(dgamma(c(Theta[k, ]), a, a/mu[k], log = TRUE))))
-  # Prior on the signatures contribution
-  logpost <- logpost + sum(sapply(1:ncol(R), function(k)
-    LaplacesDemon::ddirichlet(R[, k], alpha = SignaturePrior[, k], log = TRUE)))
-  # Prior contribution of the relevance weights
-  logpost <- logpost + sum(a0 * log(b0) - lgamma(a0) - (a0 + 1) * log(mu) - b0/mu)
-  return(logpost)
-}
-
-# Sample the mutational signature matrix
-#'@export
-sample_signatures <- function(Alpha) {
-  # Alpha is a matrix of I x K
-  I <- nrow(Alpha)
-  Ktot <- ncol(Alpha)
-  R <- matrix(rgamma(I * Ktot, Alpha), nrow = I) + 1e-10 # Small nugget to avoid degeneracies of the gamma prior
-  R <- apply(R, 2, function(x) x/sum(x))
-  colnames(R) <- colnames(Alpha)
-  return(R)
-}
-
-# Sample the weight matrix
-#'@export
-sample_weights <- function(shape_mat, rate_mat) {
-  # Alpha is a matrix of I x K
-  K <- nrow(shape_mat)
-  J <- ncol(shape_mat)
-  Theta <- matrix(rgamma(K * J, shape_mat, rate_mat), nrow = K)
-  rownames(Theta) <- rownames(shape_mat)
-  return(Theta)
-}
-
-# Sample the augmented variables
-#'@export
-sample_Y <- function(X, R, Theta, nonzero_ids) {
-  I <- nrow(R)
-  K <- ncol(R)
-  J <- ncol(Theta)
-  Y <- array(0, dim = c(I, J, K))
-  for(id in 1:nrow(nonzero_ids)){
-    i <- nonzero_ids[id, 1]
-    j <- nonzero_ids[id, 2]
-    q_vec <- R[i, ] * Theta[, j]
-    Y[i, j, ] <- rmultinom(n = 1, size = X[i, j], prob = q_vec)
-  }
-  return(Y)
-}
-
-
-# Function to swap the prior in the active processess using hungarian algorithm
-#'@export
-swap_SignaturePrior <- function(SignaturePrior, R, mu, S, cutoff) {
-  # Check active processes
-  sel <- which(mu > cutoff)
-  # Match mutational signatures using the Hungarian algorithm
-  k_est <- length(sel)
-  k_tot <- ncol(SignaturePrior)
-  CosMat <- matrix(1, k_est, k_tot)
-  for (i in 1:k_est) {
-    for (j in 1:k_tot) {
-      CosMat[i, j] <- 1 - lsa::cosine(R[, sel[i]], SignaturePrior[, j])
-    }
-  }
-  match <- data.frame(RcppHungarian::HungarianSolver(CosMat)$pairs)
-  # Add cost
-  match$cost <- apply(match, 1, function(x) 1 - CosMat[x[1], x[2]])
-  match$X1 <- sel
-  # Add names before and  after
-  prior_names <- colnames(SignaturePrior)
-  match$names <- names(sel)
-  match$best_names <- prior_names[match$X2]
-  # Get the useful indeces
-  id_original <- id_swapped <- match$X1
-  id_substituted <- match$X2
-  id_agree <- match$names == match$best_names
-  id_new <- grepl("new", match$names)
-  id_matched_to_new <- grepl("new", match$best_names)
-  selected_new <- unique(c(match$names[id_new], match$best_names[id_matched_to_new]))
-  unoccupied_novel <- which(!(prior_names %in% selected_new) &  grepl("new", prior_names))
-  id_below_07 <- match$cost <= 0.7
-
-  # Case 1 - cosmic ---> new
-  id <- !id_new & id_matched_to_new & id_below_07
-  if(sum(id)>0){
-    # This is a cosmic signature that morphed into a new one. Thus, we need to swap the cosmic signature
-    # with the new
-    id_swapped[id] <- id_substituted[id]
-  }
-
-  # Case 2 - cosmic ---> cosmic, but should be new
-  # If the names do not match AND the cosine similarity is larger that 0.7, then we have to
-  # transfer the signature to a novel one
-  id <- !id_new & !id_matched_to_new & id_below_07
-  if(sum(id) > 0){
-    # These are cosmic signatures that are matched to another cosmic signature, but the
-    # similarity is lower that 0.7. Hence, they should be regarded as novel.
-    id_swapped[id] <- unoccupied_novel[1:sum(id)]
-    unoccupied_novel <- unoccupied_novel[-c(1:sum(id))]
-  }
-
-  # Case 3 - cosmic ---> cosmic, but wrong
-  id <- !id_new & !id_matched_to_new & !id_agree & !id_below_07
-  if(sum(id) > 0){
-    # These are cosmic signature that have been morphed into another cosmic signature due to
-    # the multi-modal nature of the problem. Hence, we need to swap them with the best match
-    id_swapped[id] <- which(prior_names %in% match[id, ]$best_names)
-  }
-
-  # Case 4  - new ---> cosmic
-  id <- id_new & !id_matched_to_new & !id_below_07
-  if(sum(id) > 0) {
-    # These are new signatures that have morphed into cosmic ones. Thus, we switch the prior
-    id_swapped[id] <- id_substituted[id]
-  }
-
-  # Swap the names in the prior
-  new_names <- prior_names
-  new_names[id_original] <- prior_names[id_swapped]
-  new_names[id_swapped] <- prior_names[id_original]
-  # Swap the order of the columns in the prior
-  NewPrior <- SignaturePrior
-  NewPrior[, id_original] <- SignaturePrior[, id_swapped]
-  NewPrior[, id_swapped] <- SignaturePrior[, id_original]
-  colnames(NewPrior) <- new_names
-  return(NewPrior)
-}
-
-
-# Initialize CompressiveNMF
-#'@export
-Initialize_CompressiveNMF <- function(X, model_pars){
-  # Matrix dimension
-  I <- nrow(X); J <- ncol(X); Ktot <- ncol(model_pars$SignaturePrior)
-  # Initialization of the sampler
-  R <- sample_signatures(model_pars$SignaturePrior)
-  # Sample the global weigths
-  mu <- 1/rgamma(Ktot, model_pars$a0 , model_pars$b0)#rep(1, Ktot)
-  # Sample weights
-  shape_mat <- matrix(model_pars$a, nrow = Ktot, ncol = J)
-  rate_mat <- as.matrix(model_pars$a/mu)[, rep(1, J)]
-  Theta <- sample_weights(shape_mat, rate_mat)
-  return(list(R = R, Theta = Theta, mu = mu))
-}
-
 
 # RunMCMC CompressiveNMF
 #'@export
-Run_mcmc_CompressiveNMF <- function(X, model_pars, init_pars, nsamples, burnin, verbose.out, nchains, ...){
+Run_mcmc_CompressiveNMF_randa <- function(X, model_pars,
+                                          init_pars, nsamples, burnin,
+                                          verbose.out, nchains, ...){
 
   # Matrix dimension
   I <- nrow(X); J <- ncol(X); Ktot <- ncol(model_pars$SignaturePrior)
 
   # Unpack model parameters
   a <- model_pars$a
+  random_a <- model_pars$random_a
   alpha <- model_pars$alpha
+  epsilon <- model_pars$epsilon
   a0 <- model_pars$a0
   b0 <- model_pars$b0
+  c0 <- model_pars$c0
+  d0 <- model_pars$d0
   cutoff_excluded <- model_pars$cutoff_excluded
   SignaturePrior <- model_pars$SignaturePrior
   nonzero_ids <- model_pars$nonzero_ids
@@ -434,6 +328,7 @@ Run_mcmc_CompressiveNMF <- function(X, model_pars, init_pars, nsamples, burnin, 
   Ysums <- array(dim = c(nsamples, Ktot, J))
   THETA <- array(dim = c(nsamples, Ktot, J))
   MU <- matrix(nrow = nsamples, ncol = Ktot)
+  ASamples <- rep(NA, nsamples)
   LOGPOST <- rep(NA, nsamples)
 
   # Print the message, if needed
@@ -465,7 +360,7 @@ Run_mcmc_CompressiveNMF <- function(X, model_pars, init_pars, nsamples, burnin, 
     #------------------------------ 2. Sample the weights
     shape_mat <- a + apply(Y, c(3, 2), sum)
     rate_mat <- 1 + matrix(a / mu) [, rep(1, J)]
-    Theta <- sample_weights(shape_mat, rate_mat)
+    Theta <- sample_weights(shape_mat, rate_mat) + 1e-12
     #------------------------------ 3. Sample the signatures
     # if(swap_prior & !is.null(S)){
     #   if(iter == round(2/3 * burnin))
@@ -476,8 +371,18 @@ Run_mcmc_CompressiveNMF <- function(X, model_pars, init_pars, nsamples, burnin, 
     R <- sample_signatures(Alpha)
 
     #------------------------------ 4. Sample the global column mean
+    if(random_a){
+      a0 <- J * a + 1
+      b0 <- epsilon * a * J
+    }
     mu <- 1/rgamma(Ktot, rep(a0 + J * a, Ktot), b0 + a * rowSums(Theta))
     names(mu) <- colnames(SignaturePrior)
+
+    #------------------------------ OPTIONAL - sample a
+    if(random_a){
+      a <- sample_FullCond_a(nsamples = 1, Mu = mu, Theta = Theta,
+                             epsilon = epsilon, c0 = c0, d0 = d0, a_start = a)
+    }
 
     #------------------------------ 5. Store the output
     if(iter > burnin) {
@@ -485,6 +390,7 @@ Run_mcmc_CompressiveNMF <- function(X, model_pars, init_pars, nsamples, burnin, 
       SIGN[iter - burnin, ,] <- R
       THETA[iter - burnin, ,] <- Theta
       MU[iter - burnin, ] <- mu
+      ASamples[iter - burnin] <- a
       LOGPOST[iter - burnin] <- calculate_logPosterior(X, R, Theta, mu, a, a0, b0, SignaturePrior)
     }
   }
@@ -500,19 +406,6 @@ Run_mcmc_CompressiveNMF <- function(X, model_pars, init_pars, nsamples, burnin, 
 
   # Return the values for each chain
   return(list(Signatures = SIGN, Weights = THETA, Mu = MU, Ysums = Ysums,
-              logposterior = LOGPOST, init_pars = init_pars))
-}
-
-#'@export
-postprocess_mcmc_out <- function(output, cutoff_excluded){
-  Rhat <- apply(output$Signatures, c(2,3), mean); colnames(Rhat) <- colnames(output$Mu)
-  Thetahat <- apply(output$Weights, c(2,3), mean); rownames(Thetahat) <- colnames(output$Mu)
-  muhat <- colMeans(output$Mu); names(muhat) <- colnames(output$Mu)
-  nonzero_sign <- (muhat > cutoff_excluded)
-  return(list(Signatures = Rhat[, nonzero_sign],
-              Weights = Thetahat[nonzero_sign, ],
-              RelWeights = muhat[nonzero_sign],
-              logpost = mean(output$logposterior),
-              nonzero_sign = which(nonzero_sign)))
+              logposterior = LOGPOST, a = ASamples, init_pars = init_pars))
 }
 

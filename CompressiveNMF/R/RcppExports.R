@@ -5,7 +5,19 @@ eval_logPosterior <- function(X, R, Theta, Mu, a, a0, b0, SigPrior) {
     .Call('_CompressiveNMF_eval_logPosterior', PACKAGE = 'CompressiveNMF', X, R, Theta, Mu, a, a0, b0, SigPrior)
 }
 
-compute_CompressiveNMF_MAP <- function(X, R_start, Theta_start, Mu_start, SigPrior, a0, b0, a, maxiter, tol, use_logpost_for_convergence = FALSE) {
-    .Call('_CompressiveNMF_compute_CompressiveNMF_MAP', PACKAGE = 'CompressiveNMF', X, R_start, Theta_start, Mu_start, SigPrior, a0, b0, a, maxiter, tol, use_logpost_for_convergence)
+compute_CompressiveNMF_MAP <- function(X, R_start, Theta_start, Mu_start, SigPrior, a0, b0, a, maxiter, tol, use_logpost_for_convergence = FALSE, halfnormal = FALSE) {
+    .Call('_CompressiveNMF_compute_CompressiveNMF_MAP', PACKAGE = 'CompressiveNMF', X, R_start, Theta_start, Mu_start, SigPrior, a0, b0, a, maxiter, tol, use_logpost_for_convergence, halfnormal)
+}
+
+eval_logPosterior_MultiStudy <- function(X, R, Theta, Mu, Mu_low, SigPrior, cohorts_num, Js, a, a0, b0, hierarchy, compressive, lambda = 0.0, delta = 1.0) {
+    .Call('_CompressiveNMF_eval_logPosterior_MultiStudy', PACKAGE = 'CompressiveNMF', X, R, Theta, Mu, Mu_low, SigPrior, cohorts_num, Js, a, a0, b0, hierarchy, compressive, lambda, delta)
+}
+
+compute_CompressiveNMF_MAP_MultiStudy <- function(X, R_start, Theta_start, Mu_start, SigPrior, cohorts_num, a0, b0, a, maxiter, tol, hierarchy, compressive) {
+    .Call('_CompressiveNMF_compute_CompressiveNMF_MAP_MultiStudy', PACKAGE = 'CompressiveNMF', X, R_start, Theta_start, Mu_start, SigPrior, cohorts_num, a0, b0, a, maxiter, tol, hierarchy, compressive)
+}
+
+compute_MinVol_MAP_MultiStudy <- function(X, R_start, Theta_start, Mu_start, SigPrior, cohorts_num, a0, b0, a, lambda, delta, maxiter, tol, hierarchy, compressive) {
+    .Call('_CompressiveNMF_compute_MinVol_MAP_MultiStudy', PACKAGE = 'CompressiveNMF', X, R_start, Theta_start, Mu_start, SigPrior, cohorts_num, a0, b0, a, lambda, delta, maxiter, tol, hierarchy, compressive)
 }
 

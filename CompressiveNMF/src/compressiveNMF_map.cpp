@@ -32,6 +32,8 @@ double eval_logPosterior(arma::mat &X,
   return logpost;
 }
 
+
+
 // [[Rcpp::export]]
 List compute_CompressiveNMF_MAP(arma::mat X,
                                 arma::mat R_start,
@@ -43,7 +45,8 @@ List compute_CompressiveNMF_MAP(arma::mat X,
                                 double a,
                                 int maxiter,
                                 double tol,
-                                bool use_logpost_for_convergence = false) {
+                                bool use_logpost_for_convergence = false,
+                                bool halfnormal = false) {
 
   // Model parameters
   int K = R_start.n_cols;
@@ -69,18 +72,31 @@ List compute_CompressiveNMF_MAP(arma::mat X,
     }
     // Update R
     R_upd = (X / (R * Theta)) * Theta.t();
-    R = arma::normalise(SigPrior - 1 + R % R_upd, 1, 0);
+    R = SigPrior - 1 + R % R_upd;
     R.elem(arma::find(R < arma::datum::eps)).fill(arma::datum::eps);
+    //R = arma::normalise(SigPrior - 1 + R % R_upd, 1, 0);
+    //R.elem(arma::find(R < arma::datum::eps)).fill(arma::datum::eps);
     R = arma::normalise(R, 1, 0);
     // Update Theta
     Theta_upd = R.t() * (X / (R * Theta));
     for(int j = 0; j < J; j++){
       Mu_all.col(j) = Mu_new;
     }
-    Theta = (Mu_all / (a + Mu_all)) % (a - 1 + Theta % Theta_upd);
+    //-- Update using the halfnormal priors over theta (l2 penalty)
+    if(halfnormal){
+      Theta = (arma::datum::pi * Mu_all/4) % (-1 + arma::sqrt(1 + (8 / (arma::datum::pi * Mu_all)) % Theta % Theta_upd));
+      //Rcout << Theta<< "\n";
+    } else {
+      Theta = (Mu_all / (a + Mu_all)) % (a - 1 + Theta % Theta_upd);
+    }
     Theta.elem(arma::find(Theta < arma::datum::eps)).fill(arma::datum::eps);
     // Update Mu
-    Mu_new = (a * sum(Theta, 1) + b0)/ (a * J + a0 + 1);
+    if(halfnormal){
+      Mu_new = (sum(arma::square(Theta), 1)/arma::datum::pi + b0)/ (J/2 + a0 + 1);
+    } else {
+      Mu_new = (a * sum(Theta, 1) + b0)/ (a * J + a0 + 1);
+    }
+
     //Mu = (a * sum(Theta, 1) + b0)/ (a * J + a0 + 1);
     // Evaluate the difference on average with relevance weights
     maxdiff = arma::abs(Mu_new/Mu - 1).max();
@@ -100,6 +116,4 @@ List compute_CompressiveNMF_MAP(arma::mat X,
                       _["iter"] = it,
                       _["maxdiff"]= maxdiff);
 }
-
-
 

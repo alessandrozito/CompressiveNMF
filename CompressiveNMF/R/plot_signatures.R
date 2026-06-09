@@ -270,5 +270,113 @@ plot.CompressiveNMF <- function(object, type = "signatures", ...){
 }
 
 
+#' Detect label-switching in the MCMC chain
+#'
+#' Diagnoses label switching in a fitted \code{CompressiveNMF} model by tracking,
+#' for each active signature, the cosine similarity between its posterior estimate
+#' and the corresponding posterior samples across MCMC iterations. The posterior
+#' mean signature matrix is computed from the last \code{percSamples} fraction of
+#' the chain; each signature's samples are then compared against this estimate. If
+#' the chain is well behaved, the similarity of each signature with its own estimate
+#' stays close to one and exceeds the similarity with any other signature. Crossings
+#' between traces are indicative of label switching. The function also returns a
+#' trace of the log-posterior to aid convergence assessment.
+#'
+#' @param out_CompNMF A fitted model object returned by \code{CompressiveNMF}, containing
+#'   the list of MCMC outputs (\code{mcmc_out}) and the index of the selected chain
+#'   (\code{selected_chain}).
+#' @param X The mutational catalogue matrix used to fit the model, of dimension
+#'   \eqn{M \times N} (mutation types by samples). Its row names are used to label
+#'   the rows of the estimated signature matrix.
+#' @param percSamples Numeric in \eqn{(0, 1)}. Fraction of the final MCMC iterations
+#'   used to compute the posterior mean signature estimate against which all samples
+#'   are compared. Defaults to \code{0.01}.
+#' @param mu_threshold Numeric. Threshold on the posterior mean of the relevance
+#'   weights \code{Mu}; only signatures whose estimated weight exceeds this value are
+#'   considered active and retained in the analysis. Defaults to \code{0.005}.
+#' @param post_start Integer. First iteration from which the log-posterior trace is
+#'   plotted, used to discard early iterations. Defaults to \code{100}.
+#' @param burnin_line Optional integer. If supplied, a vertical dashed line is drawn
+#'   at this iteration on both plots to mark the end of the burn-in phase. Defaults
+#'   to \code{NULL} (no line drawn).
+#'
+#' @returns A named list with two elements:
+#'   \describe{
+#'     \item{\code{plot}}{A combined \pkg{patchwork} object with the per-signature
+#'       cosine-similarity traces, the estimated signature spectra, and the
+#'       log-posterior trace.}
+#'     \item{\code{SigsEst}}{A matrix of the posterior mean estimates for the active
+#'       signatures, of dimension \eqn{M \times K_{\mathrm{active}}}, with row names
+#'       taken from \code{X} and columns labelled \code{Sig01}, \code{Sig02}, etc.}
+#'   }
+#'
+#' @export
+detect_label_switch <- function(out_CompNMF, X,
+                                percSamples = 0.01,
+                                mu_threshold = 0.005,
+                                post_start = 100,
+                                burnin_line = NULL) {
 
+  # 1. Extract MCMC chain and dimensions
+  mcmc <- out_CompNMF$mcmc_out[[out_CompNMF$selected_chain]]
+  n_iter <- nrow(mcmc$Signatures)
+  final_samples <- round(percSamples * n_iter)
+  chain_idx <- 1:(n_iter - final_samples)
+
+  # 2. Estimate Mu and identify active signatures
+  MuEst <- colMeans(mcmc$Mu[-chain_idx, , drop = FALSE])
+  id_sigs <- which(MuEst > mu_threshold)
+
+  if (length(id_sigs) == 0) stop("No signatures passed the Mu threshold.")
+
+  # 3. Estimate Signatures
+  SigsEst <- apply(mcmc$Signatures[-chain_idx, , id_sigs, drop = FALSE], c(2, 3), mean)
+  rownames(SigsEst) <- rownames(X)
+  colnames(SigsEst) <- paste0("Sig", sprintf("%02d", seq_along(id_sigs)))
+
+  # 4. Calculate Cosine Similarities (compact lapply replaces the for-loop)
+  df_res <- lapply(seq_along(id_sigs), function(i) {
+    sims <- cosine(t(mcmc$Signatures[, , id_sigs[i]]), as.matrix(SigsEst))
+    colnames(sims) <- colnames(SigsEst)
+
+    as.data.frame(sims) %>%
+      mutate(iteration = row_number(),
+             Signature = paste0("Sig", sprintf("%02d", i))) %>%
+      pivot_longer(cols = -c(iteration, Signature), names_to = "Label")
+  }) %>% bind_rows()
+
+  # 5. Build Plot 1 (Cosine Similarities)
+  p1 <- ggplot(df_res, aes(x = iteration, y = value, color = Label)) +
+    geom_line() +
+    facet_wrap(~ Signature) +
+    ylim(c(0, 1)) +
+    theme_bw() +
+    ylab("Cosine sim. with estimate") +
+    geom_vline(xintercept = n_iter - final_samples, linetype = "dashed", color = "red")
+  if(!is.null(burnin_line)){
+    p1 <- p1 + geom_vline(xintercept = burnin_line, linetype = "dashed", color = "blue")
+  }
+  # 6. Build Plot 2 (Logposterior)
+  idx_post <- post_start:n_iter
+  df_post <- data.frame(iteration = idx_post, logpost = mcmc$logposterior[idx_post])
+
+  p2 <- ggplot(df_post, aes(x = iteration, y = logpost)) +
+    geom_line() +
+    theme_bw() +
+    geom_vline(xintercept = n_iter - final_samples, linetype = "dashed", color = "red") +
+    labs(x = "MCMC iteration", y = "Logposterior")
+  if(!is.null(burnin_line)){
+    p2 <- p2 + geom_vline(xintercept = burnin_line, linetype = "dashed", color = "blue")
+  }
+
+  # 7. Assemble final layout
+  # Note: plot_SBS_signature must be loaded in your environment
+  final_plot <- p1 + (plot_SBS_signature(SigsEst) / p2 + plot_layout(heights = c(2, 1)))
+
+  # Return both the plot and the extracted signatures
+  return(list(
+    plot = final_plot,
+    SigsEst = SigsEst
+  ))
+}
 
