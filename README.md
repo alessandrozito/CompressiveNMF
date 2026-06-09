@@ -21,6 +21,8 @@ library(CompressiveNMF)
 ### Simulation
 * Figure 2, and Figure S4 to S9 in the Supplementary material - Main simulation
   - `R/main_Simulation_analysis.R`
+* Figure S1 and S2 - Realignement and label switching
+  - `R/MCMC_chain_realignment.R`
 * Figure S10 - Sparse indel simulation
   - `R/Simulation_sparsity_indels_suppl.R`
 * Figure S11 - CompNMF vs Infinite factorization models
