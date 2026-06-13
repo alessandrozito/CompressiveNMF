@@ -22,27 +22,29 @@ library(CompressiveNMF)
 * Figure 2, and Figure S4 to S9 in the Supplementary material - Main simulation
   - `R/main_Simulation_analysis.R`
 * Figure S1 and S2 - Realignement and label switching
-  - `R/MCMC_chain_realignment.R`
-* Figure S10 - Sparse indel simulation
+  - `R/test_time_CompNMF.R`
+* Figure S10 - Computational time for varying M and N
   - `R/Simulation_sparsity_indels_suppl.R`
-* Figure S11 - CompNMF vs Infinite factorization models
+* Figure S11 - Sparse indel simulation
+  - `R/Simulation_sparsity_indels_suppl.R`
+* Figure S12 - CompNMF vs Infinite factorization models
   - `R/Simulation_Compressive_vs_InfiniteFactors.R`
-* Figure S13, S14 and S15 - Fixed vs Compressive hyperprior
+* Figure S14, S15 and S16 - Fixed vs Compressive hyperprior
   - `R/Simulation_fixed_vs_compressive.R`
-* Figure S16 - Sensitivity to epsilon and K
+* Figure S17 - Sensitivity to epsilon and K
   - `R/Simulation_sensitivity_epsilon_K.R`
-* Figure S17 - Sensitivity to a and alpha
+* Figure S18 - Sensitivity to a and alpha
   - `R/Simulation_sensitivity_alpha_a_suppl.R`
-* Figure S18 - Effect of hyperprior on alpha
+* Figure S19 - Effect of hyperprior on alpha
   - `R/comparison_with_randomAlpha.R`
   
 ### Application
 
-* Figure 3, 4, and Figure S19 to S25, Table S1 in the Supplementary material - 21 breast cancer application
+* Figure 3, 4, and Figure S20 to S26, Table S1 in the Supplementary material - 21 breast cancer application
   - `R/Application_21Breast.R`
-* Figure S26 and S27 - Sensitivity to hyperparameters in 21 breast cancer
+* Figure S27 and S28 - Sensitivity to hyperparameters in 21 breast cancer
   - `R/Application_21Breast_sensitivity_analysis.R`
-* Figure S28 and S29 - Indel Panc-AdenoCA application
+* Figure S29 and S30 - Indel Panc-AdenoCA application
   - `R/Application_PancAdeno_indels.R`
 
 ## Codes for reproducing simulation and applications

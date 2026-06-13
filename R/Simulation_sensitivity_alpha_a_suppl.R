@@ -212,5 +212,3 @@ figure <- annotate_figure(figure,
                           bottom = textGrob("Value of alpha", gp = gpar(cex = 1)))
 ggsave(plot = figure, filename = "figures/sensitivty_a_alpha_new.pdf", 
        width = 7.58, height = 4.45)
-
-
