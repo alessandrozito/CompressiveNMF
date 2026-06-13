@@ -67,7 +67,7 @@ library(CompressiveNMF)
 
 - `R/SigProfilerExtractor.R` - Wrapper for the function `sigprofiler_extract` from the `R` package `sigminer` (Wang et al., 2021) 
 
-- `R/PoissonCUSP.R` - Our implementation of the shrinkage process proposed by Legramanti et al. (2020), adapted to the Poisson factorizaton. 
+- `R/Poisson_InfiniteFactors.R` - Our implementation of the shrinkage process proposed by Legramanti et al. (2020), Kowal and Canale (2023) and Batthacharya and Dunson (2011), adapted to Poisson factorization 
 
 - Folder `R/run_BayesNMF_python` - All the python scripts to run the BayesNMD ARD (Brouwer et al. (2017))
 
@@ -102,3 +102,6 @@ https://doi.org/10.1371/journal.pgen.1009557
 
 > Legramanti S., Durante D., Dunson D. B. (2020) Bayesian cumulative shrinkage for infinite factorizations, Biometrika, Volume 107, Issue 3, 745–752. https://doi.org/10.1093/biomet/asaa008
 
+> Kowal, D. and Canale, A. (2023) Semiparametric Functional Factor Models with Bayesian Rank Selection, Bayesian Analysis, 10.1214/23-BA1410
+
+> Bhattacharya, A. and Dunson D. B. (2011) Sparse Bayesian infinite factor models, Biometrika, Volume 98, Issue 2, Pages 291–306, https://doi.org/10.1093/biomet/asr013
