@@ -10,7 +10,7 @@
 # --- 5) Multiplicative Gamma Process, Bhattacharya and Dunson (2011)
 #
 # We use the same data as in the main simulation. 
-
+library(patchwork)
 library(tidyverse)
 library(CompressiveNMF)
 library(sigminer)
@@ -230,7 +230,7 @@ nsamples <- 1000
 burnin <- 4000
 nsims <- ncores <- 20
 K_start <- 20
-rerun <- TRUE # <----- Set to true to re-run. 
+rerun <- FALSE # <----- Set to true to re-run. 
 if(rerun){
   cat("start \n", file = paste0(simulation_dir, "check.txt"))
   # Run the simulation
@@ -251,163 +251,49 @@ if(rerun){
                                           burnin = burnin, 
                                           nsims = nsims, 
                                           ncores = ncores, 
-                                          generate_data = FALSE,
-                                          runCompressive = FALSE, 
-                                          runCUSP_gamma = FALSE, 
-                                          runCUSP_gammaKC = FALSE,
-                                          runCUSP_ig = FALSE, 
-                                          runCUSP_ig_KC = FALSE, 
+                                          generate_data = TRUE,
+                                          runCompressive = TRUE, 
+                                          runCUSP_gamma = TRUE, 
+                                          runCUSP_gammaKC = TRUE,
+                                          runCUSP_ig = TRUE, 
+                                          runCUSP_ig_KC = TRUE, 
                                           runMGP = TRUE),
               silent = FALSE, outFile = "log.txt")
         }
       }
     }
   }
-}
-
-files <- list.files("output/Compressive_vs_InfiniteFactors/Scenario_100_overdisp_0_Knew_2_theta_100/")
-
-df_all <- data.frame()
-for(theta in theta_list){
-  for(K_new in K_new_list){
-    for(overd in overdispersion_list){
-      for(J in J_list){
-        print(c(theta, K_new, overd, J))
-        out_dir <- paste0(simulation_dir, "/Scenario_", J, "_overdisp_", overd, "_Knew_", K_new, "_theta_", theta)
-        # Open results files
-        files <- list.files(out_dir)
-        files <- files[grepl("rds.gzip", files) & !grepl("data", files)]
-        df_tmp <- data.frame()
-        for(f in files){
-          out <- open_rds_file(paste0(out_dir, "/", f))
-          res <- extract_results(out, name = gsub(".rds.gzip", "", f))
-          df_tmp <- rbind(df_tmp, res)
+  # Save now all results.
+  df_all <- data.frame()
+  for(theta in theta_list){
+    for(K_new in K_new_list){
+      for(overd in overdispersion_list){
+        for(J in J_list){
+          print(c(theta, K_new, overd, J))
+          out_dir <- paste0(simulation_dir, "/Scenario_", J, "_overdisp_", overd, "_Knew_", K_new, "_theta_", theta)
+          # Open results files
+          files <- list.files(out_dir)
+          files <- files[grepl("rds.gzip", files) & !grepl("data", files)]
+          df_tmp <- data.frame()
+          for(f in files){
+            out <- open_rds_file(paste0(out_dir, "/", f))
+            res <- extract_results(out, name = gsub(".rds.gzip", "", f))
+            df_tmp <- rbind(df_tmp, res)
+          }
+          df_tmp$J = J
+          df_tmp$theta = theta
+          df_tmp$K_new = K_new
+          df_tmp$overd = overd 
+          df_all <- rbind(df_all, df_tmp)
         }
-        df_tmp$J = J
-        df_tmp$theta = theta
-        df_tmp$K_new = K_new
-        df_tmp$overd = overd 
-        df_all <- rbind(df_all, df_tmp)
       }
     }
   }
+  write_tsv(df_all, file = "~/CompressiveNMF/output/Compressive_vs_InfiniteFactors/Results_CompNMF_InfiniteFactors.tsv")
+  
 }
 
-#========================================. OLD CODE
-# Fix now the missing values problem
-df_fix <- df_all %>%
-  group_by(Method, J, theta, K_new, overd) %>%
-  summarize(n = n(), .groups = "drop") %>%
-  complete(Method, J, theta, K_new, overd, fill = list(n = 0)) %>%
-  filter(n == 0) %>%
-  group_by(J, theta, K_new, overd) %>%          # group without Method
-  summarize(
-    methods = paste(unique(Method), collapse = ", "),
-    .groups = "drop")
-
-
-for(theta in theta_list){
-  for(K_new in K_new_list){
-    for(overd in overdispersion_list){
-      for(J in J_list){
-        print(c(theta, K_new, overd, J))
-        out_dir <- paste0(simulation_dir, "/Scenario_", J, "_overdisp_", overd, "_Knew_", K_new, "_theta_", theta)
-        # Open results files
-        dirKC <- paste0(out_dir, "/PoissonCUSP_invgammaKC/")
-        print(length(list.files(dirKC)))
-      }
-    }
-  }
-}
-
-# J <- 200
-# K_new <- 2
-# overd <- 0
-# out_dir <- paste0(simulation_dir, "/Scenario_", J, "_overdisp_", overd, "_Knew_", K_new, "_theta_", theta)
-# data_all <- readRDS(paste0(out_dir, "/data.rds.gzip"))
-# dirKC <- paste0(out_dir, "/PoissonCUSP_invgammaKC/")
-# print(length(list.files(dirKC)))
-# i <- setdiff(1:20, as.numeric(gsub("results_", "", gsub(".rds.gzip", "", list.files(dirKC)))))
-# data_all <- readRDS(paste0(out_dir, "/data.rds.gzip"))
-# out_name <- paste0(out_dir, "/PoissonCUSP_invgammaKC")
-# set.seed(10)
-# out <- PoissonCUSP_ig(
-#   X = data_all[[i]]$X, K = K_start, a0 = 2, b0 = 1, 
-#   KowalCanale = TRUE, random_alpha_sp = TRUE,
-#   nsamples = nsamples, burnin = burnin, 
-#   alpha = 0.5, mu_inf = 0.01, 
-#   alpha_sp = 5)
-# #res <- Postprocess_PoissonCUSP_v2(out, data = data_all[[i]])
-# saveRDS(out, file = paste0(out_name, "/results_", i, ".rds.gzip"), compress = "gzip")
-# 
-registerDoParallel(20)
-for(theta in theta_list){
-  for(K_new in K_new_list){
-    for(overd in overdispersion_list){
-      for(J in J_list){
-        print(c(theta, K_new, overd, J))
-        out_dir <- paste0(simulation_dir, "/Scenario_", J, "_overdisp_", overd, "_Knew_", K_new, "_theta_", theta)
-        data_all <- readRDS(paste0(out_dir, "/data.rds.gzip"))
-        out_name1 <- paste0(out_dir, "/PoissonCUSP_gammaKC")
-        out_PoissonCUSP_KC <- foreach(i = 1:20) %dopar% {
-          print(i)
-          out <- readRDS(paste0(out_name1, "/results_", i, ".rds.gzip"))
-          res <- Postprocess_PoissonCUSP_v2(out, data_all[[i]])
-          res
-        }
-        saveRDS(out_PoissonCUSP_KC, file = paste0(out_dir, "/PoissonCUSP_gammaKC.rds.gzip"))
-        
-        out_name2 <- paste0(out_dir, "/PoissonCUSP_invgammaKC")
-        out_PoissonCUSP_igKC <- foreach(i = 1:20) %dopar%  {
-          print(i)
-          out <- readRDS(paste0(out_name2, "/results_", i, ".rds.gzip"))
-          res <- Postprocess_PoissonCUSP_v2(out, data_all[[i]])
-          res
-        }
-        saveRDS(out_PoissonCUSP_igKC, file = paste0(out_dir, "/PoissonCUSP_invgammaKC.rds.gzip"))
-      }
-    }
-  }
-}
-
-tmp <- readRDS("~/CompressiveNMF/output/Compressive_vs_InfiniteFactors/Scenario_100_overdisp_0_Knew_2_theta_100/MGP/results_1.rds.gzip")
-tmpest <- apply(tmp$Signatures, c(2,3), mean)
-rownames(tmpest) <- rownames(CompressiveNMF::COSMIC_v3.4_SBS96_GRCh37)
-plot_SBS_signature(tmpest)
-
-fix_run <- FALSE
-if(fix_run){
-  cat("start \n", file = paste0(simulation_dir, "check.txt"))
-  # Run the simulation
-  for(i in 1:nrow(df_fix)){
-    J <- df_fix$J[i]
-    theta <- df_fix$theta[i]
-    overd <- df_fix$overd[i]
-    K_new <- df_fix$K_new[i]
-    try(run_models_Comp_vs_Infinite(J = J, 
-                                          K_new = K_new, 
-                                          theta = theta,
-                                          overd = overd,
-                                          simulation_dir = simulation_dir, 
-                                          K_start = K_start, 
-                                          cosmic_sig = c("SBS1", "SBS2", "SBS5", "SBS13"),
-                                          epsilon = 0.01, 
-                                          mu_inf = 0.01, 
-                                          nsamples = nsamples, 
-                                          burnin = burnin, 
-                                          nsims = nsims, 
-                                          ncores = ncores, 
-                                          generate_data = FALSE,
-                                          runCompressive = FALSE, 
-                                          runCUSP_gamma = FALSE, 
-                                          runCUSP_gammaKC = FALSE,
-                                          runCUSP_ig = FALSE, 
-                                          runCUSP_ig_KC = FALSE, 
-                                          runMGP = TRUE),
-            silent = FALSE, outFile = "log.txt")
-  }
-}
-
+df_all <- read_tsv("~/CompressiveNMF/output/Compressive_vs_InfiniteFactors/Results_CompNMF_InfiniteFactors.tsv")
 
 df_all$Kds <- paste0("K = ", df_all$K_new + 4)
 df_all$Kds <- factor(df_all$Kds, levels = paste0("K = ", c(6, 10)))
@@ -443,7 +329,7 @@ plotF1 <- ggplot(df_all, aes(x = Method2, y = 2*(Precision * Sensitivity)/(Preci
   theme(axis.title.x = element_blank(), 
         axis.text.x  = element_text(angle = 50, hjust = 1, size = 8.5))
   
-library(patchwork)
+
 plotK / plotF1
 ggsave(filename = "~/CompressiveNMF/figures/Compressive_vs_InfiniteFactors.pdf", 
        width = 9.72, height = 7.91)
