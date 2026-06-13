@@ -227,7 +227,7 @@ if(rerun){
       }
     }
   }
-}
+
 
 
 #-------------- Unpack the output and save it
@@ -270,7 +270,7 @@ for(theta in theta_list){
 
 # Save the output
 write_csv(x = df_all, file =  paste0(simulation_dir, "/simulation_output.csv"))
-
+}
 #-----------------------------------------------------------  Extract the F1 range
 df_F1 <- data.frame()
 for(theta in theta_list){

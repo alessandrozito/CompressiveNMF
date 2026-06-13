@@ -21,14 +21,14 @@ library(CompressiveNMF)
 ### Simulation
 * Figure 2, and Figure S4 to S9 in the Supplementary material - Main simulation
   - `R/main_Simulation_analysis.R`
-* Figure S1 and S2 - Realignement and label switching
-  - `R/test_time_CompNMF.R`
+* Figure S1 and S2 - Realignment and label switching
+  - `R/MCMC_chain_realignment.R`
 * Figure S10 - Computational time for varying M and N
-  - `R/Simulation_sparsity_indels_suppl.R`
-* Figure S11 - Sparse indel simulation
-  - `R/Simulation_sparsity_indels_suppl.R`
-* Figure S12 - CompNMF vs Infinite factorization models
+  - `R/test_time_CompNMF.R`
+* Figure S11 - CompNMF vs Infinite factorization models
   - `R/Simulation_Compressive_vs_InfiniteFactors.R`
+* Figure S12 - Sparse indel simulation
+  - `R/Simulation_sparsity_indels_suppl.R`
 * Figure S14, S15 and S16 - Fixed vs Compressive hyperprior
   - `R/Simulation_fixed_vs_compressive.R`
 * Figure S17 - Sensitivity to epsilon and K
@@ -51,9 +51,12 @@ library(CompressiveNMF)
 
 * Simulation: `R/main_Simulation.R`. This file produces the files `output/main_simulation/df_F1.csv` and `output/main_simulation/simulation_output.csv`, which are needed to reproduce the figures. The original simulation was run on 20 cores in parallel on a cluster. To reproduce the plots, run  `R/main_Simulation_analysis.R`
 
+* Simulation for the CompNMF vs infinite factors: `R/Simulation_Compressive_vs_InfiniteFactors.R`. This file produces the files is `output/Application_ID_panc` and the figures. To reproduce the figure only, set `rerun = FALSE`.
+
 * Application on 21 breast cancer data: `R/Application_21Breast.R`. This file produces the files is `output/Application_21brca` and the figures. To reproduce the figure only, set `rerun = FALSE`.
 
 * Application on indels Panc-AdenoCA: `R/Application_PancAdeno_indels.R`. This file produces the files is `output/Application_ID_panc` and the figures. To reproduce the figure only, set `rerun = FALSE`.
+
 
 ## R code description, file by file
 

@@ -72,7 +72,7 @@ run_models_Comp_vs_Infinite <- function(J, overd, K_new, theta,
                                         nsamples, burnin, 
                                         nsims, ncores, 
                                         cosmic_sig,
-                                        generate_data = TRUE,
+                                        generate_data = FALSE, # <---- data are already saved, set to true if you need to regenerate them
                                         runCompressive = TRUE, 
                                         runCUSP_gamma = TRUE, 
                                         runCUSP_gammaKC = TRUE,
